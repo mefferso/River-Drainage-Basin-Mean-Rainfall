@@ -20,6 +20,7 @@ from rasterio.windows import from_bounds, transform as window_transform
 from PIL import Image
 import requests
 from shapely.geometry import mapping, shape
+from shapely.ops import unary_union
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -27,7 +28,7 @@ DATA.mkdir(exist_ok=True)
 GAGES = json.loads((ROOT / "config/gages.json").read_text())
 PERIODS = (6, 12, 24)
 # Moderate display bounds cover most of WFO LIX including northern headwaters.
-BBOX = (-92.0, 29.1, -88.1, 33.3)  # west, south, east, north
+BBOX = (-92.0, 29.1, -88.1, 34.2)  # west, south, east, north
 BASE = "https://mrms.ncep.noaa.gov/2D/"
 NLDI = "https://api.water.usgs.gov/nldi/linked-data/nwissite/USGS-"
 SESSION = requests.Session()
@@ -78,6 +79,32 @@ def load_basins():
     if features:
         atomic_write(path, json.dumps(collection, separators=(",", ":")))
     return features, errors
+
+def build_reaches(features, gages=GAGES):
+    """Incremental contributing polygons: downstream upstream-basin minus immediate upstream outlets.
+    Missing upstream delineation is never silently treated as rainfall-free land.
+    """
+    lookup = {f['properties']['id']: shape(f['geometry']) for f in features}
+    reaches, errors = {}, {}
+    for g in gages:
+        gid = g['id']
+        if gid not in lookup:
+            errors[gid] = 'No delineated contributing watershed'
+            continue
+        parents = g.get('upstream_from', [])
+        missing = [p for p in parents if p not in lookup]
+        if missing:
+            errors[gid] = 'Missing required upstream watershed: ' + ', '.join(missing)
+            continue
+        geom = lookup[gid]
+        try:
+            reach = geom.difference(unary_union([lookup[p] for p in parents])) if parents else geom
+            if reach.is_empty or not reach.is_valid or reach.area <= 0:
+                raise ValueError('Empty or invalid incremental reach')
+            reaches[gid] = reach
+        except (ValueError, Exception) as exc:
+            errors[gid] = str(exc)
+    return reaches, errors
 
 def fetch_grid(hours: int):
     product = f"MultiSensor_QPE_{hours:02d}H_Pass1"
@@ -171,25 +198,33 @@ def image(values, path: pathlib.Path):
 def run():
     features, basin_errors = load_basins()
     basin_lookup = {x["properties"]["id"]: shape(x["geometry"]) for x in features}
+    reaches, reach_errors = build_reaches(features)
+    reach_features = [{"type": "Feature",
+                       "properties": {"id": gid, "name": next(g["name"] for g in GAGES if g["id"] == gid)},
+                       "geometry": mapping(poly)} for gid, poly in reaches.items()]
+    if reach_features:
+        atomic_write(DATA / "reaches.geojson", json.dumps(
+            {"type": "FeatureCollection", "features": reach_features}, separators=(",", ":")))
     result = {"generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
               "product": "MRMS MultiSensor QPE Pass 1", "wet_threshold_inches": 0,
-              "gages": GAGES, "periods": {}, "basin_errors": basin_errors}
+              "gages": GAGES, "periods": {}, "basin_errors": basin_errors, "reach_errors": reach_errors}
     successful = 0
     for hours in PERIODS:
         try:
             values, transform, valid_at = fetch_grid(hours)
             areas = cell_areas(transform, *values.shape)
-            entries = {}
-            for gid, poly in basin_lookup.items():
-                fractions = fraction_mask(poly, values.shape, transform)
-                entries[gid] = area_stats(values, fractions, areas)
+            entries = {'upstream': {}, 'incremental': {}}
+            for mode, geometries in (('upstream', basin_lookup), ('incremental', reaches)):
+                for gid, poly in geometries.items():
+                    fractions = fraction_mask(poly, values.shape, transform)
+                    entries[mode][gid] = area_stats(values, fractions, areas)
             png = f"data/rain_{hours}h.png"
             image(values, ROOT / png)
             result["periods"][str(hours)] = {
                 "valid_at": valid_at, "image": png, "bounds": [
                     [transform.f + transform.e * values.shape[0], transform.c],
                     [transform.f, transform.c + transform.a * values.shape[1]]
-                ], "basins": entries}
+                ], "basins": entries['upstream'], "incremental": entries['incremental']}
             successful += 1
             LOG.info("%sh QPE %s: %s basins", hours, valid_at, len(entries))
         except Exception as exc:
