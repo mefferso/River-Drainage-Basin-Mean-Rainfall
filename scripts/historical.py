@@ -49,7 +49,7 @@ def archive_manifest():
         for page in paginator.paginate(Bucket=BUCKET, Prefix=PREFIX + day + "/"):
             for obj in page.get("Contents", []):
                 key = obj["Key"]
-                match = re.search(r"_(\\d{8})-(\\d{6})\\.grib2\\.gz$", key)
+                match = re.search(r"_(\d{8})-(\d{6})\.grib2\.gz$", key)
                 if not match:
                     continue
                 stamp = datetime.strptime(match.group(1) + match.group(2), "%Y%m%d%H%M%S").replace(tzinfo=timezone.utc)
@@ -75,7 +75,7 @@ def read_archive_hour(stamp, key):
             transform = window_transform(window, src.transform)
             tagged = src.tags(1).get("GRIB_VALID_TIME") or src.tags().get("GRIB_VALID_TIME")
             if tagged is not None:
-                match = re.search(r"\\d{9,12}", str(tagged))
+                match = re.search(r"\d{9,12}", str(tagged))
                 if match:
                     actual = datetime.fromtimestamp(int(match.group()), tz=timezone.utc)
                     if actual != stamp:
