@@ -26,6 +26,8 @@ jobs:
           python-version: '3.11'
           cache: pip
       - run: pip install -r requirements.txt
+      - name: Unit tests
+        run: python -m unittest discover -s tests -v
       - name: Run basin rainfall update
         run: python scripts/update.py
       - name: Commit generated data
