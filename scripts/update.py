@@ -104,7 +104,7 @@ def fetch_grid(hours: int):
             stamp = tags.get("GRIB_VALID_TIME") or all_tags.get("GRIB_VALID_TIME")
             if stamp is None:
                 raise ValueError("GRIB_VALID_TIME missing; refuse to label an unknown grid current")
-            match = re.search(r"\\d{9,12}", str(stamp))
+            match = re.search(r"\d{9,12}", str(stamp))
             if not match:
                 raise ValueError(f"Unrecognized GRIB_VALID_TIME: {stamp}")
             valid_at = datetime.fromtimestamp(int(match.group()), tz=timezone.utc).isoformat().replace("+00:00", "Z")
