@@ -31,7 +31,7 @@ USGS **02489500** (Pearl near Bogalusa), **02492000** (Bogue Chitto near Bush), 
 ### First-time setup
 
 1. In GitHub repository **Settings → Actions → General**, ensure Actions are enabled and workflows have read/write repository permission.
-2. In **Settings → Pages**, select **Deploy from branch**, branch `main`, folder `/ (root)`.
+2. In **Settings → Pages**, select **GitHub Actions** as the publishing source (the deployment workflow publishes the site).
 3. Run **Actions → Update MRMS basin rainfall → Run workflow** to initialize the published data. Check the run logs and confirm basin polygons and products before relying on statistics.
 
 Local use: `pip install -r requirements.txt`, `python scripts/update.py`, `python -m http.server 8000`.
