@@ -19,10 +19,13 @@ a{color:#9fdaff}footer{padding:4px 0;font-size:12px;color:#a9bad2}
 <div id="status" class="status">Loading rainfall data…</div>
 <label for="gage">Select upstream contributing watershed</label><select id="gage"><option value="">Select a river gage</option></select>
 <div class="panel"><div class="name" id="basinName">Click a river gage on the map</div><div class="caption" id="basinDetail">Each marker identifies a forecast-point outlet; upstream and incremental catchments are separate.</div></div>
-<div class="panel"><div class="statgrid">
+<div class="panel">
+<label for="wetThreshold">Wet-area rainfall threshold</label>
+<select id="wetThreshold" aria-label="Minimum wet-area rainfall"><option value="0.01">≥0.01″</option><option value="0.10" selected>≥0.10″ (default)</option><option value="0.25">≥0.25″</option><option value="0.50">≥0.50″</option><option value="1.00">≥1.00″</option></select>
+<div class="statgrid">
 <div class="stat"><small>Entire basin mean</small><strong id="whole">—</strong><small>Includes valid 0″ cells</small></div>
-<div class="stat"><small>Wet-area mean</small><strong id="wet">—</strong><small>Only valid cells above 0″</small></div>
-</div><p class="caption">Wet area (of valid basin area)</p><div class="meter"><div id="bar"></div></div><b id="wetPct">—</b>
+<div class="stat"><small>Wet-area mean</small><strong id="wet">—</strong><small id="wetLabel">Only valid cells ≥0.10″</small></div>
+</div><p class="caption" id="wetAreaLabel">Area receiving ≥0.10″ (of valid basin area)</p><div class="meter"><div id="bar"></div></div><b id="wetPct">—</b>
 <p class="caption">Valid MRMS coverage: <b id="validPct">—</b></p><p class="caption">Maximum MRMS grid cell: <b id="peak">—</b></p>
 </div>
 <div class="panel"><b>MRMS rainfall (inches)</b><div id="legend" class="legend"></div><p class="caption">Cells below 0.10″ are transparent on the map, but they still count toward the rainfall averages. Native MRMS pixels are shown without smoothing.</p></div>
@@ -51,9 +54,13 @@ function render(){
  const g=state.latest?.gages.find(x=>x.id===state.selected);
  $('basinName').textContent=g?.name||'Click a river gage on the map';
  const stat=(mode==='incremental'?period?.incremental:period?.basins)?.[state.selected]||null;
+ const threshold=$('wetThreshold').value;
+ const wetStats=stat?.wet_thresholds?.[threshold] || (state.latest?.wet_threshold_inches===Number(threshold)?stat:null);
+ $('wetLabel').textContent='Only valid cells ≥'+threshold+'″';
+ $('wetAreaLabel').textContent='Area receiving ≥'+threshold+'″ (of valid basin area)';
  $('basinDetail').textContent=g?'USGS '+g.id+' · '+(mode==='incremental'?'incremental reach (excluding specified upstream points)':'entire upstream watershed'):'Select a gauge marker or use the dropdown.';
- $('whole').textContent=fmt(stat?.whole_mean);$('wet').textContent=fmt(stat?.wet_mean);
- $('wetPct').textContent=pct(stat?.wet_fraction);$('bar').style.width=pct(stat?.wet_fraction)==='—'?'0%':pct(stat.wet_fraction);
+ $('whole').textContent=fmt(stat?.whole_mean);$('wet').textContent=fmt(wetStats?.wet_mean);
+ $('wetPct').textContent=pct(wetStats?.wet_fraction);$('bar').style.width=Number.isFinite(wetStats?.wet_fraction)?pct(wetStats.wet_fraction):'0%';
  $('validPct').textContent=pct(stat?.valid_fraction);$('peak').textContent=fmt(stat?.max_inches);
  if(state.raster){map.removeLayer(state.raster);state.raster=null}
  if(period?.image&&period.bounds){state.raster=L.imageOverlay(period.image+'?v='+encodeURIComponent(state.latest.generated_at),period.bounds,{opacity:.85,interactive:false,className:'mrms-native-grid'}).addTo(map);state.raster.bringToBack()}
@@ -114,6 +121,7 @@ map.createPane('basins');map.getPane('basins').style.zIndex=455;
 map.createPane('gages');map.getPane('gages').style.zIndex=620;
 $('source').addEventListener('change',load);
 $('areaMode').addEventListener('change',render);
+$('wetThreshold').addEventListener('change',render);
 $('period').addEventListener('change',render);
 $('gage').addEventListener('change',e=>select(e.target.value));
 load();

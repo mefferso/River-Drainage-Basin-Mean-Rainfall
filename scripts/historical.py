@@ -25,7 +25,8 @@ from rasterio.windows import from_bounds, transform as window_transform
 from shapely.geometry import shape, mapping
 
 from update import (ROOT, GAGES, BBOX, area_stats, cell_areas,
-                    fraction_mask, image, load_basins, build_reaches, atomic_write)
+                    fraction_mask, image, load_basins, build_reaches, atomic_write,
+                    WET_THRESHOLDS, DEFAULT_WET_THRESHOLD)
 
 LOG = logging.getLogger("historical")
 OUT = ROOT / "historical" / "2026-10-31_2026-11-01"
@@ -125,7 +126,8 @@ def run():
         "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "product": "NOAA MRMS MultiSensor QPE 01H Pass 2 (archived hourly sums)",
         "historical": True, "event_start_utc": START.isoformat(), "event_end_utc": END.isoformat(),
-        "hours_in_event": len(manifest), "wet_threshold_inches": 0,
+        "hours_in_event": len(manifest), "wet_threshold_inches": DEFAULT_WET_THRESHOLD,
+        "wet_threshold_options_inches": WET_THRESHOLDS,
         "gages": GAGES, "basin_errors": basin_errors, "reach_errors": reach_errors, "periods": {}
     }
     for key, values in accumulated.items():

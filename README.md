@@ -6,11 +6,11 @@ Interactive near-real-time **NOAA MRMS MultiSensor QPE Pass 1** analysis for sel
 
 ## Current capabilities
 
-Choose 6, 12, or 24-hour accumulation and click a gage marker or basin outline. Switch between **full upstream watersheds** (cumulative contributing area) and **incremental reaches** (full watershed minus explicitly linked upstream forecast-point watersheds). The map defaults to the incremental geometry, which avoids overlapping nested basins and excludes rainfall downstream of the chosen forecast point. The map shows transparent MRMS QPE shading, selected basin geometry, and these separate calculations:
+Choose 6, 12, or 24-hour accumulation and click a gage marker or basin outline. Change the wet-area threshold to instantly recalculate the reported wet fraction and wet-area mean from precomputed per-threshold values; the shaded MRMS map retains its CREST-matched 0.10-inch display cutoff. Switch between **full upstream watersheds** (cumulative contributing area) and **incremental reaches** (full watershed minus explicitly linked upstream forecast-point watersheds). The map defaults to the incremental geometry, which avoids overlapping nested basins and excludes rainfall downstream of the chosen forecast point. The map shows transparent MRMS QPE shading, selected basin geometry, and these separate calculations:
 
 - **Whole-basin mean:** average of all valid basin pixels **including 0 inches**.
-- **Wet-area mean:** average of valid pixels **strictly above 0 inches**. If there are no wet cells, this is unavailable, not zero.
-- **Wet fraction:** fraction of valid basin area receiving >0 inches.
+- **Wet-area mean:** average of valid pixels with accumulation **≥ the selected threshold**, default **0.10 inches** (options: 0.01, 0.10, 0.25, 0.50, 1.00 inches). If no cells qualify, this is unavailable, not zero.
+- **Wet fraction:** fraction of valid basin area receiving rainfall **≥ the selected threshold**. Grid cells below the threshold still count toward the whole-basin mean; missing cells do not.
 - **Valid fraction:** portion of covered basin area with usable MRMS values.
 - **Maximum:** maximum valid MRMS grid-cell rainfall.
 

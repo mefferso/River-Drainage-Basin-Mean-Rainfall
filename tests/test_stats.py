@@ -31,6 +31,26 @@ class BasinStatisticsTests(unittest.TestCase):
         self.assertIsNone(result["wet_mean"])
         self.assertEqual(result["wet_fraction"], 0)
 
+    def test_adjustable_wet_thresholds_include_exact_boundary(self):
+        rain = np.array([[0.0, 0.005, 0.01, 0.10, 0.25, 0.50, 1.00]])
+        result = area_stats(rain, np.ones_like(rain), np.ones_like(rain))
+        self.assertAlmostEqual(result["whole_mean"], rain.mean())
+        self.assertEqual(result["wet_thresholds"]["0.01"]["wet_fraction"], 5 / 7)
+        self.assertEqual(result["wet_thresholds"]["0.10"]["wet_fraction"], 4 / 7)
+        self.assertEqual(result["wet_thresholds"]["0.25"]["wet_fraction"], 3 / 7)
+        self.assertEqual(result["wet_thresholds"]["0.50"]["wet_fraction"], 2 / 7)
+        self.assertEqual(result["wet_thresholds"]["1.00"]["wet_fraction"], 1 / 7)
+        self.assertAlmostEqual(result["wet_mean"], (0.10 + 0.25 + 0.50 + 1.00) / 4)
+        self.assertAlmostEqual(result["wet_fraction"], 4 / 7)
+        self.assertEqual(result["valid_cells"], 7)
+
+    def test_missing_data_does_not_change_denominator_to_zero(self):
+        rain = np.array([[np.nan, 0.0, 0.09, 0.1]])
+        result = area_stats(rain, np.ones_like(rain), np.ones_like(rain))
+        self.assertAlmostEqual(result["valid_fraction"], 3 / 4)
+        self.assertAlmostEqual(result["wet_fraction"], 1 / 3)
+        self.assertAlmostEqual(result["whole_mean"], (0.0 + 0.09 + 0.1) / 3)
+
     def test_crest_palette_and_unsmoothed_native_pixels(self):
         # Pixels are independently colored; no value interpolation is permitted.
         values = np.array([[0.0, 0.099, 0.10, 0.25, 1.0, 5.0, 12.0, 18.5]])
