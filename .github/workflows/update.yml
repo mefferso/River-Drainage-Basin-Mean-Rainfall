@@ -27,7 +27,10 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - name: Unit tests
-        run: python -m unittest discover -s tests -v
+        run: |
+          python -m compileall -q scripts
+          python -m unittest discover -s tests -v
+          node tests/validate-ui.cjs
       - name: Run basin rainfall update
         run: python scripts/update.py
       - name: Commit generated data
