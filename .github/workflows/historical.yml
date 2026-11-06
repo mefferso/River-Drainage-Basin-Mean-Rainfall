@@ -24,7 +24,10 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Run tests
-        run: python -m unittest discover -s tests -v
+        run: |
+          python -m compileall -q scripts
+          python -m unittest discover -s tests -v
+          node tests/validate-ui.cjs
       - name: Process historical event (no missing-hour substitution)
         run: python scripts/historical.py
       - name: Publish historical event files
