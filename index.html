@@ -56,7 +56,7 @@ function render(){
  $('wetPct').textContent=pct(stat?.wet_fraction);$('bar').style.width=pct(stat?.wet_fraction)==='—'?'0%':pct(stat.wet_fraction);
  $('validPct').textContent=pct(stat?.valid_fraction);$('peak').textContent=fmt(stat?.max_inches);
  if(state.raster){map.removeLayer(state.raster);state.raster=null}
- if(period?.image&&period.bounds){state.raster=L.imageOverlay(period.image+'?v='+encodeURIComponent(period.valid_at),period.bounds,{opacity:.85,interactive:false,className:'mrms-native-grid'}).addTo(map);state.raster.bringToBack()}
+ if(period?.image&&period.bounds){state.raster=L.imageOverlay(period.image+'?v='+encodeURIComponent(state.latest.generated_at),period.bounds,{opacity:.85,interactive:false,className:'mrms-native-grid'}).addTo(map);state.raster.bringToBack()}
  if(state.overlay){map.removeLayer(state.overlay);state.overlay=null}
  const geoms=state.basins?.[mode];
  if(geoms?.features?.length){
