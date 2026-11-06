@@ -1,6 +1,13 @@
 name: Update MRMS basin rainfall
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/**'
+      - 'config/**'
+      - 'requirements.txt'
+      - '.github/workflows/update.yml'
   schedule:
     - cron: '27 * * * *'
 permissions:
