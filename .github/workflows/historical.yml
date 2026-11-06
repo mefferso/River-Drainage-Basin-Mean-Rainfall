@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'scripts/historical.py'
+      - 'config/gages.json'
       - '.github/workflows/historical.yml'
 permissions:
   contents: write
