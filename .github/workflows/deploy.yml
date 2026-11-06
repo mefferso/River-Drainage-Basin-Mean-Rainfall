@@ -7,7 +7,7 @@ on:
       - 'README.md'
       - '.github/workflows/deploy.yml'
   workflow_run:
-    workflows: ["Update MRMS basin rainfall"]
+    workflows: ["Update MRMS basin rainfall", "Historical Oct 31-Nov 1 2026 MRMS test"]
     types: [completed]
   workflow_dispatch:
 permissions:
