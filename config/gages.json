@@ -19,16 +19,6 @@
     ]
   },
   {
-    "id": "02492700",
-    "name": "Pearl River at I-10 near Slidell, LA",
-    "lat": 30.2978889,
-    "lon": -89.7022306,
-    "river": "Pearl River",
-    "upstream_from": [
-      "02492600"
-    ]
-  },
-  {
     "id": "02491500",
     "name": "Bogue Chitto River at Franklinton, LA",
     "lat": 30.8429618,
