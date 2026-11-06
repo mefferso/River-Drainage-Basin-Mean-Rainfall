@@ -1,8 +1,11 @@
 import unittest
+import tempfile
+from pathlib import Path
+from PIL import Image
 import numpy as np
 from affine import Affine
 from shapely.geometry import box
-from scripts.update import area_stats, cell_areas, fraction_mask
+from scripts.update import area_stats, cell_areas, fraction_mask, image
 
 class BasinStatisticsTests(unittest.TestCase):
     def test_zero_rain_is_in_whole_mean_but_not_wet_mean(self):
@@ -27,6 +30,20 @@ class BasinStatisticsTests(unittest.TestCase):
         self.assertEqual(result["whole_mean"], 0)
         self.assertIsNone(result["wet_mean"])
         self.assertEqual(result["wet_fraction"], 0)
+
+    def test_crest_palette_and_unsmoothed_native_pixels(self):
+        # Pixels are independently colored; no value interpolation is permitted.
+        values = np.array([[0.0, 0.099, 0.10, 0.25, 1.0, 5.0, 12.0, 18.5]])
+        expected = [(0, 0, 0, 0), (0, 0, 0, 0),
+                    (153, 220, 224, 255), (82, 199, 209, 255),
+                    (198, 204, 50, 255), (219, 48, 123, 255),
+                    (86, 34, 170, 255), (86, 34, 170, 255)]
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "rain.png"
+            image(values, path)
+            with Image.open(path) as png:
+                self.assertEqual(png.size, (8, 1))
+                self.assertEqual(list(png.convert("RGBA").getdata()), expected)
 
     def test_fractional_boundary(self):
         transform = Affine(1, 0, 0, 0, -1, 1)
