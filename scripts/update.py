@@ -8,6 +8,7 @@ import logging
 import math
 import os
 import pathlib
+import re
 import tempfile
 from datetime import datetime, timezone
 from urllib.parse import quote
@@ -55,6 +56,9 @@ def load_basins():
         try:
             url = NLDI + quote(gid) + "/basin?f=json&splitCatchment=true"
             response = SESSION.get(url, timeout=35)
+            if not response.ok:
+                LOG.warning("Split-catchment request failed for %s; trying standard NLDI upstream basin", gid)
+                response = SESSION.get(NLDI + quote(gid) + "/basin?f=json", timeout=35)
             response.raise_for_status()
             raw = response.json()
             items = raw.get("features", [])
@@ -100,7 +104,10 @@ def fetch_grid(hours: int):
             stamp = tags.get("GRIB_VALID_TIME") or all_tags.get("GRIB_VALID_TIME")
             if stamp is None:
                 raise ValueError("GRIB_VALID_TIME missing; refuse to label an unknown grid current")
-            valid_at = datetime.fromtimestamp(int(stamp), tz=timezone.utc).isoformat().replace("+00:00", "Z")
+            match = re.search(r"\\d{9,12}", str(stamp))
+            if not match:
+                raise ValueError(f"Unrecognized GRIB_VALID_TIME: {stamp}")
+            valid_at = datetime.fromtimestamp(int(match.group()), tz=timezone.utc).isoformat().replace("+00:00", "Z")
     a = np.asarray(values.filled(np.nan), dtype="float64")
     a = np.where(np.ma.getmaskarray(values), np.nan, a)
     # MRMS quantities are mm. Negative sentinels are invalid, not zero.
