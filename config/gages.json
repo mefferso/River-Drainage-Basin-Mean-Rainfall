@@ -3,24 +3,165 @@
     "id": "02489500",
     "name": "Pearl River near Bogalusa, LA",
     "lat": 30.7932614,
-    "lon": -89.8209117
+    "lon": -89.8209117,
+    "river": "Pearl River",
+    "upstream_from": []
+  },
+  {
+    "id": "02492600",
+    "name": "Pearl River at Pearl River, LA",
+    "lat": 30.385193,
+    "lon": -89.7367304,
+    "river": "Pearl River",
+    "upstream_from": [
+      "02489500",
+      "02492000"
+    ]
+  },
+  {
+    "id": "02492700",
+    "name": "Pearl River at I-10 near Slidell, LA",
+    "lat": 30.2978889,
+    "lon": -89.7022306,
+    "river": "Pearl River",
+    "upstream_from": [
+      "02492600"
+    ]
+  },
+  {
+    "id": "02491500",
+    "name": "Bogue Chitto River at Franklinton, LA",
+    "lat": 30.8429618,
+    "lon": -90.16203,
+    "river": "Bogue Chitto River",
+    "upstream_from": []
   },
   {
     "id": "02492000",
     "name": "Bogue Chitto River near Bush, LA",
     "lat": 30.6293564,
-    "lon": -89.8972956
+    "lon": -89.8972956,
+    "river": "Bogue Chitto River",
+    "upstream_from": [
+      "02491500"
+    ]
+  },
+  {
+    "id": "07375280",
+    "name": "Tangipahoa River at Osyka, MS",
+    "lat": 31.0122222,
+    "lon": -90.4611111,
+    "river": "Tangipahoa River",
+    "upstream_from": []
+  },
+  {
+    "id": "07375300",
+    "name": "Tangipahoa River near Kentwood, LA",
+    "lat": 30.9376803,
+    "lon": -90.4903728,
+    "river": "Tangipahoa River",
+    "upstream_from": [
+      "07375280"
+    ]
+  },
+  {
+    "id": "07375430",
+    "name": "Tangipahoa River near Amite, LA",
+    "lat": 30.7290747,
+    "lon": -90.4842587,
+    "river": "Tangipahoa River",
+    "upstream_from": [
+      "07375300"
+    ]
   },
   {
     "id": "07375500",
     "name": "Tangipahoa River at Robert, LA",
-    "lat": 30.51,
-    "lon": -90.36
+    "lat": 30.5065805,
+    "lon": -90.3617524,
+    "river": "Tangipahoa River",
+    "upstream_from": [
+      "07375430"
+    ]
   },
   {
-    "id": "07378510",
-    "name": "Amite River at 4-H Camp near Denham Springs, LA",
-    "lat": 30.44,
-    "lon": -90.97
+    "id": "07375800",
+    "name": "Tickfaw River at Liverpool, LA",
+    "lat": 30.9307356,
+    "lon": -90.6734317,
+    "river": "Tickfaw River",
+    "upstream_from": []
+  },
+  {
+    "id": "07375960",
+    "name": "Tickfaw River at Montpelier, LA",
+    "lat": 30.6862971,
+    "lon": -90.6431509,
+    "river": "Tickfaw River",
+    "upstream_from": [
+      "07375800"
+    ]
+  },
+  {
+    "id": "07376000",
+    "name": "Tickfaw River at Holden, LA",
+    "lat": 30.5038016,
+    "lon": -90.6773163,
+    "river": "Tickfaw River",
+    "upstream_from": [
+      "07375960"
+    ]
+  },
+  {
+    "id": "07376500",
+    "name": "Natalbany River at Baptist, LA",
+    "lat": 30.5043579,
+    "lon": -90.545924,
+    "river": "Natalbany River",
+    "upstream_from": []
+  },
+  {
+    "id": "07375000",
+    "name": "Tchefuncte River near Folsom, LA",
+    "lat": 30.6160223,
+    "lon": -90.2486954,
+    "river": "Tchefuncte River",
+    "upstream_from": []
+  },
+  {
+    "id": "07375050",
+    "name": "Tchefuncte River near Covington, LA",
+    "lat": 30.4941111,
+    "lon": -90.1702222,
+    "river": "Tchefuncte River",
+    "upstream_from": [
+      "07375000"
+    ]
+  },
+  {
+    "id": "07375105",
+    "name": "Bogue Falaya River near Camp Covington, LA",
+    "lat": 30.5563889,
+    "lon": -90.1461111,
+    "river": "Bogue Falaya River",
+    "upstream_from": []
+  },
+  {
+    "id": "07375175",
+    "name": "Bogue Falaya River at Boston St. in Covington, LA",
+    "lat": 30.4763889,
+    "lon": -90.0894444,
+    "river": "Bogue Falaya River",
+    "upstream_from": [
+      "07375105"
+    ]
+  },
+  {
+    "id": "07378500",
+    "name": "Amite River near Denham Springs, LA",
+    "lat": 30.464079,
+    "lon": -90.99038,
+    "river": "Amite River",
+    "upstream_from": []
   }
 ]
