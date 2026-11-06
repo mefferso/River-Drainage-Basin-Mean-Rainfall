@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>River Basin Mean Rainfall | MRMS QPE</title>
+<link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet">
+<style>
+:root{color-scheme:dark;font:15px/1.45 system-ui,Arial,sans-serif;background:#0d1727;color:#eff5ff}
+*{box-sizing:border-box}body{margin:0}header{padding:14px 20px;border-bottom:1px solid #35445e;background:#14243a;display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between;align-items:center}h1{font-size:1.35rem;margin:0}header small{color:#b3c5de}
+main{display:grid;grid-template-columns:340px minmax(0,1fr);height:calc(100dvh - 74px)}aside{background:#16253a;overflow:auto;padding:16px;border-right:1px solid #384a63}#map{height:100%;min-height:450px;background:#202d3a}
+select,button{background:#223a56;border:1px solid #59708b;border-radius:7px;color:#f4f8ff;padding:10px;font:inherit;cursor:pointer}select{width:100%;margin:6px 0 16px}.panel{background:#20334d;border:1px solid #3d526e;padding:13px;border-radius:10px;margin-bottom:12px}.caption{color:#b7c9df;font-size:12px}.statgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.stat{background:#152439;border-radius:8px;padding:12px}.stat strong{display:block;font-size:26px;letter-spacing:-.5px}.stat small{font-size:11px;color:#b9c9df}.name{font-size:1.15rem;font-weight:bold;margin:0 0 4px}.meter{height:9px;background:#40556d;border-radius:20px;overflow:hidden;margin:6px 0}.meter>div{height:100%;background:#59bbec;width:0}.status{padding:10px;border-radius:7px;background:#263d55;margin-bottom:12px;font-size:13px}.warn{background:#684723}.empty{color:#b6c8dc}.legend{font-size:12px;line-height:1.9}.sw{display:inline-block;width:11px;height:11px;margin:0 4px 0 11px;vertical-align:middle;border-radius:2px}.sw:first-child{margin-left:0}.leaflet-tooltip{color:#142039}
+a{color:#9fdaff}footer{padding:4px 0;font-size:12px;color:#a9bad2}
+@media(max-width:750px){main{display:flex;flex-direction:column-reverse;height:auto}#map{height:55dvh;min-height:350px}aside{overflow:visible}header{padding:12px}}
+</style></head><body>
+<header><div><h1>River Basin Mean Rainfall</h1><small>NOAA MRMS MultiSensor QPE · Pass 1 · Experimental hydrometeorological analysis</small></div><div><small id="updated">Loading archived update…</small></div></header>
+<main><aside>
+<label for="period">Accumulation period</label><select id="period"><option value="6">Last 6 hours</option><option value="12">Last 12 hours</option><option value="24">Last 24 hours</option></select>
+<div id="status" class="status">Loading rainfall data…</div>
+<label for="gage">Select upstream contributing watershed</label><select id="gage"><option value="">Select a river gage</option></select>
+<div class="panel"><div class="name" id="basinName">Click a river gage on the map</div><div class="caption" id="basinDetail">Gauge marker represents the downstream outlet for the selected upstream basin.</div></div>
+<div class="panel"><div class="statgrid">
+<div class="stat"><small>Entire basin mean</small><strong id="whole">—</strong><small>Includes valid 0″ cells</small></div>
+<div class="stat"><small>Wet-area mean</small><strong id="wet">—</strong><small>Only valid cells above 0″</small></div>
+</div><p class="caption">Wet area (of valid basin area)</p><div class="meter"><div id="bar"></div></div><b id="wetPct">—</b>
+<p class="caption">Valid MRMS coverage: <b id="validPct">—</b></p><p class="caption">Maximum MRMS grid cell: <b id="peak">—</b></p>
+</div>
+<div class="panel"><b>MRMS rainfall (inches)</b><div id="legend" class="legend"></div><p class="caption">Cells below 0.01″ are transparent on the map, but 0″ cells remain in the whole-basin mean.</p></div>
+<p class="caption">Basin outlines derived from USGS NLDI upstream contributing areas (NHDPlusV2). Wet-area mean excludes dry portions and is <b>not</b> directly interchangeable with RFC mean areal precipitation in a runoff model. Invalid MRMS cells are excluded, never counted as zero.</p>
+<footer><a href="https://github.com/mefferso/River-Drainage-Basin-Mean-Rainfall">Source code &amp; methodology</a> · <a href="data/latest.json">Published statistics</a></footer>
+</aside><div id="map" aria-label="MRMS basin rainfall interactive map"></div></main>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const $=id=>document.getElementById(id), map=L.map('map',{preferCanvas:true}).setView([30.85,-90.18],8);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:17,attribution:'© OpenStreetMap, USGS NLDI, NOAA MRMS'}).addTo(map);
+const state={latest:null,basins:null,selected:null,raster:null,overlay:null,markers:[]};
+const colors=['#5dbef2','#37a866','#a2cc35','#f7e03b','#f6a92d','#ed592b','#c12d62','#9039a2','#5b3fb8','#fafafb'];
+const limits=['0.01','0.10','0.25','0.50','1','2','3','5','8','12+'];
+$('legend').innerHTML=limits.map((v,i)=>'<span class="sw" style="background:rgb('+colors[i].replace('#','') /* replaced below */+')"></span>'+v+'″').join(' ');
+$('legend').innerHTML=limits.map((v,i)=>'<span class="sw" style="background:'+colors[i]+'"></span>'+v+'″').join(' ');
+function fmt(v){return Number.isFinite(v)?v.toFixed(2)+'″':'—'}
+function pct(v){return Number.isFinite(v)?(v*100).toFixed(1)+'%':'—'}
+function time(iso){return iso?new Date(iso).toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short',timeZone:'America/Chicago'})+' CT':'unavailable'}
+function select(gid){state.selected=gid;$('gage').value=gid||'';render()}
+function render(){
+ const p=$('period').value, period=state.latest?.periods?.[p];
+ const g=state.latest?.gages.find(x=>x.id===state.selected);
+ $('basinName').textContent=g?.name||'Click a river gage on the map';
+ const stat=period?.basins?.[state.selected]||null;
+ $('basinDetail').textContent=g?'USGS '+g.id+' · upstream watershed':'Select a gauge marker or use the dropdown.';
+ $('whole').textContent=fmt(stat?.whole_mean);$('wet').textContent=fmt(stat?.wet_mean);
+ $('wetPct').textContent=pct(stat?.wet_fraction);$('bar').style.width=pct(stat?.wet_fraction)==='—'?'0%':pct(stat.wet_fraction);
+ $('validPct').textContent=pct(stat?.valid_fraction);$('peak').textContent=fmt(stat?.max_inches);
+ if(state.raster){map.removeLayer(state.raster);state.raster=null}
+ if(period?.image&&period.bounds){state.raster=L.imageOverlay(period.image+'?v='+encodeURIComponent(period.valid_at),period.bounds,{opacity:.83,interactive:false}).addTo(map);state.raster.bringToBack()}
+ if(state.overlay){state.overlay.eachLayer(layer=>{let active=layer.feature.properties.id===state.selected;layer.setStyle({color:active?'#ffdb64':'#71caff',weight:active?3:1.7,fillColor:'#ffd166',fillOpacity:active?.13:0,opacity:active?1:.8});if(active)layer.bringToFront()})}
+ state.markers.forEach(({marker,id})=>marker.setStyle({radius:id===state.selected?9:6,color:id===state.selected?'#ffdb64':'#fff'}));
+ if(!period||period.error){$('status').className='status warn';$('status').textContent=period?.error?'MRMS '+p+'h unavailable: '+period.error:'No published data for '+p+' hours.';return}
+ const age=(Date.now()-Date.parse(period.valid_at))/3600000;
+ $('status').className='status'+(age>2.5||age<-.5?' warn':'');
+ $('status').textContent=p+'-hour MRMS QPE valid '+time(period.valid_at)+(age>2.5?' · STALE ('+age.toFixed(1)+'h old)':'');
+}
+async function load(){
+ try{
+  const nonce=Date.now(), [d,b]=await Promise.all([
+   fetch('data/latest.json?v='+nonce,{cache:'no-store'}),
+   fetch('data/basins.geojson?v='+nonce,{cache:'no-store'})]);
+  if(!d.ok)throw new Error('Rainfall output not published yet (HTTP '+d.status+')');
+  state.latest=await d.json();
+  if(b.ok)state.basins=await b.json();
+  $('updated').textContent='Generated '+time(state.latest.generated_at);
+  $('gage').innerHTML='<option value="">Select a river gage</option>';
+  state.latest.gages.forEach(g=>{
+   const opt=document.createElement('option');opt.value=g.id;opt.textContent=g.name;$('gage').appendChild(opt);
+   const marker=L.circleMarker([g.lat,g.lon],{radius:6,weight:2,color:'#fff',fillColor:'#287bbf',fillOpacity:1}).addTo(map);
+   marker.bindTooltip(g.name);marker.on('click',()=>select(g.id));state.markers.push({id:g.id,marker});
+  });
+  if(state.basins?.features?.length){
+   state.overlay=L.geoJSON(state.basins,{style:{color:'#71caff',weight:1.7,fillOpacity:0},
+    onEachFeature:(feature,layer)=>{layer.bindTooltip(feature.properties.name);layer.on('click',()=>select(feature.properties.id))}}).addTo(map);
+   map.fitBounds(state.overlay.getBounds(),{padding:[20,20]});
+  }
+  state.selected=state.latest.gages.find(g=>state.basins?.features?.some(f=>f.properties.id===g.id))?.id||'';
+  render();
+ }catch(e){$('status').className='status warn';$('status').textContent='Data unavailable: '+e.message}
+}
+$('period').addEventListener('change',render);$('gage').addEventListener('change',e=>select(e.target.value));
+load();
+</script></body></html>
