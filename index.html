@@ -80,8 +80,8 @@ async function load(){
   state.history=$('source').value==='historic';
   const [d,b,r]=await Promise.all([
     fetch(base+'latest.json?v='+nonce,{cache:'no-store'}),
-    fetch('data/basins.geojson?v='+nonce,{cache:'no-store'}),
-    fetch('data/reaches.geojson?v='+nonce,{cache:'no-store'})]);
+    fetch(base+'basins.geojson?v='+nonce,{cache:'no-store'}),
+    fetch(base+'reaches.geojson?v='+nonce,{cache:'no-store'})]);
   if(!d.ok)throw new Error(state.history?'Historical processing not published yet (HTTP '+d.status+')':'Live rainfall unavailable (HTTP '+d.status+')');
   state.latest=await d.json();
   state.basins={upstream:b.ok?await b.json():null,incremental:r.ok?await r.json():null};
