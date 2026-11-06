@@ -12,10 +12,12 @@ a{color:#9fdaff}footer{padding:4px 0;font-size:12px;color:#a9bad2}
 </style></head><body>
 <header><div><h1>River Basin Mean Rainfall</h1><small>NOAA MRMS MultiSensor QPE · Pass 1 · Experimental hydrometeorological analysis</small></div><div><small id="updated">Loading archived update…</small></div></header>
 <main><aside>
-<label for="period">Accumulation period</label><select id="period"><option value="6">Last 6 hours</option><option value="12">Last 12 hours</option><option value="24">Last 24 hours</option></select>
+<label for="source">Dataset</label><select id="source"><option value="live">Near-real-time MRMS</option><option value="historic">Oct 31–Nov 1, 2026 historical event</option></select>
+<label for="areaMode">Basin statistics / highlighted area</label><select id="areaMode"><option value="incremental">Incremental reach (between forecast points)</option><option value="upstream">Entire watershed upstream of gage</option></select>
+<label for="period">Accumulation period</label><select id="period"><option value="6">Last 6 hours</option><option value="12">Last 12 hours</option><option value="24">Last 24 hours</option><option value="event" hidden>Entire historical event</option></select>
 <div id="status" class="status">Loading rainfall data…</div>
 <label for="gage">Select upstream contributing watershed</label><select id="gage"><option value="">Select a river gage</option></select>
-<div class="panel"><div class="name" id="basinName">Click a river gage on the map</div><div class="caption" id="basinDetail">Gauge marker represents the downstream outlet for the selected upstream basin.</div></div>
+<div class="panel"><div class="name" id="basinName">Click a river gage on the map</div><div class="caption" id="basinDetail">Each marker identifies a forecast-point outlet; upstream and incremental catchments are separate.</div></div>
 <div class="panel"><div class="statgrid">
 <div class="stat"><small>Entire basin mean</small><strong id="whole">—</strong><small>Includes valid 0″ cells</small></div>
 <div class="stat"><small>Wet-area mean</small><strong id="wet">—</strong><small>Only valid cells above 0″</small></div>
@@ -23,14 +25,19 @@ a{color:#9fdaff}footer{padding:4px 0;font-size:12px;color:#a9bad2}
 <p class="caption">Valid MRMS coverage: <b id="validPct">—</b></p><p class="caption">Maximum MRMS grid cell: <b id="peak">—</b></p>
 </div>
 <div class="panel"><b>MRMS rainfall (inches)</b><div id="legend" class="legend"></div><p class="caption">Cells below 0.01″ are transparent on the map, but 0″ cells remain in the whole-basin mean.</p></div>
-<p class="caption">Basin outlines derived from USGS NLDI upstream contributing areas (NHDPlusV2). Wet-area mean excludes dry portions and is <b>not</b> directly interchangeable with RFC mean areal precipitation in a runoff model. Invalid MRMS cells are excluded, never counted as zero.</p>
+<p class="caption">Basin outlines derived from USGS NLDI upstream contributing areas (NHDPlusV2); incremental reaches subtract explicitly identified upstream gage watersheds. Wet-area mean excludes dry portions and is <b>not</b> directly interchangeable with RFC mean areal precipitation in a runoff model. Invalid MRMS cells are excluded, never counted as zero.</p>
 <footer><a href="https://github.com/mefferso/River-Drainage-Basin-Mean-Rainfall">Source code &amp; methodology</a> · <a href="data/latest.json">Published statistics</a></footer>
 </aside><div id="map" aria-label="MRMS basin rainfall interactive map"></div></main>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 const $=id=>document.getElementById(id), map=L.map('map',{preferCanvas:true}).setView([30.85,-90.18],8);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:17,attribution:'© OpenStreetMap, USGS NLDI, NOAA MRMS'}).addTo(map);
-const state={latest:null,basins:null,selected:null,raster:null,overlay:null,markers:[]};
+const state={latest:null,basins:null,selected:null,raster:null,overlay:null,markers:[],history:false,allBounds:null};
+function basinStyle(selected=false,hover=false){
+ return selected?{color:'#fff15e',weight:5,opacity:1,fillColor:'#ffe253',fillOpacity:.22,dashArray:null}
+ :hover?{color:'#fff5ad',weight:3.2,opacity:1,fillColor:'#f8d945',fillOpacity:.17,dashArray:null}
+ :{color:'#b36b00',weight:3,opacity:1,fillColor:'#ffcf40',fillOpacity:.12,dashArray:null};
+}
 const colors=['#5dbef2','#37a866','#a2cc35','#f7e03b','#f6a92d','#ed592b','#c12d62','#9039a2','#5b3fb8','#fafafb'];
 const limits=['0.01','0.10','0.25','0.50','1','2','3','5','8','12+'];
 $('legend').innerHTML=limits.map((v,i)=>'<span class="sw" style="background:'+colors[i]+'"></span>'+v+'″').join(' ');
@@ -39,47 +46,74 @@ function pct(v){return Number.isFinite(v)?(v*100).toFixed(1)+'%':'—'}
 function time(iso){return iso?new Date(iso).toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short',timeZone:'America/Chicago'})+' CT':'unavailable'}
 function select(gid){state.selected=gid;$('gage').value=gid||'';render()}
 function render(){
- const p=$('period').value, period=state.latest?.periods?.[p];
+ const p=$('period').value, mode=$('areaMode').value, period=state.latest?.periods?.[p];
  const g=state.latest?.gages.find(x=>x.id===state.selected);
  $('basinName').textContent=g?.name||'Click a river gage on the map';
- const stat=period?.basins?.[state.selected]||null;
- $('basinDetail').textContent=g?'USGS '+g.id+' · upstream watershed':'Select a gauge marker or use the dropdown.';
+ const stat=(mode==='incremental'?period?.incremental:period?.basins)?.[state.selected]||null;
+ $('basinDetail').textContent=g?'USGS '+g.id+' · '+(mode==='incremental'?'incremental reach (excluding specified upstream points)':'entire upstream watershed'):'Select a gauge marker or use the dropdown.';
  $('whole').textContent=fmt(stat?.whole_mean);$('wet').textContent=fmt(stat?.wet_mean);
  $('wetPct').textContent=pct(stat?.wet_fraction);$('bar').style.width=pct(stat?.wet_fraction)==='—'?'0%':pct(stat.wet_fraction);
  $('validPct').textContent=pct(stat?.valid_fraction);$('peak').textContent=fmt(stat?.max_inches);
  if(state.raster){map.removeLayer(state.raster);state.raster=null}
  if(period?.image&&period.bounds){state.raster=L.imageOverlay(period.image+'?v='+encodeURIComponent(period.valid_at),period.bounds,{opacity:.83,interactive:false}).addTo(map);state.raster.bringToBack()}
- if(state.overlay){state.overlay.eachLayer(layer=>{let active=layer.feature.properties.id===state.selected;layer.setStyle({color:active?'#ffdb64':'#71caff',weight:active?3:1.7,fillColor:'#ffd166',fillOpacity:active?.13:0,opacity:active?1:.8});if(active)layer.bringToFront()})}
+ if(state.overlay){map.removeLayer(state.overlay);state.overlay=null}
+ const geoms=state.basins?.[mode];
+ if(geoms?.features?.length){
+   state.overlay=L.geoJSON(geoms,{pane:'basins',style:()=>basinStyle(),onEachFeature:(feature,layer)=>{
+    const id=feature.properties.id;
+    layer.bindTooltip(feature.properties.name+(mode==='incremental'?' — incremental reach':' — full upstream area'),{sticky:true});
+    layer.on('click',()=>select(id));
+    layer.on('mouseover',()=>{if(id!==state.selected)layer.setStyle(basinStyle(false,true))});
+    layer.on('mouseout',()=>{if(id!==state.selected)layer.setStyle(basinStyle())});
+   }}).addTo(map);
+   state.overlay.eachLayer(layer=>{if(layer.feature.properties.id===state.selected){layer.setStyle(basinStyle(true));layer.bringToFront()}});
+ }
  state.markers.forEach(({marker,id})=>marker.setStyle({radius:id===state.selected?9:6,color:id===state.selected?'#ffdb64':'#fff'}));
  if(!period||period.error){$('status').className='status warn';$('status').textContent=period?.error?'MRMS '+p+'h unavailable: '+period.error:'No published data for '+p+' hours.';return}
  const age=(Date.now()-Date.parse(period.valid_at))/3600000;
- $('status').className='status'+(age>2.5||age<-.5?' warn':'');
- $('status').textContent=p+'-hour MRMS QPE valid '+time(period.valid_at)+(age>2.5?' · STALE ('+age.toFixed(1)+'h old)':'');
+ $('status').className='status'+(!state.history&&(age>2.5||age<-.5)?' warn':'');
+ $('status').textContent=(state.history?'HISTORICAL · ':'LIVE · ')+(p==='event'?'full event':p+'-hour')+' MRMS QPE ending '+time(period.valid_at)+(!state.history&&age>2.5?' · STALE ('+age.toFixed(1)+'h old)':'')+(state.history?' · Oct 31–Nov 1 (Central)':'');
 }
 async function load(){
  try{
-  const nonce=Date.now(), [d,b]=await Promise.all([
-   fetch('data/latest.json?v='+nonce,{cache:'no-store'}),
-   fetch('data/basins.geojson?v='+nonce,{cache:'no-store'})]);
-  if(!d.ok)throw new Error('Rainfall output not published yet (HTTP '+d.status+')');
+  const nonce=Date.now(), base=$('source').value==='historic'?'historical/2026-10-31_2026-11-01/':'data/';
+  state.history=$('source').value==='historic';
+  const [d,b,r]=await Promise.all([
+    fetch(base+'latest.json?v='+nonce,{cache:'no-store'}),
+    fetch('data/basins.geojson?v='+nonce,{cache:'no-store'}),
+    fetch('data/reaches.geojson?v='+nonce,{cache:'no-store'})]);
+  if(!d.ok)throw new Error(state.history?'Historical processing not published yet (HTTP '+d.status+')':'Live rainfall unavailable (HTTP '+d.status+')');
   state.latest=await d.json();
-  if(b.ok)state.basins=await b.json();
-  $('updated').textContent='Generated '+time(state.latest.generated_at);
-  $('gage').innerHTML='<option value="">Select a river gage</option>';
-  state.latest.gages.forEach(g=>{
-   const opt=document.createElement('option');opt.value=g.id;opt.textContent=g.name;$('gage').appendChild(opt);
-   const marker=L.circleMarker([g.lat,g.lon],{radius:6,weight:2,color:'#fff',fillColor:'#287bbf',fillOpacity:1}).addTo(map);
-   marker.bindTooltip(g.name);marker.on('click',()=>select(g.id));state.markers.push({id:g.id,marker});
+  state.basins={upstream:b.ok?await b.json():null,incremental:r.ok?await r.json():null};
+  if(state.raster){map.removeLayer(state.raster);state.raster=null}
+  if(state.overlay){map.removeLayer(state.overlay);state.overlay=null}
+  state.markers.forEach(({marker})=>map.removeLayer(marker));state.markers=[];
+  $('updated').textContent=(state.history?'Historical dataset generated ':'Live data generated ')+time(state.latest.generated_at);
+  $('period').querySelector('[value="event"]').hidden=!state.history;
+  if(state.history){$('period').value='event'}
+  else if($('period').value==='event'){$('period').value='6'}
+  $('gage').innerHTML='<option value="">Select a forecast point</option>';
+  const grouped={};
+  state.latest.gages.forEach(g=>{(grouped[g.river||'Other']??=[]).push(g);
+    const marker=L.circleMarker([g.lat,g.lon],{pane:'gages',radius:6,weight:2,color:'#fff',fillColor:'#246db5',fillOpacity:1}).addTo(map);
+    marker.bindTooltip(g.name,{direction:'top'});marker.on('click',()=>select(g.id));state.markers.push({id:g.id,marker});
   });
-  if(state.basins?.features?.length){
-   state.overlay=L.geoJSON(state.basins,{style:{color:'#71caff',weight:1.7,fillOpacity:0},
-    onEachFeature:(feature,layer)=>{layer.bindTooltip(feature.properties.name);layer.on('click',()=>select(feature.properties.id))}}).addTo(map);
-   map.fitBounds(state.overlay.getBounds(),{padding:[20,20]});
-  }
-  state.selected=state.latest.gages.find(g=>state.basins?.features?.some(f=>f.properties.id===g.id))?.id||'';
+  Object.keys(grouped).sort().forEach(river=>{
+    const group=document.createElement('optgroup');group.label=river;
+    grouped[river].forEach(g=>{const opt=document.createElement('option');opt.value=g.id;opt.textContent=g.name;group.appendChild(opt)});
+    $('gage').appendChild(group);
+  });
+  const visible=state.basins?.incremental?.features?.length?state.basins.incremental:state.basins.upstream;
+  if(visible?.features?.length){const bounds=L.geoJSON(visible).getBounds();if(bounds.isValid())map.fitBounds(bounds,{padding:[16,16],maxZoom:9})}
+  state.selected=state.latest.gages.find(g=>state.basins?.upstream?.features?.some(f=>f.properties.id===g.id))?.id||'';
   render();
  }catch(e){$('status').className='status warn';$('status').textContent='Data unavailable: '+e.message}
 }
-$('period').addEventListener('change',render);$('gage').addEventListener('change',e=>select(e.target.value));
+map.createPane('basins');map.getPane('basins').style.zIndex=455;
+map.createPane('gages');map.getPane('gages').style.zIndex=620;
+$('source').addEventListener('change',load);
+$('areaMode').addEventListener('change',render);
+$('period').addEventListener('change',render);
+$('gage').addEventListener('change',e=>select(e.target.value));
 load();
 </script></body></html>
