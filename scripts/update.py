@@ -182,16 +182,21 @@ def fraction_mask(geometry, out_shape, transform, factor=3):
     return hi.reshape(out_shape[0], factor, out_shape[1], factor).mean(axis=(1, 3))
 
 def image(values, path: pathlib.Path):
-    """Transparent PNG in bounding box for Leaflet; invalid/zero rainfall transparent."""
-    bounds = [0.01, 0.10, 0.25, 0.5, 1, 2, 3, 5, 8, 12]
-    colors = [(93,190,242),(55,168,102),(162,204,53),(247,224,59),
-              (246,169,45),(237,89,43),(193,45,98),(144,57,162),
-              (91,63,184),(250,250,251)]
+    """Render native MRMS grid pixels with the exact Bogue Chitto CREST palette.
+
+    No interpolation, resampling, convolution or smoothing is performed.
+    Display cutoff at 0.10 inches does not affect rainfall statistics.
+    Pixels are opaque here; Leaflet applies the same 85% layer opacity as CREST.
+    """
+    bounds = [0.0, 0.10, 0.25, 0.50, 1.0, 2.0, 3.0, 5.0, 8.0, 12.0]
+    colors = [(161,170,181), (153,220,224), (82,199,209), (54,173,100),
+              (198,204,50), (242,174,50), (246,108,61), (219,48,123),
+              (153,39,168), (86,34,170)]
     rgba = np.zeros((*values.shape, 4), dtype=np.uint8)
-    good = np.isfinite(values) & (values >= bounds[0])
-    idx = np.clip(np.searchsorted(bounds, values[good], side="right") - 1, 0, len(colors)-1)
-    rgba[good, :3] = np.array(colors, dtype=np.uint8)[idx]
-    rgba[good, 3] = 200
+    visible = np.isfinite(values) & (values >= 0.10)
+    idx = np.clip(np.searchsorted(bounds, values[visible], side="right") - 1, 0, len(colors) - 1)
+    rgba[visible, :3] = np.asarray(colors, dtype=np.uint8)[idx]
+    rgba[visible, 3] = 255
     path.parent.mkdir(parents=True, exist_ok=True)
     Image.fromarray(rgba, "RGBA").save(path, optimize=True)
 
