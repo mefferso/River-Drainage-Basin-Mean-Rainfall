@@ -92,7 +92,7 @@ def fetch_grid(hours: int):
         with rasterio.open(f.name) as src:
             if src.crs is None:
                 raise ValueError("MRMS GRIB missing coordinate reference system")
-            if src.crs.to_epsg() != 4326:
+            if not src.crs.is_geographic:
                 raise ValueError(f"Unexpected MRMS CRS: {src.crs}")
             window = from_bounds(*BBOX, transform=src.transform).round_offsets().round_lengths()
             window = window.intersection(rasterio.windows.Window(0, 0, src.width, src.height))
