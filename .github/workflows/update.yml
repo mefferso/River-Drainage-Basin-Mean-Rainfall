@@ -37,5 +37,16 @@ jobs:
           git add data/
           if ! git diff --cached --quiet; then
             git commit -m "Update hourly MRMS basin rainfall"
-            git push
+            # Other documentation/code commits can arrive while MRMS downloads run.
+            # Rebase the generated-data commit rather than force-pushing.
+            for attempt in 1 2 3; do
+              git fetch origin main
+              git rebase origin/main
+              if git push origin HEAD:main; then
+                exit 0
+              fi
+              sleep 2
+            done
+            echo "Could not publish generated MRMS data after 3 attempts" >&2
+            exit 1
           fi
