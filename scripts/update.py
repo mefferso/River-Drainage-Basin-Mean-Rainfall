@@ -27,6 +27,8 @@ DATA = ROOT / "data"
 DATA.mkdir(exist_ok=True)
 GAGES = json.loads((ROOT / "config/gages.json").read_text())
 PERIODS = (6, 12, 24)
+WET_THRESHOLDS = (0.01, 0.10, 0.25, 0.50, 1.00)
+DEFAULT_WET_THRESHOLD = 0.10
 # Moderate display bounds cover most of WFO LIX including northern headwaters.
 BBOX = (-92.0, 29.1, -88.1, 34.2)  # west, south, east, north
 BASE = "https://mrms.ncep.noaa.gov/2D/"
@@ -152,23 +154,36 @@ def cell_areas(transform, height, width):
     row_area = radius**2 * dlon * np.abs(np.sin(lat + half) - np.sin(lat - half))
     return np.broadcast_to(row_area[:, None], (height, width))
 
-def area_stats(values, fractional, areas, wet_threshold=0.0):
-    """Weight partial boundary pixels; invalid grid pixels do not become zeros."""
+def area_stats(values, fractional, areas, wet_threshold=DEFAULT_WET_THRESHOLD):
+    """Area-weighted QPE statistics; ≥ thresholds are inclusive.
+
+    Whole-basin means include valid zero-precipitation pixels regardless of
+    threshold. Missing raster values are never interpreted as dry pixels.
+    """
     weights = fractional * areas
     valid = np.isfinite(values) & (weights > 0)
     valid_area = float(weights[valid].sum())
     selected_area = float(weights.sum())
-    if not valid_area:
-        return dict(whole_mean=None, wet_mean=None, wet_fraction=None,
-                    valid_fraction=0.0, max_inches=None, valid_cells=0)
-    wet = valid & (values > wet_threshold)
-    wet_area = float(weights[wet].sum())
+    threshold_stats = {}
+    for threshold in WET_THRESHOLDS:
+        key = f"{threshold:.2f}"
+        wet = valid & (values >= threshold)
+        wet_area = float(weights[wet].sum())
+        threshold_stats[key] = {
+            "wet_mean": float(np.sum(values[wet] * weights[wet]) / wet_area) if wet_area else None,
+            "wet_fraction": wet_area / valid_area if valid_area else None,
+        }
+    key = f"{wet_threshold:.2f}"
+    if key not in threshold_stats:
+        raise ValueError(f"Unsupported wet-area rainfall threshold: {wet_threshold}")
+    selected = threshold_stats[key]
     return dict(
-        whole_mean=float(np.sum(values[valid] * weights[valid]) / valid_area),
-        wet_mean=float(np.sum(values[wet] * weights[wet]) / wet_area) if wet_area else None,
-        wet_fraction=wet_area / valid_area,
+        whole_mean=float(np.sum(values[valid] * weights[valid]) / valid_area) if valid_area else None,
+        wet_mean=selected["wet_mean"],
+        wet_fraction=selected["wet_fraction"],
+        wet_thresholds=threshold_stats,
         valid_fraction=valid_area / selected_area if selected_area else 0.0,
-        max_inches=float(np.max(values[valid])),
+        max_inches=float(np.max(values[valid])) if valid_area else None,
         valid_cells=int(np.count_nonzero(valid)),
     )
 
@@ -211,7 +226,7 @@ def run():
         atomic_write(DATA / "reaches.geojson", json.dumps(
             {"type": "FeatureCollection", "features": reach_features}, separators=(",", ":")))
     result = {"generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
-              "product": "MRMS MultiSensor QPE Pass 1", "wet_threshold_inches": 0,
+              "product": "MRMS MultiSensor QPE Pass 1", "wet_threshold_inches": DEFAULT_WET_THRESHOLD, "wet_threshold_options_inches": WET_THRESHOLDS,
               "gages": GAGES, "periods": {}, "basin_errors": basin_errors, "reach_errors": reach_errors}
     successful = 0
     for hours in PERIODS:
