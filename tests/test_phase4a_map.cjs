@@ -5,6 +5,6 @@ assert.equal(scripts.length,1,'expected inline review logic');
 new vm.Script(scripts[0],{filename:'geometry_review.html'});
 for(const name of ['data/basins.geojson','data/reaches.geojson','config/gages.json','historical/relationships/v1/source/Phase2_Forecast_Point_Crosswalk.json','reports/phase4a/rfc_exact_nwsli_polygons.geojson','reports/phase4a/rfc_dashboard_only_spatial_candidates.geojson'])assert.equal(fs.existsSync(name),true,'missing map asset '+name);
 assert.match(html,/Diagnostic only/);assert.match(html,/UNVERIFIED LEGACY MAP MASK/);
-assert.match(html,/SPATIAL_ONLY/);
+assert.match(html,/Spatial-only candidate/);
 assert.match(html,/id="station"/);
 console.log('Phase 4A geometry review map syntax, paths, and scientific warnings OK');
