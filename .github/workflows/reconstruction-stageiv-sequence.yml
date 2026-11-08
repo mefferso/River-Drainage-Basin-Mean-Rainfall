@@ -1,0 +1,33 @@
+name: Phase 4C five-day Stage IV precipitation sequence
+on:
+  push:
+    branches: [feature/pilot-rainfall-reconstruction-amil1-mnlm6]
+    paths:
+      - .github/workflows/reconstruction-stageiv-sequence.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  sequence-2018:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: python -m pip install -r requirements.txt
+      - name: Download and compute 5 consecutive 12Z-12Z Stage IV basin MAP periods
+        run: |
+          python reconstruction/stageiv_daily_map.py \
+            --dates 2018-12-26 2018-12-27 2018-12-28 2018-12-29 2018-12-30 \
+            --output reconstruction/staging/stageiv_2018_five_days.json
+      - name: Retain provenance-rich five-day audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase4c-2018-five-day-stageiv
+          path: reconstruction/staging/stageiv_2018_five_days.json
+          retention-days: 30
+          if-no-files-found: warn
