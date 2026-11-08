@@ -39,9 +39,9 @@ example-001,AMIL1,2026-10-31T00:00:00Z,2026-10-31T02:00:00Z,2026-11-01T14:00:00Z
 
 Each accepted event requires every expected hourly grid, matching raster geometry and valid full-basin coverage in every hour. Rainfall is summed across complete hourly rasters before the existing `update.py` area-weighted whole-basin calculation, including valid zero-rain cells. It does not compute wet-area MAP or fabricate missing grids. Raster files may be GeoTIFF or another GDAL-readable raster, provided the documented units/CRS/metadata are correct. Events with insufficient coverage, mismatched products, overlapping or missing hours, or invalid timestamps **fail closed**.
 
-### Archive acquisition (not yet implemented)
+### Archive acquisition status
 
-Hourly Stage IV (early-2000s onward, subject to archive coverage) and archived MRMS Pass 2 must be downloaded/converted into the manifest before running this code. Pre-MRMS work will use Stage IV where verified, then station/gridded daily precipitation with a **separate daily-resolution method** (not this hourly pipeline). Daily data must not be disguised as six-hour rain periods. Obtaining original LMRFC MAP/basin methods remains a science task.
+Archived MRMS Pass 2 is now available through the opt-in `archive_qpe.py` GitHub-hosted workflow. Stage IV (early-2000s onward, subject to archive coverage) still needs an independently verified archive acquisition implementation. Pre-MRMS work will use Stage IV where verified, then station/gridded daily precipitation with a **separate daily-resolution method** (not this hourly pipeline). Daily data must not be disguised as six-hour rain periods. Obtaining original LMRFC MAP/basin methods remains a science task.
 
 ### Current limitations / next gates
 
@@ -51,3 +51,35 @@ Hourly Stage IV (early-2000s onward, subject to archive coverage) and archived M
 4. Only then publish new plotted events (same MAP-inches X / crest-feet Y display as the legacy workbook), add source toggles, and enable scheduled event processing.
 
 No historical floods, new validated crest relationships, or published reconstruction records are claimed by adding this scaffold.
+
+
+## Verified GitHub-hosted source access and first numerical audit (2026-11-08)
+
+The Codex execution sandbox was blocked from USGS/NOAA, but **GitHub-hosted Actions successfully retrieved the official data**. The pilot access probe run:
+https://github.com/mefferso/River-Drainage-Basin-Mean-Rainfall/actions/runs/42511567670
+
+For the Oct 29–Nov 3 2026 stage-probe window, USGS 00065 returned 481 instantaneous stage values for each pilot site. The crest finder emitted two *unverified* local-maximum candidates per station; stage datums and flood-event pairing remain unverified. The same run downloaded and converted two actual archived MRMS Pass 2 hours.
+
+A separate **independent 49-hour MRMS Pass 2 rainfall reproduction** succeeded:
+https://github.com/mefferso/River-Drainage-Basin-Mean-Rainfall/actions/runs/42512156714
+
+It downloaded and converted all **49 / 49** hourly source grids covering 2026-10-31T05:00Z through 2026-11-02T06:00Z, with no missing hours, then recalculated MAP using frozen event-specific upstream polygons from `historical/2026-10-31_2026-11-01/basins.geojson`. Calculated/referenced whole-upstream MAP:
+
+- AMIL1 / USGS 07375430: **0.3526434 / 0.3526434 inches** (reported difference 0.0000000 inches).
+- MNLM6 / USGS 02492360: **6.8788520 / 6.8788520 inches** (reported difference 0.0000000 inches).
+
+The audit artifacts are available as workflow-run artifacts (not published as approved event dots). It verifies reproducibility **using the same basin geometry**, not agreement with original LMRFC MAP methodology or historical forecast relationships. No verified rainfall/observed-crest pairing or historical spreadsheet match is claimed.
+
+### Scripts
+
+```bash
+python reconstruction/river_stage.py --start 2026-10-29T00:00:00Z --end 2026-11-03T00:00:00Z --output reconstruction/staging/stage_probe.json
+python reconstruction/archive_qpe.py --start 2026-10-31T05:00:00Z --end 2026-11-02T06:00:00Z --out reconstruction/staging/forty_nine_hour --download
+python reconstruction/verify_oct2026.py --manifest reconstruction/staging/forty_nine_hour/qpe_manifest.csv --output reconstruction/staging/49h_map_reproduction.json
+python -m unittest discover -s reconstruction/tests -v
+node tests/test_reconstruction_comparison.cjs
+```
+
+`reconstruction/compare_events.py` rejects legacy rows unless independently verified event windows and crest timestamps have been appended through an explicit review; rows without that chronology remain unmatched. The browser's Legacy/Reconstructed/Both controls are installed for AMIL1 and MNLM6, but reconstructed points cannot appear until records are individually marked `SCIENCE_APPROVED`. This has **not** happened. Do not overwrite or falsely relabel legacy data to enable them.
+
+Older-period Stage IV archives and NOAA station-based reconstructions have not yet been independently processed. Endpoint HTTP reachability alone is not evidence of historical archive inventory or scientific compatibility.
