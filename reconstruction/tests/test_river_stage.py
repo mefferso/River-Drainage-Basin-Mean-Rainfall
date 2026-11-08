@@ -48,6 +48,7 @@ class StageTests(unittest.TestCase):
         self.assertEqual(result[0]["candidate_stage_ft"], 7)
         self.assertEqual(result[0]["status"], "CANDIDATE_UNVERIFIED")
         obs[3]["time_utc"] = "2026-11-02T03:00:00+00:00"
+        obs[4]["time_utc"] = "2026-11-02T04:00:00+00:00"
         self.assertEqual(len(crest_candidates(obs)), 0)
 
     def test_missing_stage_units_rejected(self):
