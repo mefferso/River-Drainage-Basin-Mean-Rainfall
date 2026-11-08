@@ -1,576 +1,462 @@
 entity_type,entity_id,canonical_nws_id,candidate_status,unresolved_feature_ids,reason
-HISTORICAL_POINT,AMIL1,AMIL1,WITHHELD_TARGET_OUTLET_UNLINKED,410,NLDI hydrolocation must return exactly one feature
-HISTORICAL_POINT,BXAL1,BXAL1,WITHHELD_TARGET_OUTLET_UNLINKED,473,NLDI hydrolocation must return exactly one feature
-HISTORICAL_POINT,CGSL1,CGSL1,WITHHELD_TARGET_OUTLET_UNLINKED,546,NLDI hydrolocation must return exactly one feature
+HISTORICAL_POINT,AMIL1,AMIL1,WITHHELD_INCOMPLETE_ROUTED_COVERAGE,335,NLDI basin outlet coverage disagrees with routed RFC reachability; candidate withheld rather than publishing a partial union
+HISTORICAL_POINT,BXAL1,BXAL1,WITHHELD_INCOMPLETE_ROUTED_COVERAGE,245;248;250;251;467;468;470;472;474;479;526;527;528;529;530,NLDI basin outlet coverage disagrees with routed RFC reachability; candidate withheld rather than publishing a partial union
+HISTORICAL_POINT,CGSL1,CGSL1,WITHHELD_TARGET_OUTLET_UNLINKED,546,Outlet is 614.7 m from the returned flowline; only a snap within 200 m is accepted
 HISTORICAL_POINT,CLMM6,CLMM6,WITHHELD_TARGET_OUTLET_UNLINKED,479,NLDI hydrolocation request failed
-HISTORICAL_POINT,CREM6,CREM6,WITHHELD_TARGET_OUTLET_UNLINKED,418,NLDI hydrolocation must return exactly one feature
-HISTORICAL_POINT,CUSL1,CUSL1,WITHHELD_TARGET_OUTLET_UNLINKED,454,NLDI hydrolocation must return exactly one feature
-HISTORICAL_POINT,CVEL1,CVEL1,WITHHELD_TARGET_OUTLET_UNLINKED,458,NLDI hydrolocation must return exactly one feature
-HISTORICAL_POINT,DENL1,DENL1,WITHHELD_TARGET_OUTLET_UNLINKED,457,NLDI hydrolocation must return exactly one feature
-HISTORICAL_POINT,DIBM6,DIBM6,WITHHELD_TARGET_OUTLET_UNLINKED,464,NLDI hydrolocation must return exactly one feature
+HISTORICAL_POINT,CUSL1,CUSL1,WITHHELD_TARGET_OUTLET_UNLINKED,454,Outlet is 1132.7 m from the returned flowline; only a snap within 200 m is accepted
+HISTORICAL_POINT,CVEL1,CVEL1,WITHHELD_TARGET_OUTLET_UNLINKED,458,Outlet is 11737.4 m from the returned flowline; only a snap within 200 m is accepted
+HISTORICAL_POINT,DENL1,DENL1,WITHHELD_TARGET_OUTLET_UNLINKED,457,Outlet is 571.9 m from the returned flowline; only a snap within 200 m is accepted
+HISTORICAL_POINT,DIBM6,DIBM6,WITHHELD_TARGET_OUTLET_UNLINKED,464,Outlet is 879.0 m from the returned flowline; only a snap within 200 m is accepted
 HISTORICAL_POINT,FBFL1,FBFL1,UNRESOLVED_NO_MATCHING_RFC_FEATURE,,No RFC feature has an exact canonical NWSID attribute
-HISTORICAL_POINT,FLSL1,FLSL1,WITHHELD_TARGET_OUTLET_UNLINKED,420,NLDI hydrolocation must return exactly one feature
-HISTORICAL_POINT,GLFM6,GLFM6,WITHHELD_TARGET_OUTLET_UNLINKED,466,NLDI hydrolocation must return exactly one feature
-HISTORICAL_POINT,HOLL1,HOLL1,WITHHELD_TARGET_OUTLET_UNLINKED,452,NLDI hydrolocation must return exactly one feature
-HISTORICAL_POINT,KENL1,KENL1,WITHHELD_TARGET_OUTLET_UNLINKED,335,NLDI hydrolocation must return exactly one feature
-HISTORICAL_POINT,KLNM6,KLNM6,WITHHELD_TARGET_OUTLET_UNLINKED,465,NLDI hydrolocation must return exactly one feature
+HISTORICAL_POINT,FLSL1,FLSL1,WITHHELD_INCOMPLETE_ROUTED_COVERAGE,546,NLDI basin outlet coverage disagrees with routed RFC reachability; candidate withheld rather than publishing a partial union
+HISTORICAL_POINT,GLFM6,GLFM6,WITHHELD_TARGET_OUTLET_UNLINKED,466,Outlet is 1353.4 m from the returned flowline; only a snap within 200 m is accepted
+HISTORICAL_POINT,HOLL1,HOLL1,WITHHELD_INCOMPLETE_ROUTED_COVERAGE,409,NLDI basin outlet coverage disagrees with routed RFC reachability; candidate withheld rather than publishing a partial union
+HISTORICAL_POINT,KENL1,KENL1,WITHHELD_TARGET_OUTLET_UNLINKED,335,Outlet is 227.1 m from the returned flowline; only a snap within 200 m is accepted
+HISTORICAL_POINT,KLNM6,KLNM6,WITHHELD_TARGET_OUTLET_UNLINKED,465,Outlet is 689.8 m from the returned flowline; only a snap within 200 m is accepted
 HISTORICAL_POINT,LBFL1,LBFL1,UNRESOLVED_NO_MATCHING_RFC_FEATURE,,No RFC feature has an exact canonical NWSID attribute
-HISTORICAL_POINT,LNDM6,LNDM6,WITHHELD_TARGET_OUTLET_UNLINKED,441,NLDI hydrolocation must return exactly one feature
-HISTORICAL_POINT,LPOL1,LPOL1,WITHHELD_TARGET_OUTLET_UNLINKED,302,NLDI hydrolocation must return exactly one feature
-HISTORICAL_POINT,LRCL1,LRCL1,WITHHELD_TARGET_OUTLET_UNLINKED,545,NLDI hydrolocation must return exactly one feature
-HISTORICAL_POINT,MAGL1,MAGL1,WITHHELD_TARGET_OUTLET_UNLINKED,440,NLDI hydrolocation must return exactly one feature
-HISTORICAL_POINT,MNLM6,MNLM6,WITHHELD_TARGET_OUTLET_UNLINKED,421,NLDI hydrolocation must return exactly one feature
-HISTORICAL_POINT,MONL1,MONL1,WITHHELD_TARGET_OUTLET_UNLINKED,409,NLDI hydrolocation must return exactly one feature
-HISTORICAL_POINT,MSVL1,MSVL1,WITHHELD_TARGET_OUTLET_UNLINKED,593,NLDI hydrolocation must return exactly one feature
-HISTORICAL_POINT,NRBL1,NRBL1,WITHHELD_TARGET_OUTLET_UNLINKED,437,NLDI hydrolocation must return exactly one feature
-HISTORICAL_POINT,OSYM6,OSYM6,WITHHELD_TARGET_OUTLET_UNLINKED,308,NLDI hydrolocation must return exactly one feature
-HISTORICAL_POINT,ROBL1,ROBL1,WITHHELD_TARGET_OUTLET_UNLINKED,451,NLDI hydrolocation must return exactly one feature
-HISTORICAL_POINT,TRCL1,TRCL1,WITHHELD_TARGET_OUTLET_UNLINKED,594,NLDI hydrolocation must return exactly one feature
-HISTORICAL_POINT,TYTM6,TYTM6,WITHHELD_TARGET_OUTLET_UNLINKED,290,NLDI hydrolocation must return exactly one feature
+HISTORICAL_POINT,LNDM6,LNDM6,WITHHELD_TARGET_OUTLET_UNLINKED,441,Outlet is 1493.1 m from the returned flowline; only a snap within 200 m is accepted
+HISTORICAL_POINT,LRCL1,LRCL1,WITHHELD_TARGET_OUTLET_UNLINKED,545,Outlet is 699.7 m from the returned flowline; only a snap within 200 m is accepted
+HISTORICAL_POINT,MAGL1,MAGL1,WITHHELD_TARGET_OUTLET_UNLINKED,440,Outlet is 809.9 m from the returned flowline; only a snap within 200 m is accepted
+HISTORICAL_POINT,MONL1,MONL1,WITHHELD_TARGET_OUTLET_UNLINKED,409,Outlet is 709.5 m from the returned flowline; only a snap within 200 m is accepted
+HISTORICAL_POINT,MSVL1,MSVL1,WITHHELD_TARGET_OUTLET_UNLINKED,593,Outlet is 1873.5 m from the returned flowline; only a snap within 200 m is accepted
+HISTORICAL_POINT,NRBL1,NRBL1,WITHHELD_INCOMPLETE_ROUTED_COVERAGE,370,NLDI basin outlet coverage disagrees with routed RFC reachability; candidate withheld rather than publishing a partial union
+HISTORICAL_POINT,ROBL1,ROBL1,WITHHELD_INCOMPLETE_ROUTED_COVERAGE,335,NLDI basin outlet coverage disagrees with routed RFC reachability; candidate withheld rather than publishing a partial union
+HISTORICAL_POINT,TRCL1,TRCL1,WITHHELD_TARGET_OUTLET_UNLINKED,594,Outlet is 537.0 m from the returned flowline; only a snap within 200 m is accepted
 HISTORICAL_POINT,WPTM6,WPTM6,UNRESOLVED_NO_MATCHING_RFC_FEATURE,,No RFC feature has an exact canonical NWSID attribute
-RFC_FEATURE,1,,RFC_OUTLET_UNLINKED,1,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,2,,RFC_OUTLET_UNLINKED,2,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,3,,RFC_OUTLET_UNLINKED,3,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,4,,RFC_OUTLET_UNLINKED,4,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,5,,RFC_OUTLET_UNLINKED,5,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,6,,RFC_OUTLET_UNLINKED,6,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,7,,RFC_OUTLET_UNLINKED,7,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,9,,RFC_OUTLET_UNLINKED,9,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,10,,RFC_OUTLET_UNLINKED,10,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,11,,RFC_OUTLET_UNLINKED,11,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,12,,RFC_OUTLET_UNLINKED,12,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,13,,RFC_OUTLET_UNLINKED,13,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,14,,RFC_OUTLET_UNLINKED,14,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,1,,RFC_OUTLET_UNLINKED,1,Outlet is 642.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,2,,RFC_OUTLET_UNLINKED,2,Outlet is 1454.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,3,,RFC_OUTLET_UNLINKED,3,Outlet is 527.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,4,,RFC_OUTLET_UNLINKED,4,Outlet is 1078.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,5,,RFC_OUTLET_UNLINKED,5,Outlet is 683.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,6,,RFC_OUTLET_UNLINKED,6,Outlet is 801.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,7,,RFC_OUTLET_UNLINKED,7,Outlet is 4105.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,9,,RFC_OUTLET_UNLINKED,9,Outlet is 466.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,10,,RFC_OUTLET_UNLINKED,10,Outlet is 364.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,11,,RFC_OUTLET_UNLINKED,11,Outlet is 876.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,12,,RFC_OUTLET_UNLINKED,12,Outlet is 847.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,13,,RFC_OUTLET_UNLINKED,13,Outlet is 1102.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,14,,RFC_OUTLET_UNLINKED,14,Outlet is 469.9 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,15,,RFC_OUTLET_UNLINKED,15,NLDI hydrolocation request failed
-RFC_FEATURE,16,,RFC_OUTLET_UNLINKED,16,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,17,,RFC_OUTLET_UNLINKED,17,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,18,,RFC_OUTLET_UNLINKED,18,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,19,,RFC_OUTLET_UNLINKED,19,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,21,,RFC_OUTLET_UNLINKED,21,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,23,,RFC_OUTLET_UNLINKED,23,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,25,,RFC_OUTLET_UNLINKED,25,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,26,,RFC_OUTLET_UNLINKED,26,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,27,,RFC_OUTLET_UNLINKED,27,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,28,,RFC_OUTLET_UNLINKED,28,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,29,,RFC_OUTLET_UNLINKED,29,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,30,,RFC_OUTLET_UNLINKED,30,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,31,,RFC_OUTLET_UNLINKED,31,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,32,,RFC_OUTLET_UNLINKED,32,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,33,,RFC_OUTLET_UNLINKED,33,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,34,,RFC_OUTLET_UNLINKED,34,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,36,,RFC_OUTLET_UNLINKED,36,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,37,,RFC_OUTLET_UNLINKED,37,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,38,,RFC_OUTLET_UNLINKED,38,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,39,,RFC_OUTLET_UNLINKED,39,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,40,,RFC_OUTLET_UNLINKED,40,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,16,,RFC_OUTLET_UNLINKED,16,Outlet is 2784.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,17,,RFC_OUTLET_UNLINKED,17,Outlet is 609.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,18,,RFC_OUTLET_UNLINKED,18,Outlet is 1869.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,19,,RFC_OUTLET_UNLINKED,19,Outlet is 985.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,21,,RFC_OUTLET_UNLINKED,21,Outlet is 2227.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,23,,RFC_OUTLET_UNLINKED,23,Outlet is 2227.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,25,,RFC_OUTLET_UNLINKED,25,Outlet is 679.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,26,,RFC_OUTLET_UNLINKED,26,Outlet is 936.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,27,,RFC_OUTLET_UNLINKED,27,Outlet is 1231.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,28,,RFC_OUTLET_UNLINKED,28,Outlet is 671.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,29,,RFC_OUTLET_UNLINKED,29,Outlet is 1395.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,30,,RFC_OUTLET_UNLINKED,30,Outlet is 1034.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,31,,RFC_OUTLET_UNLINKED,31,Outlet is 1077.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,32,,RFC_OUTLET_UNLINKED,32,Outlet is 930.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,33,,RFC_OUTLET_UNLINKED,33,Outlet is 873.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,34,,RFC_OUTLET_UNLINKED,34,Outlet is 1719.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,36,,RFC_OUTLET_UNLINKED,36,Outlet is 1388.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,38,,RFC_OUTLET_UNLINKED,38,Outlet is 1276.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,39,,RFC_OUTLET_UNLINKED,39,Outlet is 255.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,40,,RFC_OUTLET_UNLINKED,40,Outlet is 1236.0 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,42,,RFC_OUTLET_UNLINKED,42,NLDI hydrolocation request failed
-RFC_FEATURE,43,,RFC_OUTLET_UNLINKED,43,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,44,,RFC_OUTLET_UNLINKED,44,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,45,,RFC_OUTLET_UNLINKED,45,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,46,,RFC_OUTLET_UNLINKED,46,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,47,,RFC_OUTLET_UNLINKED,47,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,48,,RFC_OUTLET_UNLINKED,48,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,49,,RFC_OUTLET_UNLINKED,49,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,55,,RFC_OUTLET_UNLINKED,55,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,57,,RFC_OUTLET_UNLINKED,57,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,58,,RFC_OUTLET_UNLINKED,58,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,61,,RFC_OUTLET_UNLINKED,61,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,62,,RFC_OUTLET_UNLINKED,62,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,63,,RFC_OUTLET_UNLINKED,63,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,64,,RFC_OUTLET_UNLINKED,64,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,65,,RFC_OUTLET_UNLINKED,65,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,67,,RFC_OUTLET_UNLINKED,67,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,43,,RFC_OUTLET_UNLINKED,43,Outlet is 1187.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,44,,RFC_OUTLET_UNLINKED,44,Outlet is 2032.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,45,,RFC_OUTLET_UNLINKED,45,Outlet is 972.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,46,,RFC_OUTLET_UNLINKED,46,Outlet is 1253.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,47,,RFC_OUTLET_UNLINKED,47,Outlet is 1112.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,48,,RFC_OUTLET_UNLINKED,48,Outlet is 399.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,49,,RFC_OUTLET_UNLINKED,49,Outlet is 977.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,55,,RFC_OUTLET_UNLINKED,55,Outlet is 541.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,57,,RFC_OUTLET_UNLINKED,57,Outlet is 541.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,58,,RFC_OUTLET_UNLINKED,58,Outlet is 1724.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,61,,RFC_OUTLET_UNLINKED,61,Outlet is 1084.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,62,,RFC_OUTLET_UNLINKED,62,Outlet is 1243.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,63,,RFC_OUTLET_UNLINKED,63,Outlet is 1175.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,64,,RFC_OUTLET_UNLINKED,64,Outlet is 1458.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,65,,RFC_OUTLET_UNLINKED,65,Outlet is 1274.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,67,,RFC_OUTLET_UNLINKED,67,Outlet is 1851.9 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,70,,RFC_OUTLET_UNLINKED,70,NLDI hydrolocation request failed
-RFC_FEATURE,72,,RFC_OUTLET_UNLINKED,72,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,73,,RFC_OUTLET_UNLINKED,73,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,74,,RFC_OUTLET_UNLINKED,74,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,75,,RFC_OUTLET_UNLINKED,75,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,76,,RFC_OUTLET_UNLINKED,76,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,77,,RFC_OUTLET_UNLINKED,77,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,78,,RFC_OUTLET_UNLINKED,78,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,79,,RFC_OUTLET_UNLINKED,79,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,80,,RFC_OUTLET_UNLINKED,80,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,81,,RFC_OUTLET_UNLINKED,81,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,82,,RFC_OUTLET_UNLINKED,82,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,83,,RFC_OUTLET_UNLINKED,83,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,84,,RFC_OUTLET_UNLINKED,84,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,85,,RFC_OUTLET_UNLINKED,85,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,72,,RFC_OUTLET_UNLINKED,72,Outlet is 1445.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,73,,RFC_OUTLET_UNLINKED,73,Outlet is 2002.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,74,,RFC_OUTLET_UNLINKED,74,Outlet is 844.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,75,,RFC_OUTLET_UNLINKED,75,Outlet is 1107.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,76,,RFC_OUTLET_UNLINKED,76,Outlet is 3109.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,77,,RFC_OUTLET_UNLINKED,77,Outlet is 711.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,78,,RFC_OUTLET_UNLINKED,78,Outlet is 1125.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,79,,RFC_OUTLET_UNLINKED,79,Outlet is 1965.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,81,,RFC_OUTLET_UNLINKED,81,Outlet is 554.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,82,,RFC_OUTLET_UNLINKED,82,Outlet is 1134.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,83,,RFC_OUTLET_UNLINKED,83,Outlet is 1327.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,84,,RFC_OUTLET_UNLINKED,84,Outlet is 1323.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,85,,RFC_OUTLET_UNLINKED,85,Outlet is 2063.1 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,86,,RFC_OUTLET_UNLINKED,86,NLDI hydrolocation request failed
 RFC_FEATURE,87,,RFC_OUTLET_UNLINKED,87,NLDI hydrolocation request failed
-RFC_FEATURE,88,,RFC_OUTLET_UNLINKED,88,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,89,,RFC_OUTLET_UNLINKED,89,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,90,,RFC_OUTLET_UNLINKED,90,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,91,,RFC_OUTLET_UNLINKED,91,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,92,,RFC_OUTLET_UNLINKED,92,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,93,,RFC_OUTLET_UNLINKED,93,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,94,,RFC_OUTLET_UNLINKED,94,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,95,,RFC_OUTLET_UNLINKED,95,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,96,,RFC_OUTLET_UNLINKED,96,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,97,,RFC_OUTLET_UNLINKED,97,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,98,,RFC_OUTLET_UNLINKED,98,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,99,,RFC_OUTLET_UNLINKED,99,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,100,,RFC_OUTLET_UNLINKED,100,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,101,,RFC_OUTLET_UNLINKED,101,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,102,,RFC_OUTLET_UNLINKED,102,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,103,,RFC_OUTLET_UNLINKED,103,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,104,,RFC_OUTLET_UNLINKED,104,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,105,,RFC_OUTLET_UNLINKED,105,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,106,,RFC_OUTLET_UNLINKED,106,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,107,,RFC_OUTLET_UNLINKED,107,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,108,,RFC_OUTLET_UNLINKED,108,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,109,,RFC_OUTLET_UNLINKED,109,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,110,,RFC_OUTLET_UNLINKED,110,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,111,,RFC_OUTLET_UNLINKED,111,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,112,,RFC_OUTLET_UNLINKED,112,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,113,,RFC_OUTLET_UNLINKED,113,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,114,,RFC_OUTLET_UNLINKED,114,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,115,,RFC_OUTLET_UNLINKED,115,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,116,,RFC_OUTLET_UNLINKED,116,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,117,,RFC_OUTLET_UNLINKED,117,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,119,,RFC_OUTLET_UNLINKED,119,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,88,,RFC_OUTLET_UNLINKED,88,Outlet is 1931.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,89,,RFC_OUTLET_UNLINKED,89,Outlet is 1037.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,90,,RFC_OUTLET_UNLINKED,90,Outlet is 1074.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,91,,RFC_OUTLET_UNLINKED,91,Outlet is 1637.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,92,,RFC_OUTLET_UNLINKED,92,Outlet is 1180.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,93,,RFC_OUTLET_UNLINKED,93,Outlet is 731.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,94,,RFC_OUTLET_UNLINKED,94,Outlet is 1389.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,95,,RFC_OUTLET_UNLINKED,95,Outlet is 1644.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,96,,RFC_OUTLET_UNLINKED,96,Outlet is 1411.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,97,,RFC_OUTLET_UNLINKED,97,Outlet is 1430.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,98,,RFC_OUTLET_UNLINKED,98,Outlet is 968.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,99,,RFC_OUTLET_UNLINKED,99,Outlet is 447.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,100,,RFC_OUTLET_UNLINKED,100,Outlet is 903.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,101,,RFC_OUTLET_UNLINKED,101,Outlet is 1425.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,102,,RFC_OUTLET_UNLINKED,102,Outlet is 1144.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,103,,RFC_OUTLET_UNLINKED,103,Outlet is 1449.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,104,,RFC_OUTLET_UNLINKED,104,Outlet is 983.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,105,,RFC_OUTLET_UNLINKED,105,Outlet is 1480.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,106,,RFC_OUTLET_UNLINKED,106,Outlet is 2104.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,107,,RFC_OUTLET_UNLINKED,107,Outlet is 879.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,108,,RFC_OUTLET_UNLINKED,108,Outlet is 1923.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,109,,RFC_OUTLET_UNLINKED,109,Outlet is 2012.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,110,,RFC_OUTLET_UNLINKED,110,Outlet is 1202.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,111,,RFC_OUTLET_UNLINKED,111,Outlet is 871.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,112,,RFC_OUTLET_UNLINKED,112,Outlet is 1319.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,113,,RFC_OUTLET_UNLINKED,113,Outlet is 1460.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,114,,RFC_OUTLET_UNLINKED,114,Outlet is 1948.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,115,,RFC_OUTLET_UNLINKED,115,Outlet is 1011.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,116,,RFC_OUTLET_UNLINKED,116,Outlet is 2277.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,117,,RFC_OUTLET_UNLINKED,117,Outlet is 1209.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,119,,RFC_OUTLET_UNLINKED,119,Outlet is 2118.4 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,120,,RFC_OUTLET_UNLINKED,120,NLDI hydrolocation request failed
-RFC_FEATURE,121,,RFC_OUTLET_UNLINKED,121,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,122,,RFC_OUTLET_UNLINKED,122,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,123,,RFC_OUTLET_UNLINKED,123,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,124,,RFC_OUTLET_UNLINKED,124,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,125,,RFC_OUTLET_UNLINKED,125,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,126,,RFC_OUTLET_UNLINKED,126,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,127,,RFC_OUTLET_UNLINKED,127,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,129,,RFC_OUTLET_UNLINKED,129,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,130,,RFC_OUTLET_UNLINKED,130,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,121,,RFC_OUTLET_UNLINKED,121,Outlet is 771.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,122,,RFC_OUTLET_UNLINKED,122,Outlet is 1458.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,123,,RFC_OUTLET_UNLINKED,123,Outlet is 1542.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,124,,RFC_OUTLET_UNLINKED,124,Outlet is 927.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,125,,RFC_OUTLET_UNLINKED,125,Outlet is 1214.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,126,,RFC_OUTLET_UNLINKED,126,Outlet is 1423.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,127,,RFC_OUTLET_UNLINKED,127,Outlet is 2101.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,129,,RFC_OUTLET_UNLINKED,129,Outlet is 924.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,130,,RFC_OUTLET_UNLINKED,130,Outlet is 1407.5 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,131,,RFC_OUTLET_UNLINKED,131,NLDI hydrolocation request failed
-RFC_FEATURE,132,,RFC_OUTLET_UNLINKED,132,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,133,,RFC_OUTLET_UNLINKED,133,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,134,,RFC_OUTLET_UNLINKED,134,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,136,,RFC_OUTLET_UNLINKED,136,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,137,,RFC_OUTLET_UNLINKED,137,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,138,,RFC_OUTLET_UNLINKED,138,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,139,,RFC_OUTLET_UNLINKED,139,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,140,,RFC_OUTLET_UNLINKED,140,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,141,,RFC_OUTLET_UNLINKED,141,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,142,,RFC_OUTLET_UNLINKED,142,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,132,,RFC_OUTLET_UNLINKED,132,Outlet is 1473.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,133,,RFC_OUTLET_UNLINKED,133,Outlet is 1103.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,134,,RFC_OUTLET_UNLINKED,134,Outlet is 1484.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,136,,RFC_OUTLET_UNLINKED,136,Outlet is 1572.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,137,,RFC_OUTLET_UNLINKED,137,Outlet is 829.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,138,,RFC_OUTLET_UNLINKED,138,Outlet is 765.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,139,,RFC_OUTLET_UNLINKED,139,Outlet is 774.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,140,,RFC_OUTLET_UNLINKED,140,Outlet is 514.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,141,,RFC_OUTLET_UNLINKED,141,Outlet is 1159.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,142,,RFC_OUTLET_UNLINKED,142,Outlet is 1209.3 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,143,,RFC_OUTLET_UNLINKED,143,NLDI hydrolocation request failed
-RFC_FEATURE,144,,RFC_OUTLET_UNLINKED,144,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,145,,RFC_OUTLET_UNLINKED,145,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,146,,RFC_OUTLET_UNLINKED,146,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,147,,RFC_OUTLET_UNLINKED,147,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,148,,RFC_OUTLET_UNLINKED,148,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,149,,RFC_OUTLET_UNLINKED,149,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,150,,RFC_OUTLET_UNLINKED,150,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,151,,RFC_OUTLET_UNLINKED,151,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,144,,RFC_OUTLET_UNLINKED,144,Outlet is 568.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,145,,RFC_OUTLET_UNLINKED,145,Outlet is 1977.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,146,,RFC_OUTLET_UNLINKED,146,Outlet is 916.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,147,,RFC_OUTLET_UNLINKED,147,Outlet is 910.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,148,,RFC_OUTLET_UNLINKED,148,Outlet is 1470.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,149,,RFC_OUTLET_UNLINKED,149,Outlet is 1484.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,150,,RFC_OUTLET_UNLINKED,150,Outlet is 1295.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,151,,RFC_OUTLET_UNLINKED,151,Outlet is 4326.1 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,153,,RFC_OUTLET_UNLINKED,153,NLDI hydrolocation request failed
-RFC_FEATURE,154,,RFC_OUTLET_UNLINKED,154,NLDI hydrolocation must return exactly one feature
 RFC_FEATURE,155,,RFC_OUTLET_UNLINKED,155,NLDI hydrolocation request failed
-RFC_FEATURE,156,,RFC_OUTLET_UNLINKED,156,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,157,,RFC_OUTLET_UNLINKED,157,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,158,,RFC_OUTLET_UNLINKED,158,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,159,,RFC_OUTLET_UNLINKED,159,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,160,,RFC_OUTLET_UNLINKED,160,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,161,,RFC_OUTLET_UNLINKED,161,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,162,,RFC_OUTLET_UNLINKED,162,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,163,,RFC_OUTLET_UNLINKED,163,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,164,,RFC_OUTLET_UNLINKED,164,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,165,,RFC_OUTLET_UNLINKED,165,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,166,,RFC_OUTLET_UNLINKED,166,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,167,,RFC_OUTLET_UNLINKED,167,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,169,,RFC_OUTLET_UNLINKED,169,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,170,,RFC_OUTLET_UNLINKED,170,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,171,,RFC_OUTLET_UNLINKED,171,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,172,,RFC_OUTLET_UNLINKED,172,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,173,,RFC_OUTLET_UNLINKED,173,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,178,,RFC_OUTLET_UNLINKED,178,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,179,,RFC_OUTLET_UNLINKED,179,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,180,,RFC_OUTLET_UNLINKED,180,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,181,,RFC_OUTLET_UNLINKED,181,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,185,,RFC_OUTLET_UNLINKED,185,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,156,,RFC_OUTLET_UNLINKED,156,Outlet is 1851.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,157,,RFC_OUTLET_UNLINKED,157,Outlet is 592.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,158,,RFC_OUTLET_UNLINKED,158,Outlet is 2818.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,159,,RFC_OUTLET_UNLINKED,159,Outlet is 514.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,160,,RFC_OUTLET_UNLINKED,160,Outlet is 2275.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,161,,RFC_OUTLET_UNLINKED,161,Outlet is 724.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,162,,RFC_OUTLET_UNLINKED,162,Outlet is 873.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,163,,RFC_OUTLET_UNLINKED,163,Outlet is 617.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,164,,RFC_OUTLET_UNLINKED,164,Outlet is 1443.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,165,,RFC_OUTLET_UNLINKED,165,Outlet is 547.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,169,,RFC_OUTLET_UNLINKED,169,Outlet is 1491.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,170,,RFC_OUTLET_UNLINKED,170,Outlet is 1450.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,171,,RFC_OUTLET_UNLINKED,171,Outlet is 825.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,172,,RFC_OUTLET_UNLINKED,172,Outlet is 291.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,173,,RFC_OUTLET_UNLINKED,173,Outlet is 654.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,180,,RFC_OUTLET_UNLINKED,180,Outlet is 239.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,185,,RFC_OUTLET_UNLINKED,185,Outlet is 902.9 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,186,,RFC_OUTLET_UNLINKED,186,NLDI hydrolocation request failed
-RFC_FEATURE,187,,RFC_OUTLET_UNLINKED,187,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,188,,RFC_OUTLET_UNLINKED,188,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,189,,RFC_OUTLET_UNLINKED,189,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,190,,RFC_OUTLET_UNLINKED,190,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,191,,RFC_OUTLET_UNLINKED,191,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,192,,RFC_OUTLET_UNLINKED,192,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,193,,RFC_OUTLET_UNLINKED,193,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,194,,RFC_OUTLET_UNLINKED,194,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,195,,RFC_OUTLET_UNLINKED,195,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,196,,RFC_OUTLET_UNLINKED,196,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,197,,RFC_OUTLET_UNLINKED,197,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,198,,RFC_OUTLET_UNLINKED,198,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,199,,RFC_OUTLET_UNLINKED,199,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,200,,RFC_OUTLET_UNLINKED,200,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,201,,RFC_OUTLET_UNLINKED,201,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,202,,RFC_OUTLET_UNLINKED,202,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,203,,RFC_OUTLET_UNLINKED,203,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,204,,RFC_OUTLET_UNLINKED,204,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,205,,RFC_OUTLET_UNLINKED,205,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,206,,RFC_OUTLET_UNLINKED,206,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,207,,RFC_OUTLET_UNLINKED,207,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,208,,RFC_OUTLET_UNLINKED,208,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,209,,RFC_OUTLET_UNLINKED,209,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,189,,RFC_OUTLET_UNLINKED,189,Outlet is 456.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,190,,RFC_OUTLET_UNLINKED,190,Outlet is 1379.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,192,,RFC_OUTLET_UNLINKED,192,Outlet is 2673.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,193,,RFC_OUTLET_UNLINKED,193,Outlet is 2313.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,195,,RFC_OUTLET_UNLINKED,195,Outlet is 1769.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,196,,RFC_OUTLET_UNLINKED,196,Outlet is 489.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,198,,RFC_OUTLET_UNLINKED,198,Outlet is 4432.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,199,,RFC_OUTLET_UNLINKED,199,Outlet is 1017.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,200,,RFC_OUTLET_UNLINKED,200,Outlet is 2617.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,201,,RFC_OUTLET_UNLINKED,201,Outlet is 3640.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,203,,RFC_OUTLET_UNLINKED,203,Outlet is 237.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,204,,RFC_OUTLET_UNLINKED,204,Outlet is 1869.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,205,,RFC_UPSTREAM_NAV_MISSING,205,No upstream flowline set for COMID 18719538
+RFC_FEATURE,206,,RFC_OUTLET_UNLINKED,206,Outlet is 486.9 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,210,,RFC_OUTLET_UNLINKED,210,NLDI hydrolocation request failed
-RFC_FEATURE,211,,RFC_OUTLET_UNLINKED,211,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,212,,RFC_OUTLET_UNLINKED,212,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,213,,RFC_OUTLET_UNLINKED,213,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,214,,RFC_OUTLET_UNLINKED,214,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,215,,RFC_OUTLET_UNLINKED,215,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,216,,RFC_OUTLET_UNLINKED,216,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,217,,RFC_OUTLET_UNLINKED,217,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,211,,RFC_OUTLET_UNLINKED,211,Outlet is 727.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,214,,RFC_OUTLET_UNLINKED,214,Outlet is 217.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,215,,RFC_OUTLET_UNLINKED,215,Outlet is 1312.9 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,218,,RFC_OUTLET_UNLINKED,218,NLDI hydrolocation request failed
-RFC_FEATURE,219,,RFC_OUTLET_UNLINKED,219,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,220,,RFC_OUTLET_UNLINKED,220,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,221,,RFC_OUTLET_UNLINKED,221,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,222,,RFC_OUTLET_UNLINKED,222,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,223,,RFC_OUTLET_UNLINKED,223,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,224,,RFC_OUTLET_UNLINKED,224,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,225,,RFC_OUTLET_UNLINKED,225,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,226,,RFC_OUTLET_UNLINKED,226,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,227,,RFC_OUTLET_UNLINKED,227,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,228,,RFC_OUTLET_UNLINKED,228,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,229,,RFC_OUTLET_UNLINKED,229,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,230,,RFC_OUTLET_UNLINKED,230,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,219,,RFC_OUTLET_UNLINKED,219,Outlet is 986.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,220,,RFC_OUTLET_UNLINKED,220,Outlet is 334.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,221,,RFC_OUTLET_UNLINKED,221,Outlet is 986.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,223,,RFC_OUTLET_UNLINKED,223,Outlet is 1159.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,224,,RFC_OUTLET_UNLINKED,224,Outlet is 208.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,226,,RFC_OUTLET_UNLINKED,226,Outlet is 1506.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,228,,RFC_OUTLET_UNLINKED,228,Outlet is 617.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,229,,RFC_OUTLET_UNLINKED,229,Outlet is 237.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,230,,RFC_OUTLET_UNLINKED,230,Outlet is 1071.8 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,231,,RFC_OUTLET_UNLINKED,231,NLDI hydrolocation request failed
 RFC_FEATURE,232,,RFC_OUTLET_UNLINKED,232,NLDI hydrolocation request failed
-RFC_FEATURE,233,,RFC_OUTLET_UNLINKED,233,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,234,,RFC_OUTLET_UNLINKED,234,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,235,,RFC_OUTLET_UNLINKED,235,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,236,,RFC_OUTLET_UNLINKED,236,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,237,,RFC_OUTLET_UNLINKED,237,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,238,,RFC_OUTLET_UNLINKED,238,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,239,,RFC_OUTLET_UNLINKED,239,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,240,,RFC_OUTLET_UNLINKED,240,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,233,,RFC_OUTLET_UNLINKED,233,Outlet is 354.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,234,,RFC_OUTLET_UNLINKED,234,Outlet is 873.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,236,,RFC_OUTLET_UNLINKED,236,Outlet is 772.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,237,,RFC_OUTLET_UNLINKED,237,Outlet is 837.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,238,,RFC_OUTLET_UNLINKED,238,Outlet is 1109.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,239,,RFC_OUTLET_UNLINKED,239,Outlet is 200.6 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,241,,RFC_OUTLET_UNLINKED,241,NLDI hydrolocation request failed
-RFC_FEATURE,242,,RFC_OUTLET_UNLINKED,242,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,242,,RFC_OUTLET_UNLINKED,242,Outlet is 524.0 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,243,,RFC_OUTLET_UNLINKED,243,NLDI hydrolocation request failed
-RFC_FEATURE,244,,RFC_OUTLET_UNLINKED,244,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,245,,RFC_OUTLET_UNLINKED,245,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,246,,RFC_OUTLET_UNLINKED,246,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,247,,RFC_OUTLET_UNLINKED,247,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,248,,RFC_OUTLET_UNLINKED,248,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,249,,RFC_OUTLET_UNLINKED,249,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,250,,RFC_OUTLET_UNLINKED,250,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,251,,RFC_OUTLET_UNLINKED,251,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,252,,RFC_OUTLET_UNLINKED,252,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,253,,RFC_OUTLET_UNLINKED,253,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,254,,RFC_OUTLET_UNLINKED,254,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,255,,RFC_OUTLET_UNLINKED,255,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,256,,RFC_OUTLET_UNLINKED,256,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,257,,RFC_OUTLET_UNLINKED,257,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,258,,RFC_OUTLET_UNLINKED,258,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,259,,RFC_OUTLET_UNLINKED,259,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,260,,RFC_OUTLET_UNLINKED,260,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,261,,RFC_OUTLET_UNLINKED,261,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,262,,RFC_OUTLET_UNLINKED,262,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,263,,RFC_OUTLET_UNLINKED,263,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,264,,RFC_OUTLET_UNLINKED,264,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,265,,RFC_OUTLET_UNLINKED,265,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,266,,RFC_OUTLET_UNLINKED,266,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,267,,RFC_OUTLET_UNLINKED,267,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,268,,RFC_OUTLET_UNLINKED,268,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,269,,RFC_OUTLET_UNLINKED,269,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,270,,RFC_OUTLET_UNLINKED,270,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,271,,RFC_OUTLET_UNLINKED,271,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,272,,RFC_OUTLET_UNLINKED,272,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,273,,RFC_OUTLET_UNLINKED,273,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,274,,RFC_OUTLET_UNLINKED,274,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,275,,RFC_OUTLET_UNLINKED,275,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,276,,RFC_OUTLET_UNLINKED,276,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,277,,RFC_OUTLET_UNLINKED,277,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,278,,RFC_OUTLET_UNLINKED,278,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,245,,RFC_OUTLET_UNLINKED,245,Outlet is 641.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,247,,RFC_OUTLET_UNLINKED,247,Outlet is 413.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,248,,RFC_OUTLET_UNLINKED,248,Outlet is 248.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,250,,RFC_OUTLET_UNLINKED,250,Outlet is 249.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,251,,RFC_OUTLET_UNLINKED,251,Outlet is 505.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,252,,RFC_OUTLET_UNLINKED,252,Outlet is 1360.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,256,,RFC_OUTLET_UNLINKED,256,Outlet is 240.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,257,,RFC_OUTLET_UNLINKED,257,Outlet is 336.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,258,,RFC_OUTLET_UNLINKED,258,Outlet is 905.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,259,,RFC_OUTLET_UNLINKED,259,Outlet is 226.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,262,,RFC_OUTLET_UNLINKED,262,Outlet is 1246.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,264,,RFC_OUTLET_UNLINKED,264,Outlet is 302.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,265,,RFC_OUTLET_UNLINKED,265,Outlet is 974.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,270,,RFC_OUTLET_UNLINKED,270,Outlet is 272.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,276,,RFC_OUTLET_UNLINKED,276,Outlet is 235.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,277,,RFC_OUTLET_UNLINKED,277,Outlet is 1222.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,278,,RFC_OUTLET_UNLINKED,278,Outlet is 3361.1 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,279,,RFC_OUTLET_UNLINKED,279,NLDI hydrolocation request failed
-RFC_FEATURE,280,,RFC_OUTLET_UNLINKED,280,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,281,,RFC_OUTLET_UNLINKED,281,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,282,,RFC_OUTLET_UNLINKED,282,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,283,,RFC_OUTLET_UNLINKED,283,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,284,,RFC_OUTLET_UNLINKED,284,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,285,,RFC_OUTLET_UNLINKED,285,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,286,,RFC_OUTLET_UNLINKED,286,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,280,,RFC_OUTLET_UNLINKED,280,Outlet is 1803.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,281,,RFC_OUTLET_UNLINKED,281,Outlet is 298.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,283,,RFC_OUTLET_UNLINKED,283,Outlet is 959.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,284,,RFC_OUTLET_UNLINKED,284,Outlet is 411.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,285,,RFC_OUTLET_UNLINKED,285,Outlet is 216.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,286,,RFC_OUTLET_UNLINKED,286,Outlet is 257.8 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,287,,RFC_OUTLET_UNLINKED,287,NLDI hydrolocation request failed
-RFC_FEATURE,288,,RFC_OUTLET_UNLINKED,288,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,289,,RFC_OUTLET_UNLINKED,289,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,290,,RFC_OUTLET_UNLINKED,290,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,291,,RFC_OUTLET_UNLINKED,291,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,292,,RFC_OUTLET_UNLINKED,292,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,293,,RFC_OUTLET_UNLINKED,293,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,294,,RFC_OUTLET_UNLINKED,294,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,295,,RFC_OUTLET_UNLINKED,295,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,296,,RFC_OUTLET_UNLINKED,296,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,297,,RFC_OUTLET_UNLINKED,297,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,298,,RFC_OUTLET_UNLINKED,298,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,299,,RFC_OUTLET_UNLINKED,299,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,300,,RFC_OUTLET_UNLINKED,300,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,301,,RFC_OUTLET_UNLINKED,301,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,302,,RFC_OUTLET_UNLINKED,302,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,303,,RFC_OUTLET_UNLINKED,303,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,304,,RFC_OUTLET_UNLINKED,304,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,305,,RFC_OUTLET_UNLINKED,305,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,306,,RFC_OUTLET_UNLINKED,306,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,307,,RFC_OUTLET_UNLINKED,307,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,308,,RFC_OUTLET_UNLINKED,308,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,309,,RFC_OUTLET_UNLINKED,309,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,310,,RFC_OUTLET_UNLINKED,310,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,311,,RFC_OUTLET_UNLINKED,311,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,312,,RFC_OUTLET_UNLINKED,312,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,313,,RFC_OUTLET_UNLINKED,313,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,314,,RFC_OUTLET_UNLINKED,314,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,315,,RFC_OUTLET_UNLINKED,315,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,316,,RFC_OUTLET_UNLINKED,316,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,317,,RFC_OUTLET_UNLINKED,317,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,335,,RFC_OUTLET_UNLINKED,335,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,336,,RFC_OUTLET_UNLINKED,336,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,337,,RFC_OUTLET_UNLINKED,337,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,338,,RFC_OUTLET_UNLINKED,338,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,339,,RFC_OUTLET_UNLINKED,339,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,340,,RFC_OUTLET_UNLINKED,340,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,341,,RFC_OUTLET_UNLINKED,341,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,342,,RFC_OUTLET_UNLINKED,342,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,343,,RFC_OUTLET_UNLINKED,343,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,344,,RFC_OUTLET_UNLINKED,344,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,345,,RFC_OUTLET_UNLINKED,345,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,346,,RFC_OUTLET_UNLINKED,346,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,347,,RFC_OUTLET_UNLINKED,347,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,348,,RFC_OUTLET_UNLINKED,348,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,349,,RFC_OUTLET_UNLINKED,349,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,350,,RFC_OUTLET_UNLINKED,350,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,288,,RFC_OUTLET_UNLINKED,288,Outlet is 1258.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,289,,RFC_OUTLET_UNLINKED,289,Outlet is 1542.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,291,,RFC_OUTLET_UNLINKED,291,Outlet is 588.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,292,,RFC_OUTLET_UNLINKED,292,Outlet is 556.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,293,,RFC_OUTLET_UNLINKED,293,Outlet is 234.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,296,,RFC_OUTLET_UNLINKED,296,Outlet is 5333.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,298,,RFC_OUTLET_UNLINKED,298,Outlet is 1897.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,299,,RFC_OUTLET_UNLINKED,299,Outlet is 1315.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,300,,RFC_OUTLET_UNLINKED,300,Outlet is 1759.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,301,,RFC_OUTLET_UNLINKED,301,Outlet is 886.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,303,,RFC_OUTLET_UNLINKED,303,Outlet is 554.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,305,,RFC_OUTLET_UNLINKED,305,Outlet is 1259.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,306,,RFC_OUTLET_UNLINKED,306,Outlet is 253.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,309,,RFC_OUTLET_UNLINKED,309,Outlet is 939.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,310,,RFC_OUTLET_UNLINKED,310,Outlet is 821.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,311,,RFC_OUTLET_UNLINKED,311,Outlet is 405.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,312,,RFC_OUTLET_UNLINKED,312,Outlet is 732.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,313,,RFC_OUTLET_UNLINKED,313,Outlet is 948.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,314,,RFC_OUTLET_UNLINKED,314,Outlet is 391.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,315,,RFC_OUTLET_UNLINKED,315,Outlet is 962.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,316,,RFC_OUTLET_UNLINKED,316,Outlet is 360.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,317,,RFC_OUTLET_UNLINKED,317,Outlet is 507.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,335,,RFC_OUTLET_UNLINKED,335,Outlet is 227.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,336,,RFC_OUTLET_UNLINKED,336,Outlet is 2538.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,338,,RFC_OUTLET_UNLINKED,338,Outlet is 213.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,339,,RFC_OUTLET_UNLINKED,339,Outlet is 879.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,340,,RFC_OUTLET_UNLINKED,340,Outlet is 409.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,341,,RFC_OUTLET_UNLINKED,341,Outlet is 208.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,342,,RFC_OUTLET_UNLINKED,342,Outlet is 547.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,343,,RFC_OUTLET_UNLINKED,343,Outlet is 3510.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,344,,RFC_OUTLET_UNLINKED,344,Outlet is 989.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,345,,RFC_OUTLET_UNLINKED,345,Outlet is 503.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,349,,RFC_OUTLET_UNLINKED,349,Outlet is 1686.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,350,,RFC_OUTLET_UNLINKED,350,Outlet is 707.5 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,351,,RFC_OUTLET_UNLINKED,351,NLDI hydrolocation request failed
-RFC_FEATURE,352,,RFC_OUTLET_UNLINKED,352,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,353,,RFC_OUTLET_UNLINKED,353,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,354,,RFC_OUTLET_UNLINKED,354,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,355,,RFC_OUTLET_UNLINKED,355,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,356,,RFC_OUTLET_UNLINKED,356,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,357,,RFC_OUTLET_UNLINKED,357,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,358,,RFC_OUTLET_UNLINKED,358,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,359,,RFC_OUTLET_UNLINKED,359,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,360,,RFC_OUTLET_UNLINKED,360,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,361,,RFC_OUTLET_UNLINKED,361,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,362,,RFC_OUTLET_UNLINKED,362,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,363,,RFC_OUTLET_UNLINKED,363,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,364,,RFC_OUTLET_UNLINKED,364,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,365,,RFC_OUTLET_UNLINKED,365,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,366,,RFC_OUTLET_UNLINKED,366,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,367,,RFC_OUTLET_UNLINKED,367,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,368,,RFC_OUTLET_UNLINKED,368,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,369,,RFC_OUTLET_UNLINKED,369,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,370,,RFC_OUTLET_UNLINKED,370,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,352,,RFC_OUTLET_UNLINKED,352,Outlet is 604.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,353,,RFC_OUTLET_UNLINKED,353,Outlet is 770.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,354,,RFC_OUTLET_UNLINKED,354,Outlet is 314.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,356,,RFC_OUTLET_UNLINKED,356,Outlet is 840.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,357,,RFC_OUTLET_UNLINKED,357,Outlet is 698.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,358,,RFC_OUTLET_UNLINKED,358,Outlet is 1082.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,359,,RFC_OUTLET_UNLINKED,359,Outlet is 2526.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,360,,RFC_OUTLET_UNLINKED,360,Outlet is 565.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,361,,RFC_OUTLET_UNLINKED,361,Outlet is 1335.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,362,,RFC_OUTLET_UNLINKED,362,Outlet is 1323.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,364,,RFC_OUTLET_UNLINKED,364,Outlet is 403.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,365,,RFC_OUTLET_UNLINKED,365,Outlet is 1569.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,366,,RFC_OUTLET_UNLINKED,366,Outlet is 1027.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,367,,RFC_OUTLET_UNLINKED,367,Outlet is 1298.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,368,,RFC_OUTLET_UNLINKED,368,Outlet is 621.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,369,,RFC_OUTLET_UNLINKED,369,Outlet is 1116.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,370,,RFC_OUTLET_UNLINKED,370,Outlet is 207.8 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,371,,RFC_OUTLET_UNLINKED,371,NLDI hydrolocation request failed
-RFC_FEATURE,372,,RFC_OUTLET_UNLINKED,372,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,373,,RFC_OUTLET_UNLINKED,373,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,374,,RFC_OUTLET_UNLINKED,374,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,375,,RFC_OUTLET_UNLINKED,375,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,376,,RFC_OUTLET_UNLINKED,376,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,377,,RFC_OUTLET_UNLINKED,377,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,378,,RFC_OUTLET_UNLINKED,378,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,379,,RFC_OUTLET_UNLINKED,379,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,380,,RFC_OUTLET_UNLINKED,380,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,381,,RFC_OUTLET_UNLINKED,381,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,382,,RFC_OUTLET_UNLINKED,382,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,383,,RFC_OUTLET_UNLINKED,383,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,373,,RFC_OUTLET_UNLINKED,373,Outlet is 2509.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,374,,RFC_OUTLET_UNLINKED,374,Outlet is 216.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,375,,RFC_OUTLET_UNLINKED,375,Outlet is 378.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,377,,RFC_OUTLET_UNLINKED,377,Outlet is 470.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,378,,RFC_OUTLET_UNLINKED,378,Outlet is 664.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,379,,RFC_OUTLET_UNLINKED,379,Outlet is 260.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,381,,RFC_OUTLET_UNLINKED,381,Outlet is 2602.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,382,,RFC_OUTLET_UNLINKED,382,Outlet is 1503.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,383,,RFC_OUTLET_UNLINKED,383,Outlet is 1377.2 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,384,,RFC_OUTLET_UNLINKED,384,NLDI hydrolocation request failed
-RFC_FEATURE,385,,RFC_OUTLET_UNLINKED,385,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,386,,RFC_OUTLET_UNLINKED,386,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,387,,RFC_OUTLET_UNLINKED,387,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,388,,RFC_OUTLET_UNLINKED,388,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,389,,RFC_OUTLET_UNLINKED,389,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,390,,RFC_OUTLET_UNLINKED,390,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,391,,RFC_OUTLET_UNLINKED,391,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,392,,RFC_OUTLET_UNLINKED,392,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,395,,RFC_OUTLET_UNLINKED,395,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,397,,RFC_OUTLET_UNLINKED,397,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,398,,RFC_OUTLET_UNLINKED,398,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,385,,RFC_OUTLET_UNLINKED,385,Outlet is 1016.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,388,,RFC_OUTLET_UNLINKED,388,Outlet is 913.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,389,,RFC_OUTLET_UNLINKED,389,Outlet is 548.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,390,,RFC_OUTLET_UNLINKED,390,Outlet is 2835.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,392,,RFC_OUTLET_UNLINKED,392,Outlet is 2106.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,395,,RFC_OUTLET_UNLINKED,395,Outlet is 3965.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,398,,RFC_OUTLET_UNLINKED,398,Outlet is 900.4 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,399,,RFC_OUTLET_UNLINKED,399,NLDI hydrolocation request failed
-RFC_FEATURE,400,,RFC_OUTLET_UNLINKED,400,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,401,,RFC_OUTLET_UNLINKED,401,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,402,,RFC_OUTLET_UNLINKED,402,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,403,,RFC_OUTLET_UNLINKED,403,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,404,,RFC_OUTLET_UNLINKED,404,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,405,,RFC_OUTLET_UNLINKED,405,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,406,,RFC_OUTLET_UNLINKED,406,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,407,,RFC_OUTLET_UNLINKED,407,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,408,,RFC_OUTLET_UNLINKED,408,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,409,,RFC_OUTLET_UNLINKED,409,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,410,,RFC_OUTLET_UNLINKED,410,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,411,,RFC_OUTLET_UNLINKED,411,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,412,,RFC_OUTLET_UNLINKED,412,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,413,,RFC_OUTLET_UNLINKED,413,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,414,,RFC_OUTLET_UNLINKED,414,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,415,,RFC_OUTLET_UNLINKED,415,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,416,,RFC_OUTLET_UNLINKED,416,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,417,,RFC_OUTLET_UNLINKED,417,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,418,,RFC_OUTLET_UNLINKED,418,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,419,,RFC_OUTLET_UNLINKED,419,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,420,,RFC_OUTLET_UNLINKED,420,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,421,,RFC_OUTLET_UNLINKED,421,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,422,,RFC_OUTLET_UNLINKED,422,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,423,,RFC_OUTLET_UNLINKED,423,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,424,,RFC_OUTLET_UNLINKED,424,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,425,,RFC_OUTLET_UNLINKED,425,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,426,,RFC_OUTLET_UNLINKED,426,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,427,,RFC_OUTLET_UNLINKED,427,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,428,,RFC_OUTLET_UNLINKED,428,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,429,,RFC_OUTLET_UNLINKED,429,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,430,,RFC_OUTLET_UNLINKED,430,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,431,,RFC_OUTLET_UNLINKED,431,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,433,,RFC_OUTLET_UNLINKED,433,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,434,,RFC_OUTLET_UNLINKED,434,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,435,,RFC_OUTLET_UNLINKED,435,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,436,,RFC_OUTLET_UNLINKED,436,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,437,,RFC_OUTLET_UNLINKED,437,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,438,,RFC_OUTLET_UNLINKED,438,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,439,,RFC_OUTLET_UNLINKED,439,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,440,,RFC_OUTLET_UNLINKED,440,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,441,,RFC_OUTLET_UNLINKED,441,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,442,,RFC_OUTLET_UNLINKED,442,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,443,,RFC_OUTLET_UNLINKED,443,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,444,,RFC_OUTLET_UNLINKED,444,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,445,,RFC_OUTLET_UNLINKED,445,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,446,,RFC_OUTLET_UNLINKED,446,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,447,,RFC_OUTLET_UNLINKED,447,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,448,,RFC_OUTLET_UNLINKED,448,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,449,,RFC_OUTLET_UNLINKED,449,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,450,,RFC_OUTLET_UNLINKED,450,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,451,,RFC_OUTLET_UNLINKED,451,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,452,,RFC_OUTLET_UNLINKED,452,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,453,,RFC_OUTLET_UNLINKED,453,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,454,,RFC_OUTLET_UNLINKED,454,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,455,,RFC_OUTLET_UNLINKED,455,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,400,,RFC_OUTLET_UNLINKED,400,Outlet is 779.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,402,,RFC_OUTLET_UNLINKED,402,Outlet is 484.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,403,,RFC_OUTLET_UNLINKED,403,Outlet is 1391.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,404,,RFC_OUTLET_UNLINKED,404,Outlet is 304.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,405,,RFC_OUTLET_UNLINKED,405,Outlet is 2685.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,406,,RFC_OUTLET_UNLINKED,406,Outlet is 246.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,407,,RFC_OUTLET_UNLINKED,407,Outlet is 656.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,408,,RFC_OUTLET_UNLINKED,408,Outlet is 1017.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,409,,RFC_OUTLET_UNLINKED,409,Outlet is 709.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,412,,RFC_OUTLET_UNLINKED,412,Outlet is 682.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,413,,RFC_OUTLET_UNLINKED,413,Outlet is 935.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,414,,RFC_OUTLET_UNLINKED,414,Outlet is 228.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,416,,RFC_OUTLET_UNLINKED,416,Outlet is 2371.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,417,,RFC_OUTLET_UNLINKED,417,Outlet is 3181.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,419,,RFC_OUTLET_UNLINKED,419,Outlet is 1341.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,422,,RFC_OUTLET_UNLINKED,422,Outlet is 3658.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,423,,RFC_OUTLET_UNLINKED,423,Outlet is 402.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,426,,RFC_OUTLET_UNLINKED,426,Outlet is 1143.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,427,,RFC_OUTLET_UNLINKED,427,Outlet is 1008.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,431,,RFC_OUTLET_UNLINKED,431,Outlet is 724.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,433,,RFC_OUTLET_UNLINKED,433,Outlet is 336.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,434,,RFC_OUTLET_UNLINKED,434,Outlet is 273.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,435,,RFC_OUTLET_UNLINKED,435,Outlet is 820.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,436,,RFC_OUTLET_UNLINKED,436,Outlet is 1010.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,439,,RFC_OUTLET_UNLINKED,439,Outlet is 425.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,440,,RFC_OUTLET_UNLINKED,440,Outlet is 809.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,441,,RFC_OUTLET_UNLINKED,441,Outlet is 1493.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,443,,RFC_OUTLET_UNLINKED,443,Outlet is 611.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,444,,RFC_OUTLET_UNLINKED,444,Outlet is 2010.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,448,,RFC_OUTLET_UNLINKED,448,Outlet is 1189.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,449,,RFC_OUTLET_UNLINKED,449,Outlet is 1540.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,450,,RFC_OUTLET_UNLINKED,450,Outlet is 296.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,453,,RFC_OUTLET_UNLINKED,453,Outlet is 356.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,454,,RFC_OUTLET_UNLINKED,454,Outlet is 1132.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,455,,RFC_OUTLET_UNLINKED,455,Outlet is 883.0 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,456,,RFC_OUTLET_UNLINKED,456,NLDI hydrolocation request failed
-RFC_FEATURE,457,,RFC_OUTLET_UNLINKED,457,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,458,,RFC_OUTLET_UNLINKED,458,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,459,,RFC_OUTLET_UNLINKED,459,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,460,,RFC_OUTLET_UNLINKED,460,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,462,,RFC_OUTLET_UNLINKED,462,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,463,,RFC_OUTLET_UNLINKED,463,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,464,,RFC_OUTLET_UNLINKED,464,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,465,,RFC_OUTLET_UNLINKED,465,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,466,,RFC_OUTLET_UNLINKED,466,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,457,,RFC_OUTLET_UNLINKED,457,Outlet is 571.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,458,,RFC_OUTLET_UNLINKED,458,Outlet is 11737.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,459,,RFC_OUTLET_UNLINKED,459,Outlet is 401.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,460,,RFC_OUTLET_UNLINKED,460,Outlet is 627.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,462,,RFC_OUTLET_UNLINKED,462,Outlet is 2041.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,463,,RFC_OUTLET_UNLINKED,463,Outlet is 606.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,464,,RFC_OUTLET_UNLINKED,464,Outlet is 879.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,465,,RFC_OUTLET_UNLINKED,465,Outlet is 689.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,466,,RFC_OUTLET_UNLINKED,466,Outlet is 1353.4 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,467,,RFC_OUTLET_UNLINKED,467,NLDI hydrolocation request failed
-RFC_FEATURE,468,,RFC_OUTLET_UNLINKED,468,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,469,,RFC_OUTLET_UNLINKED,469,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,470,,RFC_OUTLET_UNLINKED,470,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,472,,RFC_OUTLET_UNLINKED,472,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,473,,RFC_OUTLET_UNLINKED,473,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,474,,RFC_OUTLET_UNLINKED,474,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,475,,RFC_OUTLET_UNLINKED,475,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,476,,RFC_OUTLET_UNLINKED,476,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,477,,RFC_OUTLET_UNLINKED,477,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,478,,RFC_OUTLET_UNLINKED,478,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,468,,RFC_OUTLET_UNLINKED,468,Outlet is 6487.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,470,,RFC_OUTLET_UNLINKED,470,Outlet is 1378.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,472,,RFC_OUTLET_UNLINKED,472,Outlet is 1254.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,474,,RFC_OUTLET_UNLINKED,474,Outlet is 740.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,475,,RFC_OUTLET_UNLINKED,475,Outlet is 868.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,477,,RFC_OUTLET_UNLINKED,477,Outlet is 282.8 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,479,,RFC_OUTLET_UNLINKED,479,NLDI hydrolocation request failed
-RFC_FEATURE,480,,RFC_OUTLET_UNLINKED,480,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,481,,RFC_OUTLET_UNLINKED,481,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,482,,RFC_OUTLET_UNLINKED,482,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,483,,RFC_OUTLET_UNLINKED,483,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,484,,RFC_OUTLET_UNLINKED,484,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,485,,RFC_OUTLET_UNLINKED,485,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,486,,RFC_OUTLET_UNLINKED,486,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,487,,RFC_OUTLET_UNLINKED,487,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,488,,RFC_OUTLET_UNLINKED,488,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,489,,RFC_OUTLET_UNLINKED,489,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,480,,RFC_OUTLET_UNLINKED,480,Outlet is 2826.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,481,,RFC_OUTLET_UNLINKED,481,Outlet is 1242.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,482,,RFC_OUTLET_UNLINKED,482,Outlet is 2822.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,487,,RFC_OUTLET_UNLINKED,487,Outlet is 1000.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,489,,RFC_OUTLET_UNLINKED,489,Outlet is 634.3 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,490,,RFC_OUTLET_UNLINKED,490,NLDI hydrolocation request failed
-RFC_FEATURE,491,,RFC_OUTLET_UNLINKED,491,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,492,,RFC_OUTLET_UNLINKED,492,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,493,,RFC_OUTLET_UNLINKED,493,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,494,,RFC_OUTLET_UNLINKED,494,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,494,,RFC_OUTLET_UNLINKED,494,Outlet is 272.2 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,495,,RFC_OUTLET_UNLINKED,495,NLDI hydrolocation request failed
-RFC_FEATURE,496,,RFC_OUTLET_UNLINKED,496,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,497,,RFC_OUTLET_UNLINKED,497,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,498,,RFC_OUTLET_UNLINKED,498,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,500,,RFC_OUTLET_UNLINKED,500,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,502,,RFC_OUTLET_UNLINKED,502,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,503,,RFC_OUTLET_UNLINKED,503,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,504,,RFC_OUTLET_UNLINKED,504,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,505,,RFC_OUTLET_UNLINKED,505,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,506,,RFC_OUTLET_UNLINKED,506,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,507,,RFC_OUTLET_UNLINKED,507,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,508,,RFC_OUTLET_UNLINKED,508,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,509,,RFC_OUTLET_UNLINKED,509,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,513,,RFC_OUTLET_UNLINKED,513,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,514,,RFC_OUTLET_UNLINKED,514,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,515,,RFC_OUTLET_UNLINKED,515,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,516,,RFC_OUTLET_UNLINKED,516,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,517,,RFC_OUTLET_UNLINKED,517,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,518,,RFC_OUTLET_UNLINKED,518,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,519,,RFC_OUTLET_UNLINKED,519,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,520,,RFC_OUTLET_UNLINKED,520,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,521,,RFC_OUTLET_UNLINKED,521,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,522,,RFC_OUTLET_UNLINKED,522,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,523,,RFC_OUTLET_UNLINKED,523,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,525,,RFC_OUTLET_UNLINKED,525,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,526,,RFC_OUTLET_UNLINKED,526,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,527,,RFC_OUTLET_UNLINKED,527,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,528,,RFC_OUTLET_UNLINKED,528,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,529,,RFC_OUTLET_UNLINKED,529,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,530,,RFC_OUTLET_UNLINKED,530,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,531,,RFC_OUTLET_UNLINKED,531,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,533,,RFC_OUTLET_UNLINKED,533,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,534,,RFC_OUTLET_UNLINKED,534,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,535,,RFC_OUTLET_UNLINKED,535,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,537,,RFC_OUTLET_UNLINKED,537,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,538,,RFC_OUTLET_UNLINKED,538,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,539,,RFC_OUTLET_UNLINKED,539,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,540,,RFC_OUTLET_UNLINKED,540,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,541,,RFC_OUTLET_UNLINKED,541,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,542,,RFC_OUTLET_UNLINKED,542,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,543,,RFC_OUTLET_UNLINKED,543,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,544,,RFC_OUTLET_UNLINKED,544,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,545,,RFC_OUTLET_UNLINKED,545,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,546,,RFC_OUTLET_UNLINKED,546,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,547,,RFC_OUTLET_UNLINKED,547,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,548,,RFC_OUTLET_UNLINKED,548,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,549,,RFC_OUTLET_UNLINKED,549,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,550,,RFC_OUTLET_UNLINKED,550,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,551,,RFC_OUTLET_UNLINKED,551,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,552,,RFC_OUTLET_UNLINKED,552,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,553,,RFC_OUTLET_UNLINKED,553,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,554,,RFC_OUTLET_UNLINKED,554,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,555,,RFC_OUTLET_UNLINKED,555,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,556,,RFC_OUTLET_UNLINKED,556,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,557,,RFC_OUTLET_UNLINKED,557,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,558,,RFC_OUTLET_UNLINKED,558,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,559,,RFC_OUTLET_UNLINKED,559,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,560,,RFC_OUTLET_UNLINKED,560,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,561,,RFC_OUTLET_UNLINKED,561,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,562,,RFC_OUTLET_UNLINKED,562,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,563,,RFC_OUTLET_UNLINKED,563,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,566,,RFC_OUTLET_UNLINKED,566,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,567,,RFC_OUTLET_UNLINKED,567,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,568,,RFC_OUTLET_UNLINKED,568,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,569,,RFC_OUTLET_UNLINKED,569,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,570,,RFC_OUTLET_UNLINKED,570,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,571,,RFC_OUTLET_UNLINKED,571,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,572,,RFC_OUTLET_UNLINKED,572,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,496,,RFC_OUTLET_UNLINKED,496,Outlet is 436.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,497,,RFC_OUTLET_UNLINKED,497,Outlet is 219.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,498,,RFC_OUTLET_UNLINKED,498,Outlet is 7667.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,500,,RFC_OUTLET_UNLINKED,500,Outlet is 11281.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,502,,RFC_OUTLET_UNLINKED,502,Outlet is 418.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,503,,RFC_OUTLET_UNLINKED,503,Outlet is 484.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,504,,RFC_OUTLET_UNLINKED,504,Outlet is 301.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,505,,RFC_OUTLET_UNLINKED,505,Outlet is 1722.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,506,,RFC_OUTLET_UNLINKED,506,Outlet is 1025.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,507,,RFC_OUTLET_UNLINKED,507,Outlet is 3991.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,508,,RFC_OUTLET_UNLINKED,508,Outlet is 817.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,509,,RFC_OUTLET_UNLINKED,509,Outlet is 574.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,514,,RFC_OUTLET_UNLINKED,514,Outlet is 1092.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,515,,RFC_OUTLET_UNLINKED,515,Outlet is 872.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,516,,RFC_OUTLET_UNLINKED,516,Outlet is 1110.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,517,,RFC_OUTLET_UNLINKED,517,Outlet is 1326.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,518,,RFC_OUTLET_UNLINKED,518,Outlet is 362.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,519,,RFC_OUTLET_UNLINKED,519,Outlet is 3119.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,520,,RFC_OUTLET_UNLINKED,520,Outlet is 1114.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,521,,RFC_OUTLET_UNLINKED,521,Outlet is 1126.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,522,,RFC_OUTLET_UNLINKED,522,Outlet is 1091.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,523,,RFC_OUTLET_UNLINKED,523,Outlet is 813.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,526,,RFC_OUTLET_UNLINKED,526,Outlet is 1010.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,527,,RFC_OUTLET_UNLINKED,527,Outlet is 1424.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,528,,RFC_OUTLET_UNLINKED,528,Outlet is 683.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,529,,RFC_OUTLET_UNLINKED,529,Outlet is 232.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,530,,RFC_OUTLET_UNLINKED,530,Outlet is 566.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,531,,RFC_OUTLET_UNLINKED,531,Outlet is 629.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,533,,RFC_OUTLET_UNLINKED,533,Outlet is 739.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,534,,RFC_OUTLET_UNLINKED,534,Outlet is 818.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,535,,RFC_OUTLET_UNLINKED,535,Outlet is 1030.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,537,,RFC_OUTLET_UNLINKED,537,Outlet is 2395.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,539,,RFC_OUTLET_UNLINKED,539,Outlet is 2571.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,540,,RFC_OUTLET_UNLINKED,540,Outlet is 218.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,541,,RFC_OUTLET_UNLINKED,541,Outlet is 1109.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,542,,RFC_OUTLET_UNLINKED,542,Outlet is 999.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,545,,RFC_OUTLET_UNLINKED,545,Outlet is 699.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,546,,RFC_OUTLET_UNLINKED,546,Outlet is 614.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,547,,RFC_OUTLET_UNLINKED,547,Outlet is 889.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,548,,RFC_OUTLET_UNLINKED,548,Outlet is 677.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,549,,RFC_OUTLET_UNLINKED,549,Outlet is 746.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,550,,RFC_OUTLET_UNLINKED,550,Outlet is 633.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,551,,RFC_OUTLET_UNLINKED,551,Outlet is 671.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,552,,RFC_OUTLET_UNLINKED,552,Outlet is 1495.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,553,,RFC_OUTLET_UNLINKED,553,Outlet is 482.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,554,,RFC_OUTLET_UNLINKED,554,Outlet is 661.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,555,,RFC_OUTLET_UNLINKED,555,Outlet is 259.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,556,,RFC_OUTLET_UNLINKED,556,Outlet is 946.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,557,,RFC_OUTLET_UNLINKED,557,Outlet is 1589.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,558,,RFC_OUTLET_UNLINKED,558,Outlet is 16051.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,559,,RFC_OUTLET_UNLINKED,559,Outlet is 519.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,560,,RFC_OUTLET_UNLINKED,560,Outlet is 2954.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,561,,RFC_OUTLET_UNLINKED,561,Outlet is 914.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,562,,RFC_OUTLET_UNLINKED,562,Outlet is 1125.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,563,,RFC_OUTLET_UNLINKED,563,Outlet is 1404.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,566,,RFC_OUTLET_UNLINKED,566,Outlet is 7864.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,567,,RFC_OUTLET_UNLINKED,567,Outlet is 633.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,568,,RFC_OUTLET_UNLINKED,568,Outlet is 428.2 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,569,,RFC_OUTLET_UNLINKED,569,Outlet is 479.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,570,,RFC_OUTLET_UNLINKED,570,Outlet is 937.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,572,,RFC_OUTLET_UNLINKED,572,Outlet is 680.6 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,573,,RFC_OUTLET_UNLINKED,573,NLDI hydrolocation request failed
-RFC_FEATURE,574,,RFC_OUTLET_UNLINKED,574,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,575,,RFC_OUTLET_UNLINKED,575,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,576,,RFC_OUTLET_UNLINKED,576,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,577,,RFC_OUTLET_UNLINKED,577,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,578,,RFC_OUTLET_UNLINKED,578,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,579,,RFC_OUTLET_UNLINKED,579,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,580,,RFC_OUTLET_UNLINKED,580,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,575,,RFC_OUTLET_UNLINKED,575,Outlet is 2418.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,576,,RFC_OUTLET_UNLINKED,576,Outlet is 1555.6 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,577,,RFC_OUTLET_UNLINKED,577,Outlet is 500.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,579,,RFC_OUTLET_UNLINKED,579,Outlet is 692.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,580,,RFC_OUTLET_UNLINKED,580,Outlet is 8827.4 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,581,,RFC_OUTLET_UNLINKED,581,NLDI hydrolocation request failed
-RFC_FEATURE,582,,RFC_OUTLET_UNLINKED,582,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,583,,RFC_OUTLET_UNLINKED,583,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,584,,RFC_OUTLET_UNLINKED,584,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,585,,RFC_OUTLET_UNLINKED,585,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,586,,RFC_OUTLET_UNLINKED,586,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,587,,RFC_OUTLET_UNLINKED,587,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,588,,RFC_OUTLET_UNLINKED,588,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,589,,RFC_OUTLET_UNLINKED,589,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,590,,RFC_OUTLET_UNLINKED,590,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,591,,RFC_OUTLET_UNLINKED,591,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,582,,RFC_OUTLET_UNLINKED,582,Outlet is 902.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,583,,RFC_OUTLET_UNLINKED,583,Outlet is 1727.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,584,,RFC_OUTLET_UNLINKED,584,Outlet is 983.7 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,585,,RFC_OUTLET_UNLINKED,585,Outlet is 277.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,586,,RFC_OUTLET_UNLINKED,586,Outlet is 654.4 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,587,,RFC_OUTLET_UNLINKED,587,Outlet is 966.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,588,,RFC_OUTLET_UNLINKED,588,Outlet is 773.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,589,,RFC_OUTLET_UNLINKED,589,Outlet is 980.4 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,592,,RFC_OUTLET_UNLINKED,592,NLDI hydrolocation request failed
-RFC_FEATURE,593,,RFC_OUTLET_UNLINKED,593,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,594,,RFC_OUTLET_UNLINKED,594,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,595,,RFC_OUTLET_UNLINKED,595,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,596,,RFC_OUTLET_UNLINKED,596,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,597,,RFC_OUTLET_UNLINKED,597,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,598,,RFC_OUTLET_UNLINKED,598,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,599,,RFC_OUTLET_UNLINKED,599,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,601,,RFC_OUTLET_UNLINKED,601,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,602,,RFC_OUTLET_UNLINKED,602,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,603,,RFC_OUTLET_UNLINKED,603,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,604,,RFC_OUTLET_UNLINKED,604,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,605,,RFC_OUTLET_UNLINKED,605,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,606,,RFC_OUTLET_UNLINKED,606,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,607,,RFC_OUTLET_UNLINKED,607,NLDI hydrolocation must return exactly one feature
+RFC_FEATURE,593,,RFC_OUTLET_UNLINKED,593,Outlet is 1873.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,594,,RFC_OUTLET_UNLINKED,594,Outlet is 537.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,595,,RFC_OUTLET_UNLINKED,595,Outlet is 1912.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,596,,RFC_OUTLET_UNLINKED,596,Outlet is 4070.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,597,,RFC_OUTLET_UNLINKED,597,Outlet is 296.1 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,598,,RFC_OUTLET_UNLINKED,598,Outlet is 3072.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,599,,RFC_OUTLET_UNLINKED,599,Outlet is 350.0 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,601,,RFC_OUTLET_UNLINKED,601,Outlet is 5196.9 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,602,,RFC_OUTLET_UNLINKED,602,Outlet is 2106.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,603,,RFC_OUTLET_UNLINKED,603,Outlet is 403.3 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,604,,RFC_OUTLET_UNLINKED,604,Outlet is 227.5 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,606,,RFC_OUTLET_UNLINKED,606,Outlet is 640.8 m from the returned flowline; only a snap within 200 m is accepted
+RFC_FEATURE,607,,RFC_OUTLET_UNLINKED,607,Outlet is 3360.7 m from the returned flowline; only a snap within 200 m is accepted
 RFC_FEATURE,36,,RFC_SOURCE_GEOMETRY_INVALID,36,Ring Self-intersection[-82.50442899684 35.5246977185653]
 RFC_FEATURE,57,,RFC_SOURCE_GEOMETRY_INVALID,57,Ring Self-intersection[-83.0357228034764 35.6996836732448]
 RFC_FEATURE,70,,RFC_SOURCE_GEOMETRY_INVALID,70,Ring Self-intersection[-87.2921962231212 36.8542893836048]
@@ -611,3 +497,4 @@ NLDI_REQUEST,495,,NLDI_REQUEST_FAILED,,502 Server Error: Bad Gateway for url: ht
 NLDI_REQUEST,573,,NLDI_REQUEST_FAILED,,502 Server Error: Bad Gateway for url: https://api.water.usgs.gov/nldi/linked-data/hydrolocation?f=json&coords=POINT%28-89.5595100632+30.1796141191%29
 NLDI_REQUEST,581,,NLDI_REQUEST_FAILED,,502 Server Error: Bad Gateway for url: https://api.water.usgs.gov/nldi/linked-data/hydrolocation?f=json&coords=POINT%28-89.7937000000+30.2713700000%29
 NLDI_REQUEST,592,,NLDI_REQUEST_FAILED,,502 Server Error: Bad Gateway for url: https://api.water.usgs.gov/nldi/linked-data/hydrolocation?f=json&coords=POINT%28-90.1020962466+30.4952418097%29
+NLDI_REQUEST,18719538,,NLDI_REQUEST_FAILED,,"HTTPSConnectionPool(host='api.water.usgs.gov', port=443): Read timed out. (read timeout=40)"
