@@ -12,7 +12,7 @@
 
   function csvForRecords(records, kind) {
     const fields = kind === 'map'
-      ? ['record_id', 'event_date', 'date_precision', 'map_inches', 'crest_feet', 'tc_raw', 'tc_units_labeled', 'tc_hours_confirmed', 'periods_rain_raw', 'quality_tier', 'source_workbook', 'source_worksheet', 'source_row', 'source_file_sha256']
+      ? ['record_id', 'event_date', 'date_precision', 'map_inches', 'crest_feet', 'tc_raw', 'tc_units_labeled', 'tc_hours_confirmed', 'periods_rain_raw', 'quality_tier', 'source_workbook', 'source_worksheet', 'source_row', 'source_file_sha256', 'source_class', 'qpe_product', 'validation_status', 'crest_time_utc', 'rain_start_utc', 'rain_end_utc', 'source_url']
       : ['record_id', 'event_date', 'date_precision', 'source_point_id_raw', 'source_point_id_nws', 'source_crest_feet', 'target_point_id_raw', 'target_point_id_nws', 'target_crest_feet', 'lag_raw', 'lag_units_labeled', 'lag_hours_confirmed', 'quality_tier', 'source_workbook', 'source_worksheet', 'source_row', 'source_file_sha256'];
     return [fields.join(','), ...records.map(row => fields.map(field => escapeCsv(row[field])).join(','))].join('\r\n');
   }
@@ -29,6 +29,10 @@
     let activeNwsli = '';
     let activePayload = null;
     let activeRelation = null;
+    let visibleRelation = null;
+    let sourceChoice = 'legacy';
+    let approvedEvents = [];
+    let approvedPromise = null;
     let sortField = 'event_date';
     let sortDirection = 1;
     let selectedRecordId = '';
@@ -39,6 +43,7 @@
     const meta = $('hist-meta');
     const choices = $('hist-relationships');
     const chart = $('hist-chart');
+    const sourceChoices = $('hist-source-choices');
     const head = $('hist-head');
     const rows = $('hist-rows');
     const exportButton = $('hist-export');
@@ -50,11 +55,13 @@
       status.className = `historical-status ${state}`;
       retryButton.hidden = state !== 'error';
       choices.replaceChildren();
+      if (sourceChoices) sourceChoices.replaceChildren();
       chart.replaceChildren();
       head.replaceChildren();
       rows.replaceChildren();
       meta.textContent = '';
       activeRelation = null;
+      visibleRelation = null;
       exportButton.disabled = true;
     }
 
@@ -83,6 +90,77 @@
       }
       cache.set(nwsli, payload);
       return payload;
+    }
+
+
+    // Reconstruction remains invisible until scientific review explicitly approves
+    // individual events. Provisional stage/QPE outputs are never promoted by the UI.
+    async function loadApprovedEvents() {
+      if (!sourceChoices) return [];
+      if (!approvedPromise) {
+        approvedPromise = fetcher(options.reconstructionUrl || 'reconstruction/results/pilot_events.json')
+          .then(async response => {
+            if (!response.ok) return [];
+            const payload = await response.json();
+            if (!payload || payload.schema_version !== 1 || !Array.isArray(payload.events)) return [];
+            return payload.events.filter(event =>
+              event.validation_status === 'SCIENCE_APPROVED' &&
+              ['AMIL1', 'MNLM6'].includes(event.nwsli) &&
+              Number.isFinite(event.map_inches) && Number.isFinite(event.crest_feet) &&
+              typeof event.crest_time_utc === 'string' &&
+              typeof event.rain_start_utc === 'string' && typeof event.rain_end_utc === 'string' &&
+              typeof event.qpe_product === 'string' && event.qpe_product.length > 0
+            );
+          }).catch(() => []);
+      }
+      return approvedPromise;
+    }
+
+    function approvedRows(nwsli) {
+      return approvedEvents.filter(event => event.nwsli === nwsli).map(event => ({
+        ...event,
+        record_id: 'reconstruction:' + String(event.event_id),
+        event_date: event.crest_time_utc.slice(0, 10),
+        date_precision: 'day',
+        quality_tier: 'APPROVED',
+        source_class: 'independent_reconstruction',
+        source_workbook: null,
+        source_worksheet: null,
+        source_row: null,
+        source_file_sha256: null,
+      }));
+    }
+
+    function renderSourceChoices(relation, relations) {
+      if (!sourceChoices) return;
+      sourceChoices.replaceChildren();
+      if (relation.kind !== 'map' || !['AMIL1', 'MNLM6'].includes(activeNwsli)) return;
+      const available = approvedRows(activeNwsli).length > 0;
+      if (!available) sourceChoice = 'legacy';
+      const label = doc.createElement('span');
+      label.textContent = 'MAP–crest source: ';
+      sourceChoices.appendChild(label);
+      for (const [key, text] of [['legacy', 'Legacy'], ['reconstructed', 'Reconstructed'], ['both', 'Both']]) {
+        const button = doc.createElement('button');
+        button.type = 'button';
+        button.textContent = text;
+        button.disabled = key !== 'legacy' && !available;
+        button.className = sourceChoice === key ? 'active' : '';
+        button.setAttribute('aria-pressed', String(sourceChoice === key));
+        if (button.disabled) button.title = 'No independently reconstructed, science-approved events have been published.';
+        button.addEventListener('click', () => {
+          if (button.disabled) return;
+          sourceChoice = key;
+          selectedRecordId = '';
+          renderRelation(relation, relations);
+        });
+        sourceChoices.appendChild(button);
+      }
+      if (!available) {
+        const note = doc.createElement('span');
+        note.textContent = ' Reconstructed events pending independent scientific verification.';
+        sourceChoices.appendChild(note);
+      }
     }
 
     function appendText(parent, tag, text, className) {
@@ -142,6 +220,9 @@
 
     function pointDescription(relation, row) {
       const limitations = Array.isArray(row.quality_limitations) ? row.quality_limitations.join(', ') : '';
+      if (relation.kind === 'map' && row.source_class === 'independent_reconstruction') {
+        return `${row.event_date}; independent ${row.qpe_product} MAP ${row.map_inches} inches; observed crest ${row.crest_feet} feet at ${row.crest_time_utc}; rainfall window ${row.rain_start_utc} to ${row.rain_end_utc}; ${row.validation_status}; ${unavailable(row.source_url)}`;
+      }
       if (relation.kind === 'map') {
         const tc = Number.isFinite(row.tc_hours_confirmed)
           ? `verified TC ${row.tc_hours_confirmed} hours${row.tc_raw === null || row.tc_raw === undefined ? '' : `; source TC ${row.tc_raw} ${unavailable(row.tc_units_labeled)}`}`
@@ -233,7 +314,7 @@
         circle.setAttribute('cx', scaleX(item.x));
         circle.setAttribute('cy', scaleY(item.y));
         circle.setAttribute('r', item.stackSize > 1 ? String(6 + item.stackIndex * 4) : '6');
-        circle.setAttribute('class', `historical-point${item.stackSize > 1 ? ' stacked' : ''}${selectedRecordId === item.row.record_id ? ' selected' : ''}`);
+        circle.setAttribute('class', `historical-point${item.row.source_class === 'independent_reconstruction' ? ' reconstructed' : ''}${item.stackSize > 1 ? ' stacked' : ''}${selectedRecordId === item.row.record_id ? ' selected' : ''}`);
         circle.setAttribute('pointer-events', item.stackSize > 1 ? 'stroke' : 'all');
         circle.setAttribute('tabindex', '0');
         circle.setAttribute('role', 'button');
@@ -273,7 +354,7 @@
 
     function tableColumns(relation) {
       return relation.kind === 'map'
-        ? [['event_date', 'Event date'], ['map_inches', 'MAP (inches)'], ['crest_feet', 'Crest (feet)'], ['tc_raw', 'TC (hours when verified; source raw otherwise)'], ['periods_rain_raw', 'Rainfall periods (raw)'], ['quality_tier', 'Quality'], ['source_ref', 'Source reference']]
+        ? [['event_date', 'Event date'], ['map_inches', 'MAP (inches)'], ['crest_feet', 'Crest (feet)'], ['tc_raw', 'TC (hours when verified; source raw otherwise)'], ['periods_rain_raw', 'Rainfall periods (raw)'], ['quality_tier', 'Quality'], ['source_class', 'Series'], ['source_ref', 'Source reference']]
         : [['event_date', 'Event date'], ['source_crest_feet', `Source crest · ${relation.source_point_id_nws} (feet)`], ['target_crest_feet', `Target crest · ${relation.target_point_id_nws} (feet)`], ['lag_raw', 'Lag (hours when verified; source raw otherwise)'], ['quality_tier', 'Quality'], ['source_ref', 'Source reference']];
     }
 
@@ -281,7 +362,8 @@
       if (field === 'event_date') return dateLabel(row);
       if (field === 'tc_raw') return Number.isFinite(row.tc_hours_confirmed) ? `${row.tc_hours_confirmed} hours (verified)` : row.tc_raw === null || row.tc_raw === undefined ? 'Unavailable' : `${row.tc_raw} (${unavailable(row.tc_units_labeled)}; unverified)`;
       if (field === 'lag_raw') return Number.isFinite(row.lag_hours_confirmed) ? `${row.lag_hours_confirmed} hours (verified)` : row.lag_raw === null || row.lag_raw === undefined ? 'Unavailable' : `${row.lag_raw} (${unavailable(row.lag_units_labeled)}; unverified)`;
-      if (field === 'source_ref') return provenance(row);
+      if (field === 'source_ref') return row.source_class === 'independent_reconstruction' ? `${unavailable(row.qpe_product)} · ${unavailable(row.source_url)} · ${unavailable(row.validation_status)}` : provenance(row);
+      if (field === 'source_class') return row.source_class === 'independent_reconstruction' ? 'Reconstructed' : 'Legacy';
       return unavailable(row[field]);
     }
 
@@ -329,6 +411,12 @@
     function renderRelation(relation, relations) {
       activeRelation = relation;
       preferredRelationKey = relation.key;
+      renderSourceChoices(relation, relations);
+      const reconstructed = relation.kind === 'map' ? approvedRows(activeNwsli) : [];
+      const records = sourceChoice === 'reconstructed' ? reconstructed :
+        sourceChoice === 'both' && relation.kind === 'map' ? [...relation.records, ...reconstructed] :
+          relation.records;
+      visibleRelation = {...relation, records};
       sortField = 'event_date';
       sortDirection = 1;
       const dates = relation.records.map(row => row.event_date).filter(Boolean).sort();
@@ -342,9 +430,9 @@
         : `${relation.source_point_name} (${relation.source_point_id_nws}) source crest versus ${relation.target_point_name} (${relation.target_point_id_nws}) target crest, in feet.`;
       title.textContent = `${activePayload?.display_name || activeNwsli} · USGS ${activePayload?.usgs_site_id || activeGage} · NWS ${activeNwsli} · ${labels}`;
       renderChoices(relations, relation.key);
-      drawChart(relation);
-      renderTable(relation);
-      exportButton.disabled = false;
+      drawChart(visibleRelation);
+      renderTable(visibleRelation);
+      exportButton.disabled = !records.length;
     }
 
     async function renderForGage(usgsId) {
@@ -369,6 +457,9 @@
         const payload = await loadPoint(activeNwsli);
         if (token !== selectionToken) return;
         activePayload = {...payload, display_name: mapping.display_name, usgs_site_id: mapping.usgs_site_id};
+        sourceChoice = 'legacy';
+        approvedEvents = ['AMIL1', 'MNLM6'].includes(activeNwsli) ? await loadApprovedEvents() : [];
+        if (token !== selectionToken) return;
         const relations = availableRelations(payload);
         if (!relations.length) {
           title.textContent = `${mapping.display_name} (${mapping.nws_point_id})`;
@@ -387,8 +478,8 @@
     }
 
     function downloadCsv() {
-      if (!activeRelation) return;
-      const blob = new Blob([csvForRecords(activeRelation.records, activeRelation.kind)], {type: 'text/csv;charset=utf-8'});
+      if (!visibleRelation) return;
+      const blob = new Blob([csvForRecords(visibleRelation.records, visibleRelation.kind)], {type: 'text/csv;charset=utf-8'});
       const url = root.URL.createObjectURL(blob);
       const link = doc.createElement('a');
       link.href = url;
