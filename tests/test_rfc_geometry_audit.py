@@ -9,6 +9,7 @@ class FullNetworkAuditTests(unittest.TestCase):
         with (OUT/'network_inventory.csv').open(newline='') as f:cls.rows=list(csv.DictReader(f))
         with (OUT/'rfc_candidates.csv').open(newline='') as f:cls.candidates=list(csv.DictReader(f))
         cls.geojson=json.loads((OUT/'rfc_exact_nwsli_polygons.geojson').read_text())
+        cls.spatial=json.loads((OUT/'rfc_dashboard_only_spatial_candidates.geojson').read_text())
     def test_complete_accounting(self):
         s=self.summary
         self.assertEqual((s['historical_points'],s['dashboard_gages'],s['inventory_rows']) if 'inventory_rows' in s else (s['historical_points'],s['dashboard_gages'],len(self.rows)),(29,26,37))
@@ -40,4 +41,6 @@ class FullNetworkAuditTests(unittest.TestCase):
         self.assertEqual(len(extra),8)
         self.assertTrue(all(r['review_status']=='DASHBOARD_GAGE_WITHOUT_HISTORICAL_JOIN_SPATIAL_ONLY' for r in extra))
         self.assertTrue(all(r['rfc_candidates']!='' for r in extra))
+        self.assertEqual(len(self.spatial['features']),8)
+        self.assertTrue(all(x['properties']['scientific_status']=='SPATIAL_ONLY_NO_VERIFIED_HISTORICAL_JOIN' for x in self.spatial['features']))
 if __name__=='__main__':unittest.main()
