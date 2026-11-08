@@ -5,7 +5,7 @@
 **Feature branch:** `phase3/historical-relationships`
 **Starting `main` commit inspected:** `bf2648dcd1cd82899045477453da730692361d4e`
 **Phase 2 package audit date:** 2026-11-06
-**Release state:** Complete locally; GitHub PR, merge, Pages deployment, and published-site validation are recorded below after the release workflow.
+**Release state:** Feature implementation committed and pushed; PR #5 is open for the `main` branch. The release result is reflected in the PR and GitHub Pages workflow history.
 
 ## 1. What Phase 3 adds
 
@@ -91,12 +91,9 @@ The existing map/statistics selectors, basin and reach geometry, MRMS 6/12/24-ho
 
 ## 9. Release record
 
-Update this section after creating the remote commit and PR:
-
-- Feature branch commit: pending final commit.
-- Pull request: pending.
-- CI checks: pending.
-- Merge commit / `main` SHA: pending.
-- GitHub Pages deployment run and published URL verification: pending.
-- Known limitations/bugs after browser and workflow checks: pending.
+- Initial feature implementation commit: `b9516ccf9f030da2d4ae026f91bea1d32635e3ff`.
+- Pull request: [#5](https://github.com/mefferso/River-Drainage-Basin-Mean-Rainfall/pull/5), targeting `main` from `phase3/historical-relationships`.
+- The initial feature commit's GitHub Actions validation run `42485521960` completed successfully; the latest PR head and checks are available on PR #5.
+- Merge SHA and Pages deployment are recorded by the PR and repository Actions. Published dashboard URL: https://mefferso.github.io/River-Drainage-Basin-Mean-Rainfall/.
+- Playwright smoke checks passed on desktop and mobile using a Leaflet API stub. The managed browser tunnel could not reach the existing Leaflet CDN, so that smoke check did not validate actual Leaflet tile rendering. The existing MRMS map/statistics tests passed.
 - Recommended next step: independently obtain and audit original source workbook binaries and the original LMRFC MAP/crest methodology before any calibration work.
