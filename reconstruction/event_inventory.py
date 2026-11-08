@@ -66,6 +66,10 @@ def summarize_window(lead, stage_data, start, end):
         flags.append("TIED_MAXIMUM_STAGE")
     if representative and representative["qualifiers"]:
         flags.append("OBSERVATION_QUALIFIERS_REQUIRE_REVIEW")
+    legacy_stage = lead.get("legacy_crest_feet")
+    if (isinstance(legacy_stage, (int, float)) and largest is not None and
+            abs(largest - legacy_stage) > 1.0):
+        flags.append("WINDOW_MAX_VS_LEGACY_CREST_DIFF_GT_1FT_INVESTIGATE")
     return {
         **lead, "observed_window_start_utc": start.isoformat(),
         "observed_window_end_utc": end.isoformat(),
@@ -74,6 +78,7 @@ def summarize_window(lead, stage_data, start, end):
         "last_observed_utc": times[-1].isoformat() if times else None,
         "maximum_sample_gap_hours": round(gap_hours, 3) if gap_hours is not None else None,
         "candidate_max_stage_ft": largest,
+        "candidate_minus_legacy_crest_ft": round(largest-legacy_stage, 3) if largest is not None and isinstance(legacy_stage,(int,float)) else None,
         "candidate_max_time_utc": representative["time_utc"] if representative else None,
         "candidate_max_tied_observations": len(maxima),
         "candidate_qualifiers": representative["qualifiers"] if representative else [],
