@@ -1,0 +1,37 @@
+name: Phase 4A full-network RFC geometry audit
+on:
+  push:
+    branches:
+      - audit/phase4a-full-network-rfc-basins
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install geospatial dependencies
+        run: python -m pip install --disable-pip-version-check shapely pyproj geopandas
+      - name: Fetch authoritative NOAA LMRFC shapefile
+        run: |
+          curl -fL --connect-timeout 20 --max-time 180 --retry 3 --retry-delay 5 'https://www.nohrsc.noaa.gov/data/vector/master/b_lmrfc.tar.gz' -o b_lmrfc.tar.gz
+          sha256sum b_lmrfc.tar.gz
+      - name: Audit all 29 historical points and 26 current dashboard gages
+        run: python scripts/audit_rfc_network_geometry.py
+      - name: Test complete inventory and scientific safeguards
+        run: python -m unittest -v tests/test_rfc_geometry_audit.py
+      - name: Test standalone geometry map script
+        run: node tests/test_phase4a_map.cjs
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: phase4a-all-station-results
+          path: reports/phase4a/
+      - name: Commit reproducible audit outputs on feature branch
+        if: github.ref == 'refs/heads/audit/phase4a-full-network-rfc-basins'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/phase4a/summary.json reports/phase4a/network_inventory.csv reports/phase4a/rfc_candidates.csv reports/phase4a/rfc_exact_nwsli_polygons.geojson reports/phase4a/rfc_dashboard_only_spatial_candidates.geojson
+          git diff --cached --quiet || (git commit -m 'data: record NOAA RFC geometry audit candidates' && git fetch origin audit/phase4a-full-network-rfc-basins && git rebase origin/audit/phase4a-full-network-rfc-basins && git push origin HEAD:audit/phase4a-full-network-rfc-basins)

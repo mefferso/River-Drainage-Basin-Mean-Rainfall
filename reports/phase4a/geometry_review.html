@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Phase 4A: RFC vs NLDI basin geometry audit</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+:root{color-scheme:dark;font:14px system-ui,sans-serif;background:#101b2d;color:#e6edf7}*{box-sizing:border-box}body{margin:0}
+header{padding:14px 20px;background:#172740;border-bottom:1px solid #456}h1{margin:0;font-size:1.35rem}p{line-height:1.55}
+main{display:grid;grid-template-columns:300px minmax(0,1fr);min-height:calc(100dvh - 85px)}aside{padding:16px;background:#16243a}
+#map{height:calc(100dvh - 85px);min-height:500px}select{width:100%;padding:10px;background:#223a56;color:#fff;border:1px solid #6b8096;border-radius:6px}
+fieldset{margin-top:15px;border:1px solid #4c627c;border-radius:8px}label{display:block;margin:9px 0}
+.key{display:inline-block;width:16px;height:12px;margin-right:6px;border:2px solid currentColor}
+.small{color:#bac9dd;font-size:12px}.warning{padding:11px;border-left:3px solid #f59e0b;background:#50391c}
+#info{white-space:pre-wrap;line-height:1.5;margin-top:15px}a{color:#94d8ff}
+@media(max-width:750px){main{display:flex;flex-direction:column}#map{height:55dvh;min-height:360px}aside{order:2}}
+</style></head><body>
+<header><h1>RFC vs NLDI Basin Geometry — Phase 4A</h1><span class="small">29 historical forecast points · 26 current USGS dashboard gages · NOAA IHABBS 2018 source</span></header>
+<main><aside>
+<p class="warning"><strong>Diagnostic only.</strong> These RFC polygons are candidate model basins, <strong>not verified</strong> as the basin masks behind the original Excel MAP values. No forecast application is implied.</p>
+<label for="station">Choose a historical point or dashboard gage</label><select id="station"><option>Loading...</option></select>
+<fieldset><legend>Show layers</legend>
+<label><input type="checkbox" id="rfc" checked/> <span class="key" style="color:#f59e0b"></span> RFC NWSLI polygon</label>
+<label><input type="checkbox" id="full" checked/> <span class="key" style="color:#38bdf8"></span> NLDI full upstream</label>
+<label><input type="checkbox" id="inc" checked/> <span class="key" style="color:#22c55e"></span> NLDI incremental reach</label>
+</fieldset>
+<div id="info" role="status">Loading official geometry candidates…</div>
+<p class="small">NOAA RFC shapefile: July 25, 2018. NLDI polygons: current repository. Single RFC segments may differ from the aggregated drainage area at a forecast point. Select a station to inspect, not approve, the relationship.</p>
+<p class="small"><a href="./network_inventory.csv">Station inventory (CSV)</a> · <a href="./rfc_candidates.csv">All candidate comparisons (CSV)</a> · <a href="./rfc_exact_nwsli_polygons.geojson">RFC candidate polygons (GeoJSON)</a> · <a href="../../docs/PHASE4A_NETWORK_BASIN_GEOMETRY_HANDOFF.md">Scientific handoff</a></p>
+</aside><div id="map" aria-label="Basin geometry comparison map"></div></main>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const map=L.map('map',{preferCanvas:true}).setView([30.75,-90],8);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors',maxZoom:17}).addTo(map);
+const layerGroup=L.layerGroup().addTo(map),station=document.getElementById('station'),info=document.getElementById('info');
+let all;
+async function read(path){const response=await fetch(path);if(!response.ok)throw new Error(path+' returned HTTP '+response.status);return response.json()}
+function exactGage(x){return x.existing_dashboard_usgs_id&&x.existing_dashboard_usgs_id===x.usgs_site_id_confirmed?String(x.existing_dashboard_usgs_id):null}
+function draw(){
+if(!all)return;
+layerGroup.clearLayers();
+const [type,id]=station.value.split(':');const historic=type==='nws'?all.cross.find(x=>x.canonical_nws_id===id):null;
+const gid=historic?exactGage(historic):id;const rfc=historic?all.rfc.features.find(x=>x.properties.nwsli===id):all.spatial.features.find(x=>x.properties.usgs===gid);
+let polys=[];
+function add(feature,color,dash,label){if(!feature)return;let layer=L.geoJSON(feature,{style:{color,weight:3,fillColor:color,fillOpacity:.1,dashArray:dash||undefined}}).bindPopup(label).addTo(layerGroup);polys.push(layer)}
+if(document.getElementById('full').checked&&gid){add(all.up.features.find(x=>String(x.properties.id)===gid),'#38bdf8',null,'Current NLDI full upstream')}
+if(document.getElementById('inc').checked&&gid){add(all.inc.features.find(x=>String(x.properties.id)===gid),'#22c55e','7 5','Current NLDI incremental')}
+if(document.getElementById('rfc').checked){add(rfc,'#f59e0b','4 4',rfc?'2018 NOAA LMRFC candidate (not approved)':'RFC polygon not found')}
+if(polys.length){let b=polys[0].getBounds();for(let i=1;i<polys.length;i++)b.extend(polys[i].getBounds());map.fitBounds(b.pad(.12),{maxZoom:11})}
+else if(historic&&historic.latitude&&historic.longitude)map.setView([historic.latitude,historic.longitude],10);
+else if(type==='usgs'){const g=all.gages.find(x=>String(x.id)===id);if(g)map.setView([g.lat,g.lon],10)}
+const name=historic?historic.official_nws_name:(all.gages.find(x=>String(x.id)===id)||{}).name;
+info.textContent=(name||id)+'\n'+(historic?'NWSLI: '+id+'\n':'')+(gid?'Current USGS: '+gid+'\n':'No verified current dashboard USGS join\n')+
+(rfc?'2018 RFC polygon: '+rfc.properties.area_sqmi+' sq mi\n'+(historic?'RFC forecast group: '+rfc.properties.rfc_fcstgroup:'Spatial-only candidate: no verified historic NWSLI match'):'No associated RFC review polygon')+
+'\nScientific status: UNVERIFIED LEGACY MAP MASK';
+}
+Promise.all([read('../../data/basins.geojson'),read('../../data/reaches.geojson'),read('../../config/gages.json'),read('../../historical/relationships/v1/source/Phase2_Forecast_Point_Crosswalk.json'),read('rfc_exact_nwsli_polygons.geojson'),read('rfc_dashboard_only_spatial_candidates.geojson')]).then(([up,inc,gages,cross,rfc,spatial])=>{
+all={up,inc,gages,cross,rfc,spatial};
+station.replaceChildren();
+const groupA=document.createElement('optgroup');groupA.label='29 historical forecast points';
+for(const x of cross){const o=document.createElement('option');o.value='nws:'+x.canonical_nws_id;o.textContent=x.canonical_nws_id+' — '+x.official_nws_name;groupA.appendChild(o)}station.appendChild(groupA);
+const groupB=document.createElement('optgroup');groupB.label='26 current dashboard gages (USGS)';
+for(const x of gages){const o=document.createElement('option');o.value='usgs:'+x.id;o.textContent=x.id+' — '+x.name;groupB.appendChild(o)}station.appendChild(groupB);
+station.value='nws:AMIL1';draw();
+}).catch(e=>{info.textContent='Unable to load geometry assets: '+e.message});
+station.addEventListener('change',draw);for(const id of ['full','inc','rfc'])document.getElementById(id).addEventListener('change',draw);
+</script></body></html>

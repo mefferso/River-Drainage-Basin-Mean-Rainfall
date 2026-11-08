@@ -1,0 +1,30 @@
+{
+  "archive_sha256": "ffd630cb973edfc70a5dabdeff383593bdcef8d17f697f2e824d6e3c636269bb",
+  "rfc_features": 543,
+  "rfc_fields": [
+    "OBJ_STATUS_",
+    "OBJ_IDENTIF",
+    "NAME",
+    "MIN_X_AXIS_",
+    "MAX_X_AXIS_",
+    "MIN_Y_AXIS_",
+    "MAX_Y_AXIS_",
+    "FCSTGROUP",
+    "NWSID",
+    "AREA",
+    "DESCRIPT",
+    "TVA_NUM"
+  ],
+  "exact_nwsli_polygon_features": 26,
+  "dashboard_only_candidate_polygons": 8,
+  "historical_points": 29,
+  "dashboard_gages": 26,
+  "matched_historical_gages": 18,
+  "dashboard_only_gages": 8,
+  "inventory_rows": 37,
+  "candidate_rows": 358,
+  "with_candidates": 26,
+  "with_exact_nwsli_attributes": 26,
+  "approved_legacy_map_masks": 0,
+  "warning": "RFC feature overlap is not proof of legacy MAP geometry."
+}

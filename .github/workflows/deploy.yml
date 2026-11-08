@@ -6,6 +6,8 @@ on:
       - 'index.html'
       - 'historical-ui.js'
       - 'historical/**'
+      - 'reports/phase4a/**'
+      - 'docs/PHASE4A_NETWORK_BASIN_GEOMETRY_HANDOFF.md'
       - 'README.md'
       - '.github/workflows/deploy.yml'
   workflow_run:
