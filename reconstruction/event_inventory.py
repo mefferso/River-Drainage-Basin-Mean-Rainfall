@@ -19,7 +19,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[1]
 # 2016 and 2018 provide cross-station legacy leads; 2019 and 2026 sample MNLM6.
-TARGET_DATES = ("2016-03-12", "2018-12-28", "2019-05-12", "2026-10-31")
+TARGET_DATES = ("2016-03-12", "2016-08-13", "2017-04-03", "2017-04-04", "2018-12-28", "2019-04-20", "2019-05-12", "2020-06-08", "2026-10-31")
 BEFORE_DAYS = 3
 AFTER_DAYS = 6
 MAX_SAMPLE_GAP_HOURS = 6
