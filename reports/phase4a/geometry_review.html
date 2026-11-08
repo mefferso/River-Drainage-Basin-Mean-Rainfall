@@ -38,22 +38,22 @@ function draw(){
 if(!all)return;
 layerGroup.clearLayers();
 const [type,id]=station.value.split(':');const historic=type==='nws'?all.cross.find(x=>x.canonical_nws_id===id):null;
-const gid=historic?exactGage(historic):id;const rfc=historic?all.rfc.features.find(x=>x.properties.nwsli===id):null;
+const gid=historic?exactGage(historic):id;const rfc=historic?all.rfc.features.find(x=>x.properties.nwsli===id):all.spatial.features.find(x=>x.properties.usgs===gid);
 let polys=[];
 function add(feature,color,dash,label){if(!feature)return;let layer=L.geoJSON(feature,{style:{color,weight:3,fillColor:color,fillOpacity:.1,dashArray:dash||undefined}}).bindPopup(label).addTo(layerGroup);polys.push(layer)}
 if(document.getElementById('full').checked&&gid){add(all.up.features.find(x=>String(x.properties.id)===gid),'#38bdf8',null,'Current NLDI full upstream')}
 if(document.getElementById('inc').checked&&gid){add(all.inc.features.find(x=>String(x.properties.id)===gid),'#22c55e','7 5','Current NLDI incremental')}
-if(document.getElementById('rfc').checked){add(rfc,'#f59e0b','4 4',rfc?'2018 NOAA LMRFC '+id+' — candidate only':'RFC polygon not found')}
+if(document.getElementById('rfc').checked){add(rfc,'#f59e0b','4 4',rfc?'2018 NOAA LMRFC candidate (not approved)':'RFC polygon not found')}
 if(polys.length){let b=polys[0].getBounds();for(let i=1;i<polys.length;i++)b.extend(polys[i].getBounds());map.fitBounds(b.pad(.12),{maxZoom:11})}
 else if(historic&&historic.latitude&&historic.longitude)map.setView([historic.latitude,historic.longitude],10);
 else if(type==='usgs'){const g=all.gages.find(x=>String(x.id)===id);if(g)map.setView([g.lat,g.lon],10)}
 const name=historic?historic.official_nws_name:(all.gages.find(x=>String(x.id)===id)||{}).name;
 info.textContent=(name||id)+'\n'+(historic?'NWSLI: '+id+'\n':'')+(gid?'Current USGS: '+gid+'\n':'No verified current dashboard USGS join\n')+
-(rfc?'2018 RFC polygon: '+rfc.properties.area_sqmi+' sq mi\nRFC forecast group: '+rfc.properties.rfc_fcstgroup:'No exact NWSLI polygon in 2018 archive')+
+(rfc?'2018 RFC polygon: '+rfc.properties.area_sqmi+' sq mi\n'+(historic?'RFC forecast group: '+rfc.properties.rfc_fcstgroup:'Spatial-only candidate: no verified historic NWSLI match'):'No associated RFC review polygon')+
 '\nScientific status: UNVERIFIED LEGACY MAP MASK';
 }
-Promise.all([read('../../data/basins.geojson'),read('../../data/reaches.geojson'),read('../../config/gages.json'),read('../../historical/relationships/v1/source/Phase2_Forecast_Point_Crosswalk.json'),read('rfc_exact_nwsli_polygons.geojson')]).then(([up,inc,gages,cross,rfc])=>{
-all={up,inc,gages,cross,rfc};
+Promise.all([read('../../data/basins.geojson'),read('../../data/reaches.geojson'),read('../../config/gages.json'),read('../../historical/relationships/v1/source/Phase2_Forecast_Point_Crosswalk.json'),read('rfc_exact_nwsli_polygons.geojson'),read('rfc_dashboard_only_spatial_candidates.geojson')]).then(([up,inc,gages,cross,rfc,spatial])=>{
+all={up,inc,gages,cross,rfc,spatial};
 station.replaceChildren();
 const groupA=document.createElement('optgroup');groupA.label='29 historical forecast points';
 for(const x of cross){const o=document.createElement('option');o.value='nws:'+x.canonical_nws_id;o.textContent=x.canonical_nws_id+' — '+x.official_nws_name;groupA.appendChild(o)}station.appendChild(groupA);
