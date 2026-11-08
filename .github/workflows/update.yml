@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'scripts/**'
+      - '!scripts/build_historical_site_data.py'
       - 'config/**'
       - 'requirements.txt'
       - '.github/workflows/update.yml'
@@ -31,6 +32,7 @@ jobs:
           python -m compileall -q scripts
           python -m unittest discover -s tests -v
           node tests/validate-ui.cjs
+          node tests/test_historical_ui.cjs
       - name: Run basin rainfall update
         run: python scripts/update.py
       - name: Commit generated data

@@ -30,6 +30,7 @@ jobs:
           python -m compileall -q scripts
           python -m unittest discover -s tests -v
           node tests/validate-ui.cjs
+          node tests/test_historical_ui.cjs
       - name: Process historical event (no missing-hour substitution)
         run: python scripts/historical.py
       - name: Publish historical event files

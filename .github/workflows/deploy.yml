@@ -4,6 +4,8 @@ on:
     branches: [main]
     paths:
       - 'index.html'
+      - 'historical-ui.js'
+      - 'historical/**'
       - 'README.md'
       - '.github/workflows/deploy.yml'
   workflow_run:
