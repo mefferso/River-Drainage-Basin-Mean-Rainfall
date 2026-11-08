@@ -24,6 +24,11 @@ class Phase4BWorkflowContractTests(unittest.TestCase):
         self.assertIn("historical_map_equivalence", builder)
         self.assertNotIn("scripts/update.py", builder)
         self.assertNotIn("Path(\"config/gages.json\").write", builder)
+        self.assertGreater(
+            builder.rfind('if __name__ == "__main__":'),
+            builder.index("def load_rfc_features("),
+            "CLI must not execute before runtime functions are defined",
+        )
 
     def test_handoff_keeps_modern_qpe_and_original_rfc_map_distinct(self):
         report = (ROOT / "docs/PHASE4B_HISTORICAL_MAP_RECONSTRUCTION.md").read_text()

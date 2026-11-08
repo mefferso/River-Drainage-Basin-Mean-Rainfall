@@ -914,10 +914,6 @@ def main() -> None:
     print(json.dumps(summary, indent=2, sort_keys=True))
 
 
-if __name__ == "__main__":
-    main()
-
-
 def _plain(value: Any) -> Any:
     if value is None:
         return None
@@ -1072,3 +1068,7 @@ def write_source_inventory(
         json.dumps(collection, separators=(",", ":"), allow_nan=False) + "\n",
         encoding="utf-8",
     )
+
+
+if __name__ == "__main__":
+    main()
