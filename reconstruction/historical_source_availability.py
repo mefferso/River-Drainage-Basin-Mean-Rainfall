@@ -90,16 +90,53 @@ def _quality_summary(features):
     return values
 
 
+def _peak_summary(features):
+    properties = [feature.get("properties", {}) for feature in features]
+    codes = {}
+    for item in properties:
+        code = str(item.get("parameter_code") or "UNKNOWN")
+        codes[code] = codes.get(code, 0) + 1
+    dates = [str(item.get("time")) for item in properties if item.get("time")]
+    return {
+        "record_count": len(properties), "records_by_parameter_code": codes,
+        "earliest_record_time": min(dates) if dates else None,
+        "latest_record_time": max(dates) if dates else None,
+        "records": [{k: item.get(k) for k in (
+            "monitoring_location_id", "parameter_code", "time", "value", "unit_of_measure",
+            "water_year", "qualifier", "approval_status") if k in item}
+            for item in properties],
+    }
+
+
+def _crest_quality_summary(records):
+    counts = {}
+    for record in records:
+        code = str(record.get("preliminary") or "UNSPECIFIED")
+        counts[code] = counts.get(code, 0) + 1
+    return {
+        "record_count": len(records), "preliminary_codes": counts,
+        "olddatum_true_count": sum(record.get("olddatum") is True for record in records),
+        "timestamp_range_utc": [
+            min((str(record.get("occurredTime")) for record in records if record.get("occurredTime")), default=None),
+            max((str(record.get("occurredTime")) for record in records if record.get("occurredTime")), default=None),
+        ],
+    }
+
+
 def retrieve(session=None, now=None):
     sess = session or requests.Session()
     retrieved = (now or datetime.now(timezone.utc)).astimezone(timezone.utc).isoformat()
     stations = {}
     for nwsli, site in SITES.items():
         location = f"USGS-{site}"
-        metadata = _collection(sess, "time-series-metadata", {
-            "f": "json", "monitoring_location_id": location, "parameter_code": "00065",
-            "limit": 1000, "skipGeometry": "true",
-        })
+        try:
+            metadata = _collection(sess, "time-series-metadata", {
+                "f": "json", "monitoring_location_id": location, "parameter_code": "00065",
+                "limit": 1000, "skipGeometry": "true",
+            })
+        except Exception as exc:
+            metadata = {"collection": "time-series-metadata", "initial_request_url": None,
+                        "page_count": 0, "features": [], "pages": [], "error": str(exc)}
         metadata_features = [f for f in metadata["features"]
                              if str(f.get("properties", {}).get("parameter_code")) == "00065"]
         metadata["features"] = metadata_features
@@ -118,18 +155,31 @@ def retrieve(session=None, now=None):
             interval = f"{start.date().isoformat()}T00:00:00Z/{end.date().isoformat()}T00:00:00Z"
             query = {"f": "json", "monitoring_location_id": location, "parameter_code": "00065",
                      "datetime": interval, "limit": 1000, "skipGeometry": "true"}
-            continuous = _collection(sess, "continuous", query)
-            daily = _collection(sess, "daily", query)
+            try:
+                continuous = _collection(sess, "continuous", query)
+            except Exception as exc:
+                continuous = {"collection": "continuous", "initial_request_url": None,
+                              "page_count": 0, "features": [], "pages": [], "error": str(exc)}
+            try:
+                daily = _collection(sess, "daily", query)
+            except Exception as exc:
+                daily = {"collection": "daily", "initial_request_url": None,
+                         "page_count": 0, "features": [], "pages": [], "error": str(exc)}
             stage_samples[lead] = {
                 "review_window_utc": [start.isoformat(), end.isoformat()],
                 "continuous_00065": {**continuous, "values": _quality_summary(continuous["features"])},
                 "daily_00065": {**daily, "values": _quality_summary(daily["features"])},
             }
 
-        peaks = _collection(sess, "peaks", {"f": "json", "monitoring_location_id": location,
-                                               "limit": 1000, "skipGeometry": "true"})
+        try:
+            peaks = _collection(sess, "peaks", {"f": "json", "monitoring_location_id": location,
+                                                  "limit": 1000, "skipGeometry": "true"})
+        except Exception as exc:
+            peaks = {"collection": "peaks", "initial_request_url": None,
+                     "page_count": 0, "features": [], "pages": [], "error": str(exc)}
         peaks["records"] = [{k: f.get("properties", {}).get(k) for k in f.get("properties", {})}
                             for f in peaks["features"]]
+        peaks["summary"] = _peak_summary(peaks["features"])
         station["annual_peak_records"] = peaks
         station["daily_and_continuous_stage_review_windows"] = stage_samples
 
@@ -152,6 +202,8 @@ def retrieve(session=None, now=None):
                     "historic_crest_count": len(historic) if isinstance(historic, list) else 0,
                     "recent_crests": recent if isinstance(recent, list) else [],
                     "recent_crest_count": len(recent) if isinstance(recent, list) else 0,
+                    "historic_crest_quality": _crest_quality_summary(historic) if isinstance(historic, list) else None,
+                    "recent_crest_quality": _crest_quality_summary(recent) if isinstance(recent, list) else None,
                     "raw_response": body,
                 }
             except Exception as exc:
@@ -184,13 +236,20 @@ def main():
         compact[nwsli] = {
             "usgs_00065_series_count": len(metadata),
             "usgs_00065_series": metadata,
+            "usgs_00065_metadata_error": station["usgs_00065_time_series_metadata"].get("error"),
             "annual_peak_count": len(station["annual_peak_records"]["features"]),
+            "annual_peak_summary": station["annual_peak_records"].get("summary"),
+            "annual_peak_error": station["annual_peak_records"].get("error"),
             "review_window_observation_counts": {date: {
                 kind: len(stage[kind]["features"]) for kind in ("continuous_00065", "daily_00065")
             } for date, stage in station["daily_and_continuous_stage_review_windows"].items()},
+            "review_window_errors": {date: {
+                kind: stage[kind].get("error") for kind in ("continuous_00065", "daily_00065")
+            } for date, stage in station["daily_and_continuous_stage_review_windows"].items()},
             "nwps": {key: {k: val.get(k) for k in (
                 "status_code", "timestamp_field_count", "earliest_timestamp_utc", "latest_timestamp_utc",
-                "historic_crest_count", "recent_crest_count", "error")}
+                "historic_crest_count", "recent_crest_count", "historic_crest_quality",
+                "recent_crest_quality", "error")}
                 for key,val in station["noaa_nwps"].items()},
         }
     print(json.dumps({"status": result["status"], "stations": compact, "output": str(args.output)}, indent=2))
