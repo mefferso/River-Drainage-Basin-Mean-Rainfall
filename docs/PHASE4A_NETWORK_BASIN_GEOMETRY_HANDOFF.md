@@ -13,6 +13,13 @@
 - Dashboard polygons: committed `data/basins.geojson` and `data/reaches.geojson`, no geometry edits.
 - Output: `network_inventory.csv` (29 historical + 8 dashboard-only = 37 rows); `rfc_candidates.csv` (358 candidate comparisons, including spatial-only dashboard points); `rfc_exact_nwsli_polygons.geojson` (26 provenance-labeled candidate polygons); `summary.json`.
 
+## Dedicated review map
+
+After GitHub Pages deployment, review the standalone read-only map at
+https://mefferso.github.io/River-Drainage-Basin-Mean-Rainfall/reports/phase4a/geometry_review.html
+
+The map supports all 29 historical NWSLI point choices and all 26 USGS gage choices, overlays verified-ID RFC candidate polygons, full NLDI basins and incremental reach geometry, and labels dashboard-only RFC matches as spatial-only (never a verified same-outlet historical join). It is intentionally separate from the production rainfall dashboard.
+
 ## Geometry methods
 
 All areas computed geodesically on WGS84 with `pyproj.Geod.geometry_area_perimeter`; dimensions in square miles. Intersection/union (IoU) is 100 × area(RFC ∩ NLDI)/area(RFC ∪ NLDI), calculated for both whole upstream and incremental geometry when an exact Phase 2 dashboard join exists. The chosen *leading polygon* is prioritized by exact NWSLI attribute and outlet containment, then spatial IoU; this is a **review candidate**, not an approved hydrologic area. The candidate file retains source NWSID and all attributes.
