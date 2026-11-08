@@ -280,6 +280,39 @@ class RfcNetworkRelationshipTests(unittest.TestCase):
         self.assertEqual(link["measure"], 54.2)
         self.assertEqual(len(link["response_sha256"]), 64)
 
+    def test_hydrolocation_uses_indexed_snap_and_ignores_provided_input_point(self):
+        lon, lat = self.outlet
+        response = {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [lon + 0.0005, lat],
+                    },
+                    "properties": {
+                        "source": "indexed",
+                        "type": "hydrolocation",
+                        "comid": 101,
+                        "measure": 54.2,
+                    },
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {"type": "Point", "coordinates": [lon, lat]},
+                    "properties": {"source": "provided", "type": "point"},
+                },
+            ],
+        }
+
+        link = resolve_outlet_link(self.feature("410"), response)
+
+        self.assertEqual(link["status"], "LINKED")
+        self.assertEqual(link["comid"], 101)
+        self.assertAlmostEqual(link["measure"], 54.2)
+        self.assertLessEqual(link["distance_m"], 200)
+
     def test_raindrop_far_snap_and_missing_comid_are_unresolved(self):
         far = resolve_outlet_link(
             self.feature("410"), self.response(offset_y=0.01)
@@ -484,6 +517,57 @@ class RfcNetworkRelationshipTests(unittest.TestCase):
             )
             self.assertEqual(no_network.calls, [])
             self.assertEqual(cached, first)
+
+    def test_network_refresh_reuses_prior_raw_hydrolocation_responses(self):
+        class FakeResponse:
+            def __init__(self, payload):
+                self.payload = payload
+            def raise_for_status(self):
+                return None
+            def json(self):
+                return self.payload
+
+        class FakeSession:
+            def __init__(self):
+                self.calls = []
+            def get(self, url, timeout):
+                self.calls.append(url)
+                if "/navigation/UT/flowlines" in url:
+                    return FakeResponse({"type": "FeatureCollection", "features": [
+                        {"id": "nhdplusv2:101", "properties": {"comid": 101}}
+                    ]})
+                if "/basin" in url:
+                    return FakeResponse({"type": "FeatureCollection", "features": [{
+                        "type": "Feature",
+                        "geometry": {"type": "Polygon", "coordinates": [[
+                            [-91, 30], [-90, 30], [-90, 31], [-91, 31], [-91, 30]
+                        ]]},
+                    }]})
+                raise AssertionError(f"Unexpected network request: {url}")
+
+        feature = self.feature("410")
+        from urllib.parse import urlencode
+        coords = f"POINT({feature.outlet.x:.10f} {feature.outlet.y:.10f})"
+        url = "https://api.water.usgs.gov/nldi/linked-data/hydrolocation?" + urlencode(
+            {"f": "json", "coords": coords}
+        )
+        response = self.response()
+        response["source_url"] = url
+        response["retrieved_at"] = "2026-11-08T00:00:00Z"
+
+        with tempfile.TemporaryDirectory() as temp:
+            seed = Path(temp) / "nldi_responses.json.gz"
+            seed.write_bytes(gzip.compress(json.dumps([response]).encode(), mtime=0))
+            session = FakeSession()
+            network = fetch_network_cache(
+                [feature], Path(temp) / "cache", refresh=True, session=session,
+                sleep_seconds=0, response_seed_path=seed,
+            )
+
+        self.assertEqual(network["links"]["410"]["status"], "LINKED")
+        self.assertFalse(any("hydrolocation" in url for url in session.calls))
+        self.assertEqual(len(session.calls), 2)
+        self.assertEqual(len(network["raw_responses"]), 3)
 
 
 class RfcCandidateTests(unittest.TestCase):

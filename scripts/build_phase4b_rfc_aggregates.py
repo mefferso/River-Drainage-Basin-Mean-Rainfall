@@ -90,11 +90,29 @@ def resolve_outlet_link(
         "reason": "",
     }
     features = response.get("features")
-    if not isinstance(features, list) or len(features) != 1:
-        result["reason"] = "NLDI hydrolocation must return exactly one feature"
+    if not isinstance(features, list) or not features:
+        result["reason"] = "NLDI hydrolocation returned no features"
         return result
 
-    match = features[0]
+    indexed_features = [
+        item for item in features
+        if isinstance(item, Mapping)
+        and str((item.get("properties") or {}).get("source", "")).lower() == "indexed"
+    ]
+    if len(indexed_features) == 1:
+        # NLDI commonly returns both the indexed flowline snap and the original
+        # input point (source="provided"). Only the indexed result is routing
+        # evidence; the provided point has no COMID and must not make a valid
+        # snap ambiguous.
+        match = indexed_features[0]
+    elif not indexed_features and len(features) == 1:
+        # Keep compatibility with NLDI responses and fixtures that return one
+        # unlabelled hydrolocation result.
+        match = features[0]
+    else:
+        result["reason"] = "NLDI hydrolocation must contain exactly one indexed feature"
+        return result
+
     properties = match.get("properties") or {}
     reported_method = str(properties.get("method", properties.get("location_method", ""))).upper()
     if "RAINDROP" in reported_method or "TRACE" in reported_method:
@@ -237,8 +255,14 @@ def fetch_network_cache(
     refresh: bool = False,
     session: Any = None,
     sleep_seconds: float = 0.1,
+    response_seed_path: Path | None = None,
 ) -> dict[str, Any]:
-    """Fetch or load a versioned NLDI snapshot; request failures remain explicit."""
+    """Fetch or load a versioned NLDI snapshot; request failures remain explicit.
+
+    A prior compressed raw-response archive can seed refreshes. This avoids
+    repeating successful hydrolocation requests while still retrying failures
+    and refreshing navigation/basin evidence for newly resolved COMIDs.
+    """
     import requests
     from datetime import datetime, timezone
     from urllib.parse import urlencode
@@ -264,8 +288,23 @@ def fetch_network_cache(
     upstream_sets: dict[int, set[int]] = {}
     failures: list[dict[str, str]] = []
     raw_responses: list[dict[str, Any]] = []
+    seeded_responses: dict[str, dict[str, Any]] = {}
+    if response_seed_path is not None and Path(response_seed_path).is_file():
+        with gzip.open(response_seed_path, "rt", encoding="utf-8") as stream:
+            seed_payload = json.load(stream)
+        if not isinstance(seed_payload, list):
+            raise ValueError("NLDI response seed must contain a JSON array")
+        seeded_responses = {
+            str(response["source_url"]): response
+            for response in seed_payload
+            if isinstance(response, dict) and response.get("source_url")
+        }
 
     def get_payload(url: str, subject: str) -> dict[str, Any] | None:
+        seeded = seeded_responses.get(url)
+        if seeded is not None:
+            raw_responses.append(seeded)
+            return seeded
         if sleep_seconds > 0:
             time.sleep(sleep_seconds)
         retrieved = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
@@ -847,6 +886,7 @@ def run_reconstruction(
     network = fetch_network_cache(
         features, cache_dir, refresh=refresh_nldi, session=session,
         sleep_seconds=sleep_seconds,
+        response_seed_path=Path(out_dir) / "nldi_responses.json.gz",
     )
     edges, network_issues = build_relationships(
         features, network["links"], network["upstream_reach_sets"]
