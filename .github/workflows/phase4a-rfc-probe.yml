@@ -21,6 +21,8 @@ jobs:
         run: python scripts/audit_rfc_network_geometry.py
       - name: Test complete inventory and scientific safeguards
         run: python -m unittest -v tests/test_rfc_geometry_audit.py
+      - name: Test standalone geometry map script
+        run: node tests/test_phase4a_map.cjs
       - uses: actions/upload-artifact@v4
         if: success()
         with:
