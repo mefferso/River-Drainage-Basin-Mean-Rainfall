@@ -1,0 +1,45 @@
+{
+  "schema_version": "historical-v1",
+  "source_counts": {
+    "map_to_crest": 301,
+    "crest_to_crest": 365,
+    "crosswalk": 29
+  },
+  "published_counts": {
+    "map_to_crest": 240,
+    "crest_to_crest": 365
+  },
+  "excluded_map_records": {
+    "no_verified_current_dashboard_gage": 61,
+    "by_historical_point": {
+      "GLFM6": 54,
+      "KLNM6": 7
+    }
+  },
+  "verified_dashboard_crosswalks": 18,
+  "published_relationships": 12,
+  "published_points": [
+    "AMIL1",
+    "BXAL1",
+    "CREM6",
+    "CUSL1",
+    "DENL1",
+    "DIBM6",
+    "FLSL1",
+    "HOLL1",
+    "KENL1",
+    "LNDM6",
+    "LPOL1",
+    "MNLM6",
+    "MONL1",
+    "OSYM6",
+    "ROBL1"
+  ],
+  "source_sha256": {
+    "Phase2_MAP_to_Crest_Plot_Ready.json": "830cc965e9a3afd7bcd62c328b68a082df60038e84e8af6a511315c9438c67fc",
+    "Phase2_Crest_to_Crest_Plot_Ready.json": "88cf92527eef23f4ed8d03eb30d126f7b060c1c0e4c5907ffa3e6a4295328a55",
+    "Phase2_Forecast_Point_Crosswalk.json": "30df8ca7c33046dc771665c73056898fb833587492ca56c843e1325c90ee6b4f"
+  },
+  "crosswalk_file": "crosswalk.json",
+  "point_file_pattern": "points/{nws_point_id}.json"
+}

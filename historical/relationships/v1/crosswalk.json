@@ -1,0 +1,92 @@
+[
+  {
+    "usgs_site_id": "02480590",
+    "nws_point_id": "DIBM6",
+    "display_name": "Tchoutacabouffa River near D'Iberville"
+  },
+  {
+    "usgs_site_id": "02481510",
+    "nws_point_id": "LNDM6",
+    "display_name": "Wolf River near Landon"
+  },
+  {
+    "usgs_site_id": "02489500",
+    "nws_point_id": "BXAL1",
+    "display_name": "Pearl River near Bogalusa"
+  },
+  {
+    "usgs_site_id": "02492343",
+    "nws_point_id": "CREM6",
+    "display_name": "East Hobolochitto Creek near Caesar"
+  },
+  {
+    "usgs_site_id": "02492360",
+    "nws_point_id": "MNLM6",
+    "display_name": "West Hobolochitto Creek near McNeill"
+  },
+  {
+    "usgs_site_id": "07375000",
+    "nws_point_id": "FLSL1",
+    "display_name": "Tchefuncte River near Folsom"
+  },
+  {
+    "usgs_site_id": "07375050",
+    "nws_point_id": "CUSL1",
+    "display_name": "Tchefuncte River near Covington"
+  },
+  {
+    "usgs_site_id": "07375105",
+    "nws_point_id": "CGSL1",
+    "display_name": "Bogue Falaya River near Camp Covington"
+  },
+  {
+    "usgs_site_id": "07375175",
+    "nws_point_id": "CVEL1",
+    "display_name": "Bogue Falaya River at Boston Street"
+  },
+  {
+    "usgs_site_id": "07375280",
+    "nws_point_id": "OSYM6",
+    "display_name": "Tangipahoa River at Osyka"
+  },
+  {
+    "usgs_site_id": "07375300",
+    "nws_point_id": "KENL1",
+    "display_name": "Tangipahoa River near Kentwood"
+  },
+  {
+    "usgs_site_id": "07375430",
+    "nws_point_id": "AMIL1",
+    "display_name": "Tangipahoa River near Amite"
+  },
+  {
+    "usgs_site_id": "07375500",
+    "nws_point_id": "ROBL1",
+    "display_name": "Tangipahoa River at Robert"
+  },
+  {
+    "usgs_site_id": "07375800",
+    "nws_point_id": "LPOL1",
+    "display_name": "Tickfaw River at Liverpool"
+  },
+  {
+    "usgs_site_id": "07375960",
+    "nws_point_id": "MONL1",
+    "display_name": "Tickfaw River at Montpelier"
+  },
+  {
+    "usgs_site_id": "07376000",
+    "nws_point_id": "HOLL1",
+    "display_name": "Tickfaw River at Holden"
+  },
+  {
+    "usgs_site_id": "07376500",
+    "nws_point_id": "NRBL1",
+    "display_name": "Natalbany River at Baptist"
+  },
+  {
+    "usgs_site_id": "07378500",
+    "nws_point_id": "DENL1",
+    "display_name": "Amite River at Denham Springs"
+  }
+]

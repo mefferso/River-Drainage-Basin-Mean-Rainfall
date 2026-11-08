@@ -30,6 +30,24 @@ The historical job is one-time via `.github/workflows/historical.yml` (on first 
 
 Historical output availability must be confirmed from successful workflow logs and committed artifacts; inclusion of the workflow alone does not imply the event was processed.
 
+## Historical rainfall-to-crest relationships
+
+The map now includes a historical analysis section immediately below it. Selecting a map gage loads approved historical relationships independently of the Dataset, accumulation-period, basin-area, and wet-threshold controls. MAP-to-crest records show the legacy study MAP against the source-reported crest; directional crest pairs preserve the Phase 2 source endpoint on X and target endpoint on Y. Each plotted point links to its original record ID and workbook/sheet/row reference. The table sorts by date and numeric fields and can be downloaded as CSV.
+
+The published Phase 2 package includes 301 Tier B MAP-to-crest source records, 365 Tier B crest pairs across 12 relationships, and 29 forecast-point crosswalk entries. Eighteen crosswalks match a configured dashboard USGS gage exactly. Of those, 15 forecast points have at least one published historical relationship. The mapped plot points are AMIL1, BXAL1, CREM6, CUSL1, DENL1, DIBM6, FLSL1, HOLL1, KENL1, LNDM6, LPOL1, MNLM6, MONL1, OSYM6, and ROBL1. The site publishes 240 MAP rows attached to verified current map points and all 365 paired crests. The 61 remaining MAP rows (54 GLFM6 and 7 KLNM6) remain in the source export but are not attached to current map markers: GLFM6 has no existing dashboard marker and its geometry needs review; KLNM6 is not the dashboard's Jourdan gage at USGS 02481667.
+
+All displayed observations are **Tier B historical descriptive records**, not verified or calibrated forecast inputs. Legacy RFC MAP is not interchangeable with modern MRMS whole-basin or wet-area rainfall. Date labels are not guaranteed to be crest dates; original stage datums, MAP method, rainfall periods, TC clock, and some lag units remain unresolved. No fitted equation, interpolation, or operational stage forecast is displayed. `MNLM6` (West Hobolochitto) and `CREM6` (East Hobolochitto) remain distinct. Source spelling `WTPM6` is preserved in pair provenance while the canonical station ID is `WPTM6`.
+
+Versioned source exports, crosswalk subset, manifest, and per-point payloads are under `historical/relationships/v1/`. To refresh these files after a reviewed Phase 2 update, replace the three source JSONs in `historical/relationships/v1/source/`, update the reviewed expected counts in `scripts/build_historical_site_data.py` when the baseline changes, then run:
+
+```sh
+python scripts/build_historical_site_data.py
+python -m unittest discover -s tests -v
+node tests/test_historical_ui.cjs
+```
+
+Review `docs/historical_methodology.md`, `docs/historical_quality_control.md`, and `docs/PHASE3_HANDOFF.md` before extending the plotted records. New stations require an authoritative same-outlet mapping and reviewed geometry; matching names or nearby coordinates are insufficient.
+
 ## Data and pipeline
 
 - MRMS 6/12/24-hour Pass 1 GRIB2: https://mrms.ncep.noaa.gov/2D/
