@@ -5,6 +5,7 @@ on:
     paths:
       - .github/workflows/phase4d-scientific-reconciliation.yml
       - reconstruction/phase4d_reconcile.py
+      - reconstruction/river_stage.py
       - reconstruction/tests/test_phase4d_reconcile.py
       - reconstruction/historical_source_availability.py
       - reconstruction/tests/test_historical_source_availability.py

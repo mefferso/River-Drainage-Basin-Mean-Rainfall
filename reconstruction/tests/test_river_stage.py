@@ -51,6 +51,23 @@ class StageTests(unittest.TestCase):
         obs[4]["time_utc"] = "2026-11-02T04:00:00+00:00"
         self.assertEqual(len(crest_candidates(obs)), 0)
 
+    def test_shallow_short_term_ripples_do_not_create_duplicate_crests(self):
+        stages = [3.0, 5.0, 4.96, 5.1, 3.0]
+        obs = [{"time_utc": f"2026-11-01T0{i}:00:00+00:00", "stage_ft": stage,
+                "site_id": "07375430", "source_url": "https://example.invalid", "qualifiers": []}
+               for i, stage in enumerate(stages)]
+        candidates = crest_candidates(obs)
+        self.assertEqual([item["candidate_stage_ft"] for item in candidates], [5.1])
+        self.assertEqual(candidates[0]["minimum_prominence_ft"], 0.1)
+
+    def test_distinct_multipeak_hydrograph_keeps_both_candidates(self):
+        stages = [3.0, 6.0, 5.3, 6.2, 3.0]
+        obs = [{"time_utc": f"2026-11-01T0{i}:00:00+00:00", "stage_ft": stage,
+                "site_id": "07375430", "source_url": "https://example.invalid", "qualifiers": []}
+               for i, stage in enumerate(stages)]
+        candidates = crest_candidates(obs)
+        self.assertEqual([item["candidate_stage_ft"] for item in candidates], [6.0, 6.2])
+
     def test_missing_stage_units_rejected(self):
         response = Mock()
         response.json.return_value = {"value": {"timeSeries": [{

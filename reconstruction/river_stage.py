@@ -89,11 +89,15 @@ def request_stage(site_id, start, end, session=None):
             "series_metadata": series_metadata, "observations": records}
 
 
-def crest_candidates(observations, min_stage_ft=None, separation_hours=48):
-    """Candidate local peaks only; NOT verified event crests.
+def crest_candidates(observations, min_stage_ft=None, separation_hours=6,
+                     min_prominence_ft=0.10):
+    """Return provisional local crest candidates with conservative ripple grouping.
 
-    Uses available valid samples; gaps and provisional qualifiers are retained
-    for review. The caller must verify continuous coverage and hydrology.
+    Adjacent local maxima within ``separation_hours`` are grouped only when the
+    observed valley between them is shallower than ``min_prominence_ft`` below
+    the lower peak. A deeper valley keeps both potential crests. Neighbors more
+    than six hours away are never used to assert a local peak. Gaps, qualifiers,
+    and source provenance remain review concerns; this does not verify events.
     """
     obs = sorted(observations, key=lambda r: r["time_utc"])
     peaks = []
@@ -108,17 +112,30 @@ def crest_candidates(observations, min_stage_ft=None, separation_hours=48):
             if max((middle-left).total_seconds(), (right-middle).total_seconds()) > 21600:
                 continue
             peaks.append(current)
-    selected = []
-    for p in sorted(peaks, key=lambda r: r["stage_ft"], reverse=True):
-        at = time_utc(p["time_utc"])
-        if all(abs((at-time_utc(other["time_utc"])).total_seconds()) >= separation_hours * 3600
-               for other in selected):
-            selected.append(p)
+    peaks = sorted(peaks, key=lambda r: r["time_utc"])
+    clusters = []
+    for peak in peaks:
+        if not clusters:
+            clusters.append([peak])
+            continue
+        previous = clusters[-1][-1]
+        separation = (time_utc(peak["time_utc"])-time_utc(previous["time_utc"])).total_seconds()/3600
+        valley = [item["stage_ft"] for item in obs
+                  if time_utc(previous["time_utc"]) < time_utc(item["time_utc"]) < time_utc(peak["time_utc"])]
+        shallow_ripple = bool(valley) and min(previous["stage_ft"], peak["stage_ft"]) - min(valley) < min_prominence_ft
+        if separation < separation_hours and shallow_ripple:
+            if peak["stage_ft"] >= clusters[-1][-1]["stage_ft"]:
+                clusters[-1][-1] = peak
+        else:
+            clusters.append([peak])
+    selected = [cluster[-1] for cluster in clusters]
     return sorted([{
         "site_id": p["site_id"], "candidate_time_utc": p["time_utc"],
         "candidate_stage_ft": p["stage_ft"], "qualifiers": p["qualifiers"],
         "source_url": p["source_url"], "status": "CANDIDATE_UNVERIFIED",
-        "note": "Local maximum of available instantaneous observations; not a verified flood crest",
+        "minimum_peak_separation_hours": separation_hours,
+        "minimum_prominence_ft": min_prominence_ft,
+        "note": "Local maximum candidate after shallow-ripple grouping; not a verified flood crest",
     } for p in selected], key=lambda r: r["candidate_time_utc"])
 
 
