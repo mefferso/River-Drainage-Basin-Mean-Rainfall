@@ -1,0 +1,37 @@
+name: Phase 4B actual legacy-stage event leads
+on:
+  push:
+    branches: [feature/pilot-rainfall-reconstruction-amil1-mnlm6]
+    paths:
+      - 'reconstruction/event_inventory.py'
+      - 'reconstruction/tests/test_event_inventory.py'
+      - '.github/workflows/reconstruction-event-inventory.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  stage-event-inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Confirm legacy leads and fail-closed stage logic
+        run: python -m unittest discover -s reconstruction/tests -v
+      - name: Retrieve independent USGS stage windows for overlapping legacy leads
+        run: |
+          python reconstruction/event_inventory.py \
+            --output reconstruction/staging/legacy_stage_leads.json
+      - name: Upload traceable unverified candidates for hydrologic review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase4b-stage-lead-inventory
+          path: reconstruction/staging/legacy_stage_leads.json
+          if-no-files-found: warn
+          retention-days: 30
