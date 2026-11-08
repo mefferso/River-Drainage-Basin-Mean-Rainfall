@@ -22,7 +22,10 @@ import numpy as np
 import rasterio
 from rasterio.windows import from_bounds, transform as window_transform
 
-from river_stage import time_utc
+try:
+    from .river_stage import time_utc
+except ImportError:  # direct execution as script
+    from river_stage import time_utc
 
 BUCKET = "noaa-mrms-pds"
 PRODUCT = "MultiSensor_QPE_01H_Pass2_00.00"
