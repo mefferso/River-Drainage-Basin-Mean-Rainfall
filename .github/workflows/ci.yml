@@ -14,8 +14,11 @@ jobs:
         with:
           python-version: '3.11'
           cache: pip
-      - run: pip install -r requirements.txt
+      - run: pip install -r requirements.txt geopandas pyproj
       - run: python -m compileall -q scripts
       - run: python -m unittest discover -s tests -v
       - run: node tests/validate-ui.cjs
       - run: node tests/test_historical_ui.cjs
+      - run: node tests/test_phase4a_map.cjs
+      - run: node tests/test_phase4b_map.cjs
+      - run: python -m unittest -v tests/test_phase4b_workflow_contract.py
