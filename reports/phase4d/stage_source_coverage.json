@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-11-08T20:19:11.777133+00:00",
+  "generated_at_utc": "2026-11-08T20:33:34.559278+00:00",
   "status": "SOURCE_AVAILABILITY_PROBE_NOT_EVENT_VALIDATION",
-  "source_run_id": 42519457827,
-  "source_artifact_id": 13632502088,
+  "source_run_id": 42520685369,
+  "source_artifact_id": 13633585578,
   "interpretation": [
     "USGS continuous and daily time series are distinct record types; metadata dates indicate series bounds and may include internal gaps.",
     "USGS annual peak-flow records are not a complete inventory of smaller flood events.",
@@ -13,7 +13,7 @@
   "stations": {
     "AMIL1": {
       "usgs_site_id": "07375430",
-      "retrieved_at_utc": "2026-11-08T20:19:11.777133+00:00",
+      "retrieved_at_utc": "2026-11-08T20:33:34.559278+00:00",
       "usgs_metadata_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/time-series-metadata/items?f=json&monitoring_location_id=USGS-07375430&parameter_code=00065&limit=1000&skipGeometry=true",
       "usgs_series": [
         {
@@ -1511,8 +1511,8 @@
         "stageflow": {
           "url": "https://api.water.noaa.gov/nwps/v1/gauges/AMIL1/stageflow",
           "status_code": 200,
-          "record_count": 5704,
-          "start_utc": "2026-10-09T20:30:00+00:00",
+          "record_count": 5710,
+          "start_utc": "2026-10-09T20:45:00+00:00",
           "end_utc": "2026-11-13T12:00:00+00:00",
           "quality": {
             "note": "NWPS stageflow payload is current observation/forecast range, not long-term historical coverage."
@@ -1619,7 +1619,7 @@
     },
     "MNLM6": {
       "usgs_site_id": "02492360",
-      "retrieved_at_utc": "2026-11-08T20:19:11.777133+00:00",
+      "retrieved_at_utc": "2026-11-08T20:33:34.559278+00:00",
       "usgs_metadata_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/time-series-metadata/items?f=json&monitoring_location_id=USGS-02492360&parameter_code=00065&limit=1000&skipGeometry=true",
       "usgs_series": [
         {
@@ -3279,8 +3279,8 @@
         "stageflow": {
           "url": "https://api.water.noaa.gov/nwps/v1/gauges/MNLM6/stageflow",
           "status_code": 200,
-          "record_count": 5782,
-          "start_utc": "2026-10-09T20:30:00+00:00",
+          "record_count": 5788,
+          "start_utc": "2026-10-09T20:45:00+00:00",
           "end_utc": "2026-11-13T12:00:00+00:00",
           "quality": {
             "note": "NWPS stageflow payload is current observation/forecast range, not long-term historical coverage."
