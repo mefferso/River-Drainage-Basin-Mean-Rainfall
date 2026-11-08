@@ -123,6 +123,10 @@ def main():
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(result,indent=2)+"\n")
     print(json.dumps({"leads":len(result["event_leads"]),"retrievals":result["coverage"],
+                      "observed_window_maxima": [{k:row.get(k) for k in
+                        ("nwsli","legacy_date_lead","legacy_crest_feet","candidate_max_stage_ft",
+                         "candidate_max_time_utc","maximum_sample_gap_hours","review_status","qc_flags")}
+                         for row in result["event_leads"]],
                       "approved_event_pairs":0,"output":str(args.output)},indent=2))
     if any(x["status"]=="RETRIEVAL_FAILED" for x in result["coverage"]):
         raise SystemExit("Some source observations failed; see saved diagnostics")
