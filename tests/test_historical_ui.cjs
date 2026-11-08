@@ -59,6 +59,7 @@ async function main() {
   assert.match(html, /historical-ui\.js/);
   assert.match(html, /renderHistoricalForUsGsGage/);
   assert.match(html, /historical-analysis/);
+  assert.match(html, /id="hist-retry"[^>]*hidden/);
   assert.match(html, /@media\s*\(max-width:750px\)/);
   assert.match(html, /const retained=state\.latest\.gages\.some\(g=>g\.id===state\.selected\)/);
   assert.match(html, /\$\('period'\)\.addEventListener\('change',render\)/);
@@ -82,6 +83,7 @@ async function main() {
   };
   const controller = ui.create({document: f.document, fetch: fetchFn, baseUrl: 'historical/relationships/v1/'});
   await controller.renderForGage('07375430');
+  assert.equal(f.elements['hist-retry'].hidden, true, 'Retry hidden after success');
   assert.match(f.elements['hist-status'].textContent, /3 historical descriptive records/);
   assert.match(f.elements['hist-title'].textContent, /Tangipahoa River near Amite/);
   assert.match(f.elements['hist-title'].textContent, /USGS 07375430 · NWS AMIL1/);
@@ -119,6 +121,7 @@ async function main() {
   assert.match(f.elements['hist-status'].textContent, /No approved historical relationships/);
   assert.equal(f.elements['hist-rows'].children.length, 0);
   await controller.renderForGage('not-a-dashboard-gage');
+  assert.equal(f.elements['hist-retry'].hidden, true, 'No match is not an error');
   assert.match(f.elements['hist-status'].textContent, /No verified historical station match/);
 
   const stale = fixture();
@@ -137,6 +140,14 @@ async function main() {
   finishFirst({ok: true, json: async () => mapPayload('AMIL1', [mapRow('OLD', 1, '2001-01-01')])});
   await oldRequest;
   assert.deepEqual(stale.elements['hist-rows'].children.map(row => row.dataset.recordId), ['NEW']);
+
+  const failed = fixture();
+  const failedController = ui.create({document: failed.document, fetch: async () => ({ok: false, status: 503}), baseUrl: 'historical/relationships/v1/'});
+  await failedController.renderForGage('07375430');
+  assert.match(failed.elements['hist-status'].textContent, /Could not load historical records/);
+  assert.equal(failed.elements['hist-retry'].hidden, false, 'Retry visible on load error');
+  await failedController.renderForGage('');
+  assert.equal(failed.elements['hist-retry'].hidden, true, 'Retry hidden after clearing error');
 
   console.log('Historical UI syntax and selection, sorting, synchronization, export, and stale-fetch tests passed');
 }
