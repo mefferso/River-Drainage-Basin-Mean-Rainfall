@@ -137,10 +137,24 @@ with tempfile.TemporaryDirectory() as tmp:
             'geometry':mapping(feature.geometry)})
     (OUT/'rfc_exact_nwsli_polygons.geojson').write_text(json.dumps({
         'type':'FeatureCollection','features':exact_features},separators=(',',':')))
+    spatial_features=[]
+    for entry in rows:
+        if entry['historical_id'] or not entry['leading_rfc_feature']:continue
+        idx=int(entry['leading_rfc_feature'])
+        feature=frame.loc[idx]
+        spatial_features.append({'type':'Feature','properties':{
+            'usgs':entry['dashboard_usgs'],'rfc_index':str(idx),
+            'rfc_nwsid':str(feature.get('NWSID','')),
+            'rfc_name':str(feature.get('DESCRIPT','')),
+            'area_sqmi':round(area(feature.geometry),3),
+            'scientific_status':'SPATIAL_ONLY_NO_VERIFIED_HISTORICAL_JOIN'},
+            'geometry':mapping(feature.geometry)})
+    (OUT/'rfc_dashboard_only_spatial_candidates.geojson').write_text(json.dumps({
+        'type':'FeatureCollection','features':spatial_features},separators=(',',':')))
     writetable(OUT/'network_inventory.csv',rows)
     writetable(OUT/'rfc_candidates.csv',candidates)
     summary={'archive_sha256':hashlib.sha256(archive.read_bytes()).hexdigest(),
-        'rfc_features':len(frame),'rfc_fields':attrs,'exact_nwsli_polygon_features':len(exact_features),'historical_points':len(cross),
+        'rfc_features':len(frame),'rfc_fields':attrs,'exact_nwsli_polygon_features':len(exact_features),'dashboard_only_candidate_polygons':len(spatial_features),'historical_points':len(cross),
         'dashboard_gages':len(gages),'matched_historical_gages':len(used),
         'dashboard_only_gages':len(gages)-len(used),'inventory_rows':len(rows),
         'candidate_rows':len(candidates),'with_candidates':sum(bool(x['rfc_candidates']) for x in rows[:29]),
