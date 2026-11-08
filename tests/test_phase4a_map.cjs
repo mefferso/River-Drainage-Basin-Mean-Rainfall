@@ -1,6 +1,6 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');const vm=require('node:vm');
 const html=fs.readFileSync('reports/phase4a/geometry_review.html','utf8');
-const scripts=[...html.matchAll(/<script(?:\\s[^>]*)?>([\\s\\S]*?)<\\/script>/g)].map(x=>x[1]).filter(Boolean);
+const scripts=[html.split('<script>')[1]?.split('</script>')[0]].filter(Boolean);
 assert.equal(scripts.length,1,'expected inline review logic');
 new vm.Script(scripts[0],{filename:'geometry_review.html'});
 for(const name of ['data/basins.geojson','data/reaches.geojson','config/gages.json','historical/relationships/v1/source/Phase2_Forecast_Point_Crosswalk.json','reports/phase4a/rfc_exact_nwsli_polygons.geojson','reports/phase4a/rfc_dashboard_only_spatial_candidates.geojson'])assert.equal(fs.existsSync(name),true,'missing map asset '+name);
