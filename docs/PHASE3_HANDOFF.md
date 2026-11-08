@@ -5,7 +5,7 @@
 **Feature branch:** `phase3/historical-relationships`
 **Starting `main` commit inspected:** `bf2648dcd1cd82899045477453da730692361d4e`
 **Phase 2 package audit date:** 2026-11-06
-**Release state:** Feature implementation committed and pushed; PR #5 is open for the `main` branch. The release result is reflected in the PR and GitHub Pages workflow history.
+**Release state:** Phase 3 was merged through PR #5 and deployed to GitHub Pages. The current `main` branch also contains a subsequent automated MRMS historical experiment data update.
 
 ## 1. What Phase 3 adds
 
@@ -91,9 +91,11 @@ The existing map/statistics selectors, basin and reach geometry, MRMS 6/12/24-ho
 
 ## 9. Release record
 
-- Initial feature implementation commit: `b9516ccf9f030da2d4ae026f91bea1d32635e3ff`.
-- Pull request: [#5](https://github.com/mefferso/River-Drainage-Basin-Mean-Rainfall/pull/5), targeting `main` from `phase3/historical-relationships`.
-- The initial feature commit's GitHub Actions validation run `42485521960` completed successfully; the latest PR head and checks are available on PR #5.
-- Merge SHA and Pages deployment are recorded by the PR and repository Actions. Published dashboard URL: https://mefferso.github.io/River-Drainage-Basin-Mean-Rainfall/.
-- Playwright smoke checks passed on desktop and mobile using a Leaflet API stub. The managed browser tunnel could not reach the existing Leaflet CDN, so that smoke check did not validate actual Leaflet tile rendering. The existing MRMS map/statistics tests passed.
+- Initial feature implementation commit: `b9516ccf9f030da2d4ae026f91bea1d32635e3ff`; final PR head: `9400431cf78dc4b62acddf849e230611937b376b`.
+- Pull request [#5](https://github.com/mefferso/River-Drainage-Basin-Mean-Rainfall/pull/5) was squash-merged into `main` as `e9f8dd78c8c53bb65caf35be164cdb58d992518a`.
+- Validation workflow run [42485706024](https://github.com/mefferso/River-Drainage-Basin-Mean-Rainfall/actions/runs/42485706024) completed successfully on the final PR head.
+- Pages deployment run [42485748152](https://github.com/mefferso/River-Drainage-Basin-Mean-Rainfall/actions/runs/42485748152) completed successfully for the merge commit. The current `main` branch is `c6fe9304f1201f65c0ddcb4c224d44128b83ac68`, after the automated MRMS experiment publication; Pages deployment run [42485806346](https://github.com/mefferso/River-Drainage-Basin-Mean-Rainfall/actions/runs/42485806346) also completed successfully for that current revision.
+- Published dashboard URL: https://mefferso.github.io/River-Drainage-Basin-Mean-Rainfall/. Deployment workflow success confirms the artifact upload and Pages deployment. This managed environment returned HTTP 403 when directly requesting the Pages URL and its browser runtime was unavailable, so the live page response could not be independently inspected from this session.
+- Local Playwright smoke checks passed at desktop and mobile sizes using a Leaflet API stub: the historical scatter and table rendered 23 AMIL1 rows and 34 OSYM6→KENL1 rows, MRMS controls preserved historical selection, and the mobile layout had no horizontal overflow. This did not verify actual Leaflet tile rendering. The existing MRMS map/statistics tests passed.
+- Python compilation, all 17 Python unit tests, and both Node UI test suites passed. The project virtual environment supplied the repository's geospatial dependencies.
 - Recommended next step: independently obtain and audit original source workbook binaries and the original LMRFC MAP/crest methodology before any calibration work.
