@@ -294,6 +294,18 @@ def main():
     compact = {}
     for nwsli, station in result["stations"].items():
         metadata = station["usgs_00065_time_series_metadata"]["series_summary"]
+        overlaps = station["review_window_source_overlaps"]
+        def compact_overlaps(records, time_key):
+            return [{
+                "legacy_date_lead_only": item["legacy_date_lead_only"],
+                "time_utc": item["source_record"].get(time_key),
+                "stage": item["source_record"].get("stage", item["source_record"].get("value")),
+                "flow": item["source_record"].get("flow"),
+                "parameter_code": item["source_record"].get("parameter_code"),
+                "preliminary_or_qualifier": item["source_record"].get("preliminary", item["source_record"].get("qualifier")),
+                "olddatum": item["source_record"].get("olddatum"),
+                "status": item["status"],
+            } for item in records]
         compact[nwsli] = {
             "usgs_00065_series_count": len(metadata),
             "usgs_00065_series": metadata,
@@ -310,6 +322,10 @@ def main():
             "review_window_coverage": {date: {
                 kind: stage[kind].get("coverage") for kind in ("continuous_00065", "daily_00065")
             } for date, stage in station["daily_and_continuous_stage_review_windows"].items()},
+            "review_window_source_overlaps": {
+                "usgs_annual_peaks": compact_overlaps(overlaps["usgs_annual_peak_record_overlaps"], "time"),
+                "noaa_nwps_historic_crests": compact_overlaps(overlaps["nwps_historic_crest_overlaps"], "occurredTime"),
+            },
             "review_window_errors": {date: {
                 kind: stage[kind].get("error") for kind in ("continuous_00065", "daily_00065")
             } for date, stage in station["daily_and_continuous_stage_review_windows"].items()},
