@@ -19,6 +19,8 @@ jobs:
           sha256sum b_lmrfc.tar.gz
       - name: Audit all 29 historical points and 26 current dashboard gages
         run: python scripts/audit_rfc_network_geometry.py
+      - name: Test complete inventory and scientific safeguards
+        run: python -m unittest -v tests/test_rfc_geometry_audit.py
       - uses: actions/upload-artifact@v4
         if: success()
         with:
