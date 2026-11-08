@@ -22,7 +22,7 @@ class FullNetworkAuditTests(unittest.TestCase):
         self.assertTrue(all(x['legacy_map_geometry_approved']=='False' for x in self.rows))
         self.assertTrue(all('UNVERIFIED' in r['scientific_status'] or r['scientific_status']=='SPATIAL_ONLY_NO_VERIFIED_HISTORICAL_JOIN' for r in self.candidates))
     def test_crosswalk_is_fail_closed(self):
-        ids={r['canonical_nwsli']:r for r in self.rows if r['historical_id']}
+        ids={r['historical_id']:r for r in self.rows if r['historical_id']}
         self.assertNotEqual(ids['MNLM6']['dashboard_usgs'],ids['CREM6']['dashboard_usgs'])
         self.assertEqual(ids['KLNM6']['dashboard_usgs'],'')
         self.assertEqual(ids['WTPM6']['canonical_nwsli'],'WPTM6')
