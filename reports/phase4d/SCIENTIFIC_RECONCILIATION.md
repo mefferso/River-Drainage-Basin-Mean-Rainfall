@@ -1,6 +1,6 @@
 # Phase 4D scientific reconciliation
 
-**Status as of 2026-11-08:** source observations and historical daily QPE have been retrieved in earlier GitHub Actions runs; the event matches and historical RFC MAP masks remain unapproved. The reproducible Phase 4D workflow is configured to repeat the official RFC download, same-window Stage IV geometry comparison, and USGS anomaly-window retrieval. The execution artifact is required before publishing its new RFC-candidate MAP results.
+**Status as of 2026-11-08:** source observations and historical daily QPE have been retrieved in GitHub Actions; event matches and historical RFC MAP masks remain unapproved. The Phase 4D source workflow completed successfully twice, including native-grid geometry comparisons and full instantaneous anomaly-window retrievals. The second run reports shared and nonshared basin rainfall diagnostics.
 
 ## Evidence, units, and limits
 
@@ -48,12 +48,19 @@ The Phase 4D GitHub Actions run retrieved the official daily GRIBs and calculate
 
 | Pilot | Existing NLDI full basin | Exact-attribute RFC candidate | Candidate minus NLDI | Difference relative to NLDI |
 |---|---:|---:|---:|---:|
-| AMIL1 | 4.38437744 in | 4.96101221 in | +0.57663477 in | +13.1541% |
-| MNLM6 | 4.67518080 in | 4.66863778 in | -0.00654302 in | -0.1400% |
+| AMIL1 | 4.38437744 in | 4.96101221 in | +0.57663477 in | +13.1520% |
+| MNLM6 | 4.67518080 in | 4.66863778 in | -0.00654301 in | -0.1400% |
 
-Run [42517415066](https://github.com/mefferso/River-Drainage-Basin-Mean-Rainfall/actions/runs/42517415066), artifact `phase4d-scientific-reconciliation` (13631453084), contains the native grid signature, exact valid intervals, per-day MAPs, GRIB checks, geometry source provenance, and retrieved anomaly hydrographs. The two-day window is exactly 2018-12-26 12Z through 2018-12-28 12Z for both pilots. The comparison shows that candidate-mask geometry alone can materially change AMIL1 MAP; for MNLM6 the two masks yield nearly equal values in this particular window. It does not show that either candidate equals the historical operational MAP mask.
+Run [42517415066](https://github.com/mefferso/River-Drainage-Basin-Mean-Rainfall/actions/runs/42517415066), artifact `phase4d-scientific-reconciliation` (13631453084), contains the native grid signature, exact valid intervals, per-day MAPs, GRIB checks, geometry source provenance, and retrieved anomaly hydrographs. The component results were repeated in [run 42517779447](https://github.com/mefferso/River-Drainage-Basin-Mean-Rainfall/actions/runs/42517779447), artifact 13631314104. The two-day window is exactly 2018-12-26 12Z through 2018-12-28 12Z for both pilots. The comparison shows that candidate-mask geometry alone can materially change AMIL1 MAP; for MNLM6 the two masks yield nearly equal values in this particular window. It does not show that either candidate equals the historical operational MAP mask.
 
-The 2018-12-27 and 2018-12-28 daily components were added after this first successful audit to partition rain over shared and nonshared geometry areas; their rerun is pending. The logged whole-basin comparison above was directly checked from actual Action output. The local execution environment cannot access NOAA through its network proxy. Do not interpret a candidate geometry comparison as historical-method reconciliation.
+The second Phase 4D run also calculated the same Stage IV accumulations over the common and nonshared polygon regions. These component values are rainfall depth summed over the two daily products for each region; they are not volume contributions:
+
+| Pilot | Shared region | RFC candidate-only region | NLDI-only region |
+|---|---:|---:|---:|
+| AMIL1 | 4.95763671 in | 5.10519340 in | 3.97740550 in |
+| MNLM6 | 4.66888763 in | 4.66234755 in | 4.91552074 in |
+
+The AMIL1 difference is consistent with the small RFC-only area having higher mean rain than the large NLDI-only region during this storm window. MNLM6's nonshared region depths are also close. These values describe spatial distribution on the mask differences but cannot prove either boundary's historical use. The local execution environment cannot access NOAA through its network proxy. Do not interpret a candidate geometry comparison as historical-method reconciliation.
 
 ## AMIL1 stage discrepancies
 
@@ -62,7 +69,7 @@ The 2018-12-27 and 2018-12-28 daily components were added after this first succe
 | 2016-08-13 | 26.20 ft | 29.28 ft | 2016-08-13 04:45Z | +3.08 ft |
 | 2017-04-04 | 17.80 ft | 11.64 ft | 2017-04-04 05:30Z | -6.16 ft |
 
-These are measured values reported by the Phase 4B source audit. No datum offset or source error has been inferred. The new workflow downloads full instantaneous hydrographs from 00065 for three days before through six days after each spreadsheet date lead and emits every observation, timestamp, qualifier, series metadata, retrieval time, and source URL to `amil1_hydrograph_discrepancy_windows.json`. It also lists local sample maxima at least six hours apart for review; those points remain provisional and the short separation may retain multiple fluctuations. A full hydrograph, date/datum timeline, source worksheet interpretation, and event association must be reviewed before identifying the cause.
+These are measured values reported by the Phase 4B source audit and were independently reproduced in the Phase 4D full-series retrieval. Each 9-day USGS 00065 window returned 861 samples, from 2016-08-10 00:00Z through 2016-08-18 23:00Z and 2017-04-01 00:00Z through 2017-04-09 23:00Z. The largest sample interval was 15 minutes in each window. The 29.28 ft sample at 2016-08-13 04:45Z and 11.64 ft sample at 2017-04-04 05:30Z each carry raw qualifier `A` in the returned series. That qualifier is preserved but does not by itself adjudicate datum consistency, legacy source meaning, or flood-event identity. No datum offset or source error has been inferred. The full hydrographs, every timestamp and qualifier, series metadata, retrieval time, and source URL are in artifact 13631453084 from run 42517415066. The code also lists local sample maxima at least six hours apart for review; those points remain provisional and the short separation may retain multiple fluctuations. A full hydrograph, date/datum timeline, source worksheet interpretation, and event association must be reviewed before identifying the cause.
 
 The compact inventory in [`stage_event_leads.csv`](stage_event_leads.csv) and [`stage_event_leads.json`](stage_event_leads.json) reports 11 actual sample-window maxima. It deliberately records **0 confirmed flood crests**. Central-time strings are conversions of source UTC timestamps through `America/Chicago`; DST is therefore handled per date. Qualifier adjudication is not represented by the compact summary.
 

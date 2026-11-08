@@ -6,6 +6,8 @@ on:
       - .github/workflows/phase4d-scientific-reconciliation.yml
       - reconstruction/phase4d_reconcile.py
       - reconstruction/tests/test_phase4d_reconcile.py
+      - reconstruction/historical_source_availability.py
+      - reconstruction/tests/test_historical_source_availability.py
       - reports/phase4a/**
       - reconstruction/stageiv_daily_map.py
       - scripts/audit_rfc_network_geometry.py
@@ -45,6 +47,8 @@ jobs:
             --dates 2018-12-27 2018-12-28 \
             --retrieve-stage \
             --output reports/phase4d/phase4d_data_audit.json
+          python -m reconstruction.historical_source_availability \
+            --output reports/phase4d/stage_source_availability.json
       - name: Upload provenance and independent source results
         if: always()
         uses: actions/upload-artifact@v4
