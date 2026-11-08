@@ -1,0 +1,70 @@
+name: Pilot independent rainfall and stage archive access probe
+on:
+  push:
+    branches:
+      - feature/pilot-rainfall-reconstruction-amil1-mnlm6
+    paths:
+      - 'reconstruction/**'
+      - '.github/workflows/reconstruction-data-probe.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  historical-source-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install geospatial dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Run reconstruction unit tests
+        run: python -m unittest discover -s reconstruction/tests -v
+      - name: Retrieve actual USGS stage observations for two pilots
+        continue-on-error: true
+        run: |
+          python reconstruction/river_stage.py \
+            --start 2026-10-29T00:00:00Z \
+            --end 2026-11-03T00:00:00Z \
+            --output reconstruction/staging/stage_probe.json
+      - name: Check two archived MRMS Pass 2 hours, download native source data
+        continue-on-error: true
+        run: |
+          python reconstruction/archive_qpe.py \
+            --start 2026-10-31T00:00:00Z \
+            --end 2026-10-31T02:00:00Z \
+            --out reconstruction/staging/mrms \
+            --download
+      - name: Probe official Stage IV and NCEI endpoints (nonfatal diagnostic)
+        continue-on-error: true
+        run: |
+          mkdir -p reconstruction/staging
+          python - <<'PY'
+          import json, requests, datetime, pathlib
+          urls = {
+            "NCEI StageIV portal": "https://www.ncei.noaa.gov/products/radar/next-generation-weather-radar",
+            "NOAA StageIV documentation": "https://www.emc.ncep.noaa.gov/mmb/ylin/pcpanl/stage4/",
+            "USGS NWIS": "https://waterservices.usgs.gov/nwis/iv/?format=json&sites=07375430&parameterCd=00065&period=P1D",
+          }
+          out = {}
+          for name,url in urls.items():
+            try:
+              r = requests.get(url, timeout=20, headers={"User-Agent":"River-Basin-Mean-Rainfall research/0.1"})
+              out[name] = {"url":url, "http_status":r.status_code, "bytes":len(r.content)}
+            except Exception as e:
+              out[name] = {"url":url, "error":str(e)}
+          p=pathlib.Path("reconstruction/staging/source_endpoint_status.json")
+          p.write_text(json.dumps(out,indent=2)+"\n")
+          print(json.dumps(out,indent=2))
+          PY
+      - name: Upload probe outputs for independent review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pilot-real-source-probe
+          path: reconstruction/staging/
+          if-no-files-found: warn
+          retention-days: 14
