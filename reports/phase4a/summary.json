@@ -16,6 +16,7 @@
     "TVA_NUM"
   ],
   "exact_nwsli_polygon_features": 26,
+  "dashboard_only_candidate_polygons": 8,
   "historical_points": 29,
   "dashboard_gages": 26,
   "matched_historical_gages": 18,
