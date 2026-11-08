@@ -32,4 +32,4 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add reports/phase4a/summary.json reports/phase4a/network_inventory.csv reports/phase4a/rfc_candidates.csv reports/phase4a/rfc_exact_nwsli_polygons.geojson
-          git diff --cached --quiet || (git commit -m 'data: record NOAA RFC geometry audit candidates' && git push origin HEAD:audit/phase4a-full-network-rfc-basins)
+          git diff --cached --quiet || (git commit -m 'data: record NOAA RFC geometry audit candidates' && git fetch origin audit/phase4a-full-network-rfc-basins && git rebase origin/audit/phase4a-full-network-rfc-basins && git push origin HEAD:audit/phase4a-full-network-rfc-basins)
