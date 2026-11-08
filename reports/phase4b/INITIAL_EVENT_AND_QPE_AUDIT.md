@@ -53,3 +53,20 @@ NOAA's [precipitation data access documentation](https://water.noaa.gov/about/pr
 5. Keep the website's `SCIENCE_APPROVED` reconstructed-event gate disabled until event-level evidence and method reviews support it.
 
 The existing 2026-10-31 49h MRMS Pass 2 reproduction for both stations remains verified only **as a rainfall calculation over the same frozen NLDI polygons**. It is not proof that historical LMRFC MAP or its associated crest is equivalent.
+
+
+## October 2026 rainfall timing versus USGS stage (provisional)
+
+An independent diagnostic downloaded all 49 original MRMS Pass 2 hours again, calculated full-upstream basin hourly precipitation, and retrieved USGS 00065 samples around the case:
+[successful GitHub-hosted calculation](https://github.com/mefferso/River-Drainage-Basin-Mean-Rainfall/actions/runs/42513583015).
+
+| Pilot | Window maximum stage | Candidate UTC time | Event MAP | Rainfall before maximum | Rainfall after maximum |
+|---|---:|---|---:|---:|---:|
+| AMIL1 | 5.11 ft | 2026-11-01 15:45 | 0.352643 in | 0.345028 in | 0.007616 in |
+| MNLM6 | 18.01 ft | 2026-11-01 16:00 | 6.878852 in | 6.878766 in | 0.000086 in |
+
+For AMIL1, the candidate stage maximum is **not necessarily a flood crest** and one clock hour partially overlaps the peak timestamp, although its QPE contribution was zero at displayed precision. The stage maxima and rainfall windows are not yet approved as corresponding hydrological events.
+
+**Important interpretation for MNLM6:** although the existing 49h accumulation ends 14 hours *after* the observed stage-window maximum, only **0.000086 in** of the calculated basin MAP fell after that maximum. Thus, this particular event's 49h total is not materially inflated by post-peak rain. This does *not* reconcile the existing legacy 2026-10-31 MNLM6 MAP **5.1 in** with the independently reproduced whole-NLDI-basin MRMS Pass 2 MAP **6.878852 in**, a difference of **+1.778852 in** (MRMS minus legacy). Investigate original RFC basin geometry, rainfall-window semantics, QPE product algorithms and event record provenance before drawing conclusions.
+
+A key remaining requirement is to inspect the full hourly rainfall/stage evolution and separately establish the storm rainfall onset and end rather than approving the fixed 49h period by assumption.
