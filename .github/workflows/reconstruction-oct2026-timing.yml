@@ -1,0 +1,41 @@
+name: Phase 4B Oct 2026 rainfall-stage timing diagnostic
+on:
+  push:
+    branches: [feature/pilot-rainfall-reconstruction-amil1-mnlm6]
+    paths:
+      - reconstruction/temporal_oct2026.py
+      - .github/workflows/reconstruction-oct2026-timing.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  rainfall-stage-timing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: python -m pip install -r requirements.txt
+      - name: Retrieve real 49-hour MRMS Pass2 event
+        run: |
+          python reconstruction/archive_qpe.py \
+            --start 2026-10-31T05:00:00Z \
+            --end 2026-11-02T06:00:00Z \
+            --out reconstruction/staging/forty_nine_hour \
+            --download
+      - name: Retrieve USGS hydrograph and partition before/after peak MAP
+        run: |
+          python reconstruction/temporal_oct2026.py \
+            --manifest reconstruction/staging/forty_nine_hour/qpe_manifest.csv \
+            --output reconstruction/staging/oct2026_rain_stage_timing.json
+      - name: Upload diagnostic only — not approved scatterplot events
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase4b-oct2026-temporal-stage-diagnostic
+          path: reconstruction/staging/oct2026_rain_stage_timing.json
+          if-no-files-found: warn
+          retention-days: 30
