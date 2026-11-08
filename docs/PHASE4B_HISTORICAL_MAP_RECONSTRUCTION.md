@@ -14,11 +14,13 @@ The NLDI proxy is accepted only after the documented first-ring-vertex outlet co
 
 Run `python scripts/build_phase4b_rfc_aggregates.py --archive b_lmrfc.tar.gz --refresh-nldi` after obtaining the official source archive. The builder verifies the exact archive SHA-256 and 543-feature count, preserves all source DBF attributes, records NLDI responses and errors in a versioned cache, and writes the package under `reports/phase4b/`.
 
+The official 2018 archive contains a topologically invalid source polygon (the first encountered is source feature index 30). The production refresh preserves original coordinates and records each geometry validity explanation in the inventory, GeoJSON, topology snapshot, and unresolved register. Defects are never silently repaired. Any aggregate whose routed components include an invalid feature is withheld. The general source loader remains strict by default; only the pinned production refresh opts into preserving and flagging the authentic source defects.
+
 | Artifact | Contents |
 | --- | --- |
 | `rfc_feature_inventory.csv` | One row per RFC segment, all twelve original attributes, source fingerprint, outlet, geodesic area, link status and evidence hashes. |
 | `rfc_single_segments.geojson` | Original 2018 segments as a distinct, unverified layer. |
-| `topology_snapshot.json` | Outlet links, directed NLDI reach sets, target basin geometries, response hashes, retrieval times and unresolved requests. |
+| `topology_snapshot.json` and `nldi_responses.json.gz` | Outlet links, directed NLDI reach sets, target basin geometries, response hashes, retrieval times, unresolved requests, and the compressed raw response bundle. |
 | `rfc_relationships.csv` | Pairwise directed RFC segment relationships supported by NLDI upstream flowline membership. |
 | `station_reconciliation.csv` and `.json` | Exactly 29 crosswalk rows, geometry availability, area/overlap metrics, source references and uncertainties. |
 | `candidate_aggregates.geojson` | Complete-coverage routed unions only; source component IDs remain attached. |

@@ -21,6 +21,7 @@ for(const asset of [
 for(const label of [
  '2018 RFC source segment','Routed RFC aggregate candidate',
  'Verified NLDI full upstream','Verified NLDI incremental',
+  'All 543 RFC source segments',
  'Modern MRMS MAP is not interchangeable with legacy RFC MAP',
  'NOT ESTABLISHED','29 historical forecast points',
 ]) assert.ok(html.includes(label),'missing scientific map label: '+label);

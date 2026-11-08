@@ -1,5 +1,6 @@
 import csv
 import hashlib
+import gzip
 import json
 import tarfile
 import tempfile
@@ -173,6 +174,24 @@ class RfcSourceInventoryTests(unittest.TestCase):
                 load_rfc_features(
                     archive, expected_count=1, expected_sha256=digest
                 )
+
+    def test_source_defect_can_be_preserved_and_flagged_without_repair(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            archive = make_archive(root, [{**RFC_FIELDS, "_valid": False}])
+            digest = hashlib.sha256(archive.read_bytes()).hexdigest()
+            features = load_rfc_features(
+                archive, expected_count=1, expected_sha256=digest,
+                allow_invalid_geometry=True,
+            )
+            self.assertFalse(features[0].geometry_valid)
+            self.assertTrue(features[0].geometry_issue)
+            self.assertFalse(features[0].geometry.is_valid)
+            write_source_inventory(features, root / "out", digest)
+            with (root / "out/rfc_feature_inventory.csv").open(newline="") as stream:
+                inventory = list(csv.DictReader(stream))
+            self.assertEqual(inventory[0]["source_geometry_valid"], "False")
+            self.assertTrue(inventory[0]["source_geometry_issue"])
 
     def test_inventory_rejects_duplicate_feature_id(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -395,6 +414,8 @@ class RfcNetworkRelationshipTests(unittest.TestCase):
             self.assertEqual(snapshot["rfc_feature_count"], 2)
             self.assertEqual(snapshot["relationship_count"], 1)
             self.assertEqual(snapshot["unresolved_issue_count"], 0)
+            archive = out / snapshot["raw_response_archive"]["path"]
+            self.assertEqual(json.loads(gzip.decompress(archive.read_bytes())), [])
 
     def test_network_cache_fetches_directed_navigation_and_reuses_snapshot(self):
         class FakeResponse:
@@ -473,6 +494,7 @@ class RfcCandidateTests(unittest.TestCase):
             properties={"NWSID": nwsid, "OBJ_IDENTIF": feature_id},
             geometry=Polygon([(x0, 0), (x1, 0), (x1, 1), (x0, 1), (x0, 0)]),
             outlet=Point(outlet), area_sqmi=(x1 - x0) * 100,
+            geometry_valid=True, geometry_issue="",
         )
 
     def test_candidate_unions_only_directed_upstream_components(self):
@@ -505,6 +527,21 @@ class RfcCandidateTests(unittest.TestCase):
         self.assertIsNone(result["geometry"])
         self.assertEqual(result["candidate_status"], "WITHHELD_INCOMPLETE_ROUTED_COVERAGE")
         self.assertIn("3", result["unresolved_feature_ids"])
+
+    def test_candidate_is_withheld_for_invalid_original_rfc_component(self):
+        upstream = self.feature("1", "UP", 0, 1, (0.5, 0.5))
+        upstream.geometry_valid = False
+        upstream.geometry_issue = "Self-intersection"
+        target = self.feature("2", "TARGET", 1, 2, (1.5, 0.5))
+        result = build_station_candidate(
+            {"canonical_nws_id": "TARGET"}, [upstream, target],
+            [{"upstream_feature_id": "1", "downstream_feature_id": "2"}],
+            {"1": {"status": "LINKED", "comid": 11},
+             "2": {"status": "LINKED", "comid": 22}},
+            target_basin=Polygon([(0, -1), (3, -1), (3, 2), (0, 2), (0, -1)]),
+        )
+        self.assertIsNone(result["geometry"])
+        self.assertEqual(result["candidate_status"], "WITHHELD_INVALID_SOURCE_COMPONENT")
 
     def test_metrics_are_geodesic_and_bounded(self):
         first = Polygon([(-91, 30), (-90, 30), (-90, 31), (-91, 31), (-91, 30)])

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import csv
 import argparse
+import gzip
 import hashlib
 import json
 import math
@@ -57,6 +58,8 @@ class RfcFeature:
     geometry: Any
     outlet: Any
     area_sqmi: float
+    geometry_valid: bool = True
+    geometry_issue: str = ""
 
 
 def resolve_outlet_link(
@@ -409,11 +412,21 @@ def write_network_outputs(
         writer = csv.DictWriter(stream, fieldnames=relationship_fields)
         writer.writeheader()
         writer.writerows(edges)
+    response_bytes = json.dumps(
+        list(raw_responses), separators=(",", ":"), ensure_ascii=False,
+        allow_nan=False,
+    ).encode("utf-8")
+    response_archive = gzip.compress(response_bytes, mtime=0)
+    response_archive_path = out_dir / "nldi_responses.json.gz"
+    response_archive_path.write_bytes(response_archive)
     topology = {
         "schema_version": 1,
         "source": "NOAA 2018 LMRFC source segments + USGS NLDI/NHDPlusV2 proxy",
         "source_archive_sha256": archive_sha256,
         "rfc_feature_count": len(features),
+        "invalid_source_geometry_count": sum(
+            not getattr(feature, "geometry_valid", True) for feature in features
+        ),
         "linked_outlet_count": sum(link.get("status") == "LINKED" for link in links.values()),
         "unresolved_outlet_count": sum(link.get("status") != "LINKED" for link in links.values()),
         "relationship_count": len(edges),
@@ -424,7 +437,12 @@ def write_network_outputs(
         "basins": basins or {},
         "issues": list(issues),
         "request_failures": list(failures),
-        "raw_nldi_responses": list(raw_responses),
+        "raw_response_archive": {
+            "path": response_archive_path.name,
+            "sha256": hashlib.sha256(response_archive).hexdigest(),
+            "response_count": len(raw_responses),
+            "compression": "gzip",
+        },
     }
     (out_dir / "topology_snapshot.json").write_text(
         json.dumps(topology, indent=2, sort_keys=True, allow_nan=False) + "\n",
@@ -433,6 +451,7 @@ def write_network_outputs(
     summary = {key: topology[key] for key in (
         "source_archive_sha256", "rfc_feature_count", "linked_outlet_count",
         "unresolved_outlet_count", "relationship_count", "unresolved_issue_count",
+        "invalid_source_geometry_count",
     )}
     summary["connectivity_classification"] = "NHDPLUS_LINKED_PROXY" if edges else "UNRESOLVED"
     summary["legacy_map_geometry_verified"] = False
@@ -569,6 +588,20 @@ def build_station_candidate(
 
     component_ids = sorted(reachable)
     component_features = [feature for feature in features if feature.feature_id in reachable]
+    invalid_components = [
+        feature for feature in component_features
+        if not getattr(feature, "geometry_valid", True)
+    ]
+    if invalid_components:
+        result["candidate_status"] = "WITHHELD_INVALID_SOURCE_COMPONENT"
+        result["reason"] = (
+            "Routed component includes invalid original RFC geometry; "
+            "source was preserved without repair"
+        )
+        result["unresolved_feature_ids"] = sorted(
+            feature.feature_id for feature in invalid_components
+        )
+        return result
     try:
         geometry = unary_union([feature.geometry for feature in component_features])
     except Exception:
@@ -805,7 +838,7 @@ def run_reconstruction(
 ) -> dict[str, Any]:
     """Build all Phase 4B source, network, station, and summary outputs."""
     archive_sha256 = hashlib.sha256(Path(archive_path).read_bytes()).hexdigest()
-    features = load_rfc_features(archive_path)
+    features = load_rfc_features(archive_path, allow_invalid_geometry=True)
     points = json.loads(Path(crosswalk_path).read_text(encoding="utf-8"))
     gages = json.loads(Path(gages_path).read_text(encoding="utf-8"))
     existing_basins = json.loads(Path(basin_path).read_text(encoding="utf-8"))
@@ -818,6 +851,13 @@ def run_reconstruction(
     edges, network_issues = build_relationships(
         features, network["links"], network["upstream_reach_sets"]
     )
+    for feature in features:
+        if not feature.geometry_valid:
+            network_issues.append({
+                "feature_id": feature.feature_id,
+                "code": "RFC_SOURCE_GEOMETRY_INVALID",
+                "reason": feature.geometry_issue,
+            })
     write_network_outputs(
         features, network["links"], network["upstream_reach_sets"], edges,
         network_issues, out_dir, archive_sha256, basins=network["basins"],
@@ -885,6 +925,7 @@ def run_reconstruction(
         "candidate_count": sum(result.get("geometry") is not None for result in results),
         "withheld_or_unresolved_station_count": sum(result.get("geometry") is None for result in results),
         "legacy_map_equivalence_verified_count": 0,
+        "invalid_source_geometry_count": sum(not feature.geometry_valid for feature in features),
         "station_status_counts": dict(__import__("collections").Counter(
             result.get("candidate_status", "UNRESOLVED") for result in results
         )),
@@ -957,6 +998,7 @@ def load_rfc_features(
     *,
     expected_count: int = RFC_FEATURE_COUNT,
     expected_sha256: str | None = RFC_ARCHIVE_SHA256,
+    allow_invalid_geometry: bool = False,
 ) -> list[RfcFeature]:
     """Verify and parse all RFC polygons without discarding source attributes."""
     archive_path = Path(archive_path)
@@ -988,8 +1030,17 @@ def load_rfc_features(
         seen: set[str] = set()
         for index, row in frame.iterrows():
             geometry = row.geometry
-            if geometry is None or geometry.is_empty or not geometry.is_valid:
-                raise ValueError(f"RFC feature {index} has invalid geometry")
+            if geometry is None or geometry.is_empty:
+                raise ValueError(f"RFC feature {index} has missing or empty geometry")
+            geometry_valid = bool(geometry.is_valid)
+            geometry_issue = ""
+            if not geometry_valid:
+                from shapely.validation import explain_validity
+                geometry_issue = explain_validity(geometry)
+                if not allow_invalid_geometry:
+                    raise ValueError(
+                        f"RFC feature {index} has invalid geometry: {geometry_issue}"
+                    )
             properties = {field: _plain(row[field]) for field in RFC_FIELDS}
             feature_id = str(properties["OBJ_IDENTIF"]).strip()
             if not feature_id or feature_id in seen:
@@ -1006,6 +1057,8 @@ def load_rfc_features(
                     geometry=geometry,
                     outlet=_outlet(geometry),
                     area_sqmi=area_sqmi,
+                    geometry_valid=geometry_valid,
+                    geometry_issue=geometry_issue,
                 )
             )
     return features
@@ -1021,6 +1074,8 @@ def write_source_inventory(
         "source_feature_index",
         "source_feature_id",
         "source_archive_sha256",
+        "source_geometry_valid",
+        "source_geometry_issue",
         "outlet_longitude",
         "outlet_latitude",
         "geometry_area_sqmi",
@@ -1037,6 +1092,8 @@ def write_source_inventory(
                     "source_feature_index": feature.feature_index,
                     "source_feature_id": feature.feature_id,
                     "source_archive_sha256": archive_sha256,
+                    "source_geometry_valid": getattr(feature, "geometry_valid", True),
+                    "source_geometry_issue": getattr(feature, "geometry_issue", ""),
                     "outlet_longitude": feature.outlet.x,
                     "outlet_latitude": feature.outlet.y,
                     "geometry_area_sqmi": feature.area_sqmi,
@@ -1057,6 +1114,8 @@ def write_source_inventory(
                     "source_archive_sha256": archive_sha256,
                     "geometry_area_sqmi": feature.area_sqmi,
                     "scientific_status": "UNVERIFIED_LEGACY_MAP_GEOMETRY",
+                    "source_geometry_valid": getattr(feature, "geometry_valid", True),
+                    "source_geometry_issue": getattr(feature, "geometry_issue", ""),
                     **feature.properties,
                 },
                 "geometry": mapping(feature.geometry),

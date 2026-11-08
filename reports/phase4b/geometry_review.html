@@ -18,6 +18,7 @@ a{color:#94d8ff}@media(max-width:750px){main{display:flex;flex-direction:column}
 <label for="station">Historical forecast point</label><select id="station"><option>Loading station inventory…</option></select>
 <fieldset><legend>Geometry layers</legend>
 <label><input type="checkbox" id="source" checked/> <span class="key" style="color:#f59e0b"></span>2018 RFC source segment</label>
+<label><input type="checkbox" id="allSource"/> All 543 RFC source segments</label>
 <label><input type="checkbox" id="candidate" checked/> <span class="key" style="color:#e879f9"></span>Routed RFC aggregate candidate</label>
 <label><input type="checkbox" id="full" checked/> <span class="key" style="color:#38bdf8"></span>Verified NLDI full upstream</label>
 <label><input type="checkbox" id="incremental" checked/> <span class="key" style="color:#22c55e"></span>Verified NLDI incremental</label>
@@ -40,7 +41,11 @@ function draw(){
  const candidate=all.candidates.features.find(feature=>feature.properties.canonical_nws_id===id);
  const refs=all.references.features.filter(feature=>feature.properties.canonical_nws_id===id);let layers=[];
  function add(feature,color,dash,label){if(!feature)return;const layer=L.geoJSON(feature,{style:{color,weight:3,fillColor:color,fillOpacity:.10,dashArray:dash||undefined}}).bindPopup(label).addTo(group);layers.push(layer)}
- if(document.getElementById('source').checked)source.forEach(feature=>add(feature,'#f59e0b','4 4','2018 NOAA RFC source segment'));
+ if(document.getElementById('source').checked){
+  const sourceToDraw=document.getElementById('allSource').checked?all.source.features:source;
+  sourceToDraw.forEach(feature=>add(feature,feature.properties.source_geometry_valid===false?'#ef4444':'#f59e0b','4 4',
+   feature.properties.source_geometry_valid===false?'2018 NOAA RFC source segment — invalid geometry, preserved without repair':'2018 NOAA RFC source segment'));
+ }
  if(document.getElementById('candidate').checked)add(candidate,'#e879f9',null,'NHDPlus/NLDI routed RFC candidate — MAP equivalence not established');
  if(document.getElementById('full').checked)refs.filter(feature=>feature.properties.layer==='full_upstream').forEach(feature=>add(feature,'#38bdf8',null,'Current verified NLDI full upstream'));
  if(document.getElementById('incremental').checked)refs.filter(feature=>feature.properties.layer==='incremental').forEach(feature=>add(feature,'#22c55e','7 5','Current verified NLDI incremental reach'));
@@ -60,5 +65,5 @@ Promise.all([
  for(const point of points){const option=document.createElement('option');option.value=point.canonical_nws_id;option.textContent=point.canonical_nws_id+' — '+point.official_nws_name;station.appendChild(option)}
  station.value='AMIL1';draw();
 }).catch(error=>{info.textContent='Unable to load Phase 4B assets: '+error.message});
-station.addEventListener('change',draw);for(const id of ['source','candidate','full','incremental'])document.getElementById(id).addEventListener('change',draw);
+station.addEventListener('change',draw);for(const id of ['source','allSource','candidate','full','incremental'])document.getElementById(id).addEventListener('change',draw);
 </script></body></html>
