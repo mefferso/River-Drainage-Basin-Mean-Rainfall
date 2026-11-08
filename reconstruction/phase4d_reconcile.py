@@ -101,7 +101,13 @@ def aggregate_same_qpe_window(daily_records: list[dict]) -> dict:
     nldi = sum(item["nldi_map_inches"] for item in ordered)
     rfc = sum(item["rfc_map_inches"] for item in ordered)
     start, end = _parse_time(ordered[0]["start_utc"]), _parse_time(ordered[-1]["end_utc"])
-    return {
+    spatial_components = {}
+    for component in ("intersection", "rfc_only", "nldi_only"):
+        field = f"{component}_map_inches"
+        values = [item.get(field) for item in ordered]
+        if all(isinstance(value, (int, float)) and math.isfinite(value) for value in values):
+            spatial_components[component] = round(sum(values), 8)
+    result = {
         "product": next(iter(product_set)), "grid_signature": next(iter(grid_set)),
         "start_utc": start.isoformat(), "end_utc": end.isoformat(),
         "duration_hours": int((end - start).total_seconds() // 3600),
@@ -111,6 +117,9 @@ def aggregate_same_qpe_window(daily_records: list[dict]) -> dict:
         "rfc_minus_nldi_percent_of_nldi": round((rfc - nldi) / nldi * 100, 4) if nldi else None,
         "periods": ordered,
     }
+    if spatial_components:
+        result["spatial_component_map_inches_over_window"] = spatial_components
+    return result
 
 
 def _load_geo(path: Path) -> dict:
@@ -188,6 +197,9 @@ def stageiv_geometry_audit(dates: list[str], geometries: dict, nwsli: str, site_
                     "duration_hours": int((end - start).total_seconds() // 3600),
                     "product": "NOAA_STAGE_IV_CONUS_APCP_24H", "grid_signature": signature,
                     "nldi_map_inches": maps["nldi"], "rfc_map_inches": maps["rfc"],
+                    "intersection_map_inches": maps["intersection"],
+                    "rfc_only_map_inches": maps["rfc_only"],
+                    "nldi_only_map_inches": maps["nldi_only"],
                     "source_provenance": provenance,
                 })
     aggregate = aggregate_same_qpe_window(records)
@@ -220,7 +232,16 @@ def stage_discrepancy_audit(output_path: Path) -> dict:
         })
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps({"schema_version": 1, "windows": windows}, indent=2) + "\n", encoding="utf-8")
-    return {"window_count": len(windows), "observation_counts": {w["legacy_date_label_only"]: w["observation_count"] for w in windows}}
+    return {
+        "window_count": len(windows),
+        "observation_counts": {f'{w["nwsli"]}:{w["legacy_date_label_only"]}': w["observation_count"] for w in windows},
+        "windows": [{k: w[k] for k in (
+            "nwsli", "usgs_site_id", "legacy_date_label_only", "window_start_utc", "window_end_utc",
+            "retrieved_at_utc", "source_url", "series_metadata", "observation_count",
+            "first_observed_utc", "last_observed_utc", "largest_sample_gap_hours",
+            "local_peak_candidates_6h_separation", "status")}
+            for w in windows],
+    }
 
 
 def run(args) -> dict:
@@ -229,8 +250,15 @@ def run(args) -> dict:
     rfc_data = _load_geo(args.rfc)
     rfc_geoms = {f["properties"]["nwsli"]: shape(f["geometry"]) for f in rfc_data["features"] if f.get("properties", {}).get("nwsli") in PILOTS}
     nldi_geoms = {str(f["properties"].get("id")): shape(f["geometry"]) for f in upstream_data["features"]}
-    qpe = {nwsli: stageiv_geometry_audit(args.dates, {"nldi": nldi_geoms[site], "rfc": rfc_geoms[nwsli]}, nwsli, site)
-           for nwsli, site in PILOTS.items()}
+    qpe = {}
+    for nwsli, site in PILOTS.items():
+        rfc_geom, nldi_geom = rfc_geoms[nwsli], nldi_geoms[site]
+        qpe[nwsli] = stageiv_geometry_audit(args.dates, {
+            "nldi": nldi_geom, "rfc": rfc_geom,
+            "intersection": rfc_geom.intersection(nldi_geom),
+            "rfc_only": rfc_geom.difference(nldi_geom),
+            "nldi_only": nldi_geom.difference(rfc_geom),
+        }, nwsli, site)
     stage_path = args.output.parent / "amil1_hydrograph_discrepancy_windows.json"
     stage_summary = stage_discrepancy_audit(stage_path) if args.retrieve_stage else {"status": "NOT_RUN"}
     result = {
@@ -262,9 +290,13 @@ def main() -> None:
     parser.add_argument("--retrieve-stage", action="store_true")
     result = run(parser.parse_args())
     print(json.dumps({"status": result["status"], "geometry_stations": list(result["geometry"]["stations"]),
+                      "stage_discrepancy_retrieval": result["stage_discrepancy_retrieval"],
                       "stageiv_windows": {k: {"start_utc": v["start_utc"], "end_utc": v["end_utc"],
                                                      "nldi_map_inches": v["nldi_map_inches"],
-                                                     "rfc_map_inches": v["rfc_map_inches"]}
+                                                     "rfc_map_inches": v["rfc_map_inches"],
+                                                     "rfc_minus_nldi_inches": v["rfc_minus_nldi_inches"],
+                                                     "rfc_minus_nldi_percent_of_nldi": v["rfc_minus_nldi_percent_of_nldi"],
+                                                     "spatial_component_map_inches_over_window": v.get("spatial_component_map_inches_over_window")}
                                            for k,v in result["qpe_same_product_same_window"].items()}}, indent=2))
 
 

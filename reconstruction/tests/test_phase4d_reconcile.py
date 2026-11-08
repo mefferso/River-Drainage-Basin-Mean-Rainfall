@@ -22,15 +22,19 @@ class Phase4DReconciliationTests(unittest.TestCase):
         start = datetime(2018, 12, 26, 12, tzinfo=timezone.utc)
         days = [
             {"product": "NOAA_STAGE_IV_CONUS_APCP_24H", "grid_signature": "grid-a", "start_utc": start.isoformat(),
-             "end_utc": (start + timedelta(days=1)).isoformat(), "nldi_map_inches": 1.0, "rfc_map_inches": 1.2},
+             "end_utc": (start + timedelta(days=1)).isoformat(), "nldi_map_inches": 1.0, "rfc_map_inches": 1.2,
+             "intersection_map_inches": 1.1, "rfc_only_map_inches": 1.4, "nldi_only_map_inches": 0.9},
             {"product": "NOAA_STAGE_IV_CONUS_APCP_24H", "grid_signature": "grid-a", "start_utc": (start + timedelta(days=1)).isoformat(),
-             "end_utc": (start + timedelta(days=2)).isoformat(), "nldi_map_inches": 2.0, "rfc_map_inches": 2.2},
+             "end_utc": (start + timedelta(days=2)).isoformat(), "nldi_map_inches": 2.0, "rfc_map_inches": 2.2,
+             "intersection_map_inches": 2.1, "rfc_only_map_inches": 2.4, "nldi_only_map_inches": 1.9},
         ]
         result = aggregate_same_qpe_window(days)
         self.assertEqual(result["duration_hours"], 48)
         self.assertEqual(result["nldi_map_inches"], 3.0)
         self.assertAlmostEqual(result["rfc_map_inches"] - result["nldi_map_inches"], 0.4)
         self.assertEqual(result["product"], days[0]["product"])
+        self.assertEqual(result["spatial_component_map_inches_over_window"],
+                         {"intersection": 3.2, "rfc_only": 3.8, "nldi_only": 2.8})
         bad = [dict(days[0]), dict(days[1], start_utc=(start + timedelta(days=2)).isoformat(),
                                       end_utc=(start + timedelta(days=3)).isoformat())]
         with self.assertRaisesRegex(ValueError, "contiguous"):

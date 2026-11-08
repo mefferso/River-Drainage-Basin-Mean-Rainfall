@@ -8,7 +8,7 @@ The distinctions below are deliberate: the spreadsheet date is a search lead; th
 
 | Evidence | Result | Provenance and qualification |
 |---|---|---|
-| NOAA LMRFC archive | 543 features; 26 exact NWSLI attribute features | [NOHRSC archive](https://www.nohrsc.noaa.gov/data/vector/master/b_lmrfc.tar.gz), SHA-256 `ffd630cb973edfc70a5dabdeff383593bdcef8d17f697f2e824d6e3c636269bb`; retrieved in the Phase 4A GitHub Actions audit on 2026-11-08. Source CRS was not included in the saved Phase 4A summary; the Phase 4D workflow now records it from the archive before transforming exports to EPSG:4326. |
+| NOAA LMRFC archive | 543 features; 26 exact NWSLI attribute features | [NOHRSC archive](https://www.nohrsc.noaa.gov/data/vector/master/b_lmrfc.tar.gz), SHA-256 `ffd630cb973edfc70a5dabdeff383593bdcef8d17f697f2e824d6e3c636269bb`; Phase 4D retrieval 2026-11-08 19:55:27 UTC. The source shapefile CRS is EPSG:4326; exported comparison geometries remain EPSG:4326. |
 | Exact attribute matching | AMIL1 `NWSID=AMIL1`, feature 359, `TANGIPAHOA/AMITE`; MNLM6 `NWSID=MNLM6`, feature 370, `W.HOBOLO- @ MCNEIL` | Fields include `NWSID`, `DESCRIPT`, `FCSTGROUP`, and `AREA`. These matches are unverified candidates; Phase 4A approved zero legacy MAP masks. |
 | USGS stage leads | 11 actual 00065 review-window maxima (5 AMIL1, 6 MNLM6); 0 approved event pairs | [USGS 00065 stage-lead Actions run](https://github.com/mefferso/River-Drainage-Basin-Mean-Rainfall/actions/runs/42513224763), artifact `phase4b-stage-lead-inventory` (artifact 13630840118). The accompanying CSV/JSON are compact inventories from that artifact's summary; the complete source artifact retains the retrieved series details and qualifiers. Search dates remain date leads. |
 | NOAA Stage IV QPE | Actual APCP CONUS GRIB, 24-hour native accumulation, 12Z-to-12Z periods | [Five-day Dec 2018 run](https://github.com/mefferso/River-Drainage-Basin-Mean-Rainfall/actions/runs/42514324970), artifact 13630611671. Product units are kg/m² (liquid-water equivalent); basin MAP uses native-grid intersections weighted by WGS84 geodesic area. This is daily 24-hour data, not hourly or six-hour MAP. |
@@ -44,7 +44,16 @@ The five actual daily products ending 12Z were:
 
 Stage-window maxima from actual USGS samples were AMIL1 18.98 ft at 2018-12-28 17:15Z and MNLM6 19.72 ft at 2018-12-29 18:45Z. The latter occurs on the day after the legacy date label; both are still review-window maxima, not independently adjudicated crests. The 2018-12-29 12Z daily QPE product was zero in both current NLDI basins. The 2018-12-30 12Z product includes later rain and is not appended to this event. Daily intervals cannot resolve within-day onset or cessation.
 
-The Phase 4D workflow calculates MAP for the exact same daily GRIB grids, native accumulation intervals, and both geometry sets. It labels the exact-attribute polygon as an unverified RFC candidate. The local execution environment cannot access NOAA through its network proxy; the GitHub-hosted run is the designated source retrieval. Do not interpret a candidate geometry comparison as historical-method reconciliation.
+The Phase 4D GitHub Actions run retrieved the official daily GRIBs and calculated both geometry MAPs using identical QPE grids and intervals, without resampling:
+
+| Pilot | Existing NLDI full basin | Exact-attribute RFC candidate | Candidate minus NLDI | Difference relative to NLDI |
+|---|---:|---:|---:|---:|
+| AMIL1 | 4.38437744 in | 4.96101221 in | +0.57663477 in | +13.1541% |
+| MNLM6 | 4.67518080 in | 4.66863778 in | -0.00654302 in | -0.1400% |
+
+Run [42517415066](https://github.com/mefferso/River-Drainage-Basin-Mean-Rainfall/actions/runs/42517415066), artifact `phase4d-scientific-reconciliation` (13631453084), contains the native grid signature, exact valid intervals, per-day MAPs, GRIB checks, geometry source provenance, and retrieved anomaly hydrographs. The two-day window is exactly 2018-12-26 12Z through 2018-12-28 12Z for both pilots. The comparison shows that candidate-mask geometry alone can materially change AMIL1 MAP; for MNLM6 the two masks yield nearly equal values in this particular window. It does not show that either candidate equals the historical operational MAP mask.
+
+The 2018-12-27 and 2018-12-28 daily components were added after this first successful audit to partition rain over shared and nonshared geometry areas; their rerun is pending. The logged whole-basin comparison above was directly checked from actual Action output. The local execution environment cannot access NOAA through its network proxy. Do not interpret a candidate geometry comparison as historical-method reconciliation.
 
 ## AMIL1 stage discrepancies
 

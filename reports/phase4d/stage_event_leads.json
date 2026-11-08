@@ -28,7 +28,12 @@
       "source": "USGS NWIS instantaneous values, parameter 00065",
       "source_run_id": 42513224763,
       "source_artifact_id": 13630840118,
-      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)"
+      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)",
+      "legacy_map_inches": 9.3,
+      "source_workbook": "AMIL1_MAP_crest.xls",
+      "source_worksheet": "Sheet1",
+      "source_row": 20,
+      "date_semantics": "legacy date is only a search lead; crest-date meaning unverified"
     },
     {
       "nwsli": "AMIL1",
@@ -45,7 +50,12 @@
       "source": "USGS NWIS instantaneous values, parameter 00065",
       "source_run_id": 42513224763,
       "source_artifact_id": 13630840118,
-      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)"
+      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)",
+      "legacy_map_inches": 12.1,
+      "source_workbook": "AMIL1_MAP_crest.xls",
+      "source_worksheet": "Sheet1",
+      "source_row": 21,
+      "date_semantics": "legacy date is only a search lead; crest-date meaning unverified"
     },
     {
       "nwsli": "AMIL1",
@@ -62,7 +72,12 @@
       "source": "USGS NWIS instantaneous values, parameter 00065",
       "source_run_id": 42513224763,
       "source_artifact_id": 13630840118,
-      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)"
+      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)",
+      "legacy_map_inches": 2.7,
+      "source_workbook": "AMIL1_MAP_crest.xls",
+      "source_worksheet": "Sheet1",
+      "source_row": 23,
+      "date_semantics": "legacy date is only a search lead; crest-date meaning unverified"
     },
     {
       "nwsli": "AMIL1",
@@ -79,7 +94,12 @@
       "source": "USGS NWIS instantaneous values, parameter 00065",
       "source_run_id": 42513224763,
       "source_artifact_id": 13630840118,
-      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)"
+      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)",
+      "legacy_map_inches": 4.7,
+      "source_workbook": "AMIL1_MAP_crest.xls",
+      "source_worksheet": "Sheet1",
+      "source_row": 25,
+      "date_semantics": "legacy date is only a search lead; crest-date meaning unverified"
     },
     {
       "nwsli": "AMIL1",
@@ -96,7 +116,12 @@
       "source": "USGS NWIS instantaneous values, parameter 00065",
       "source_run_id": 42513224763,
       "source_artifact_id": 13630840118,
-      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)"
+      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)",
+      "legacy_map_inches": 3.5,
+      "source_workbook": "AMIL1_MAP_crest.xls",
+      "source_worksheet": "Sheet1",
+      "source_row": 26,
+      "date_semantics": "legacy date is only a search lead; crest-date meaning unverified"
     },
     {
       "nwsli": "MNLM6",
@@ -113,7 +138,12 @@
       "source": "USGS NWIS instantaneous values, parameter 00065",
       "source_run_id": 42513224763,
       "source_artifact_id": 13630840118,
-      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)"
+      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)",
+      "legacy_map_inches": 8,
+      "source_workbook": "MNLM6_MAP_crest.xls",
+      "source_worksheet": "Sheet1",
+      "source_row": 43,
+      "date_semantics": "legacy date is only a search lead; crest-date meaning unverified"
     },
     {
       "nwsli": "MNLM6",
@@ -130,7 +160,12 @@
       "source": "USGS NWIS instantaneous values, parameter 00065",
       "source_run_id": 42513224763,
       "source_artifact_id": 13630840118,
-      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)"
+      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)",
+      "legacy_map_inches": 2.2,
+      "source_workbook": "MNLM6_MAP_crest.xls",
+      "source_worksheet": "Sheet1",
+      "source_row": 42,
+      "date_semantics": "legacy date is only a search lead; crest-date meaning unverified"
     },
     {
       "nwsli": "MNLM6",
@@ -147,7 +182,12 @@
       "source": "USGS NWIS instantaneous values, parameter 00065",
       "source_run_id": 42513224763,
       "source_artifact_id": 13630840118,
-      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)"
+      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)",
+      "legacy_map_inches": 4.6,
+      "source_workbook": "MNLM6_MAP_crest.xls",
+      "source_worksheet": "Sheet1",
+      "source_row": 37,
+      "date_semantics": "legacy date is only a search lead; crest-date meaning unverified"
     },
     {
       "nwsli": "MNLM6",
@@ -164,7 +204,12 @@
       "source": "USGS NWIS instantaneous values, parameter 00065",
       "source_run_id": 42513224763,
       "source_artifact_id": 13630840118,
-      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)"
+      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)",
+      "legacy_map_inches": 8,
+      "source_workbook": "MNLM6_MAP_crest.xls",
+      "source_worksheet": "Sheet1",
+      "source_row": 38,
+      "date_semantics": "legacy date is only a search lead; crest-date meaning unverified"
     },
     {
       "nwsli": "MNLM6",
@@ -181,7 +226,12 @@
       "source": "USGS NWIS instantaneous values, parameter 00065",
       "source_run_id": 42513224763,
       "source_artifact_id": 13630840118,
-      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)"
+      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)",
+      "legacy_map_inches": 3.6,
+      "source_workbook": "MNLM6_MAP_crest.xls",
+      "source_worksheet": "Sheet1",
+      "source_row": 50,
+      "date_semantics": "legacy date is only a search lead; crest-date meaning unverified"
     },
     {
       "nwsli": "MNLM6",
@@ -198,7 +248,12 @@
       "source": "USGS NWIS instantaneous values, parameter 00065",
       "source_run_id": 42513224763,
       "source_artifact_id": 13630840118,
-      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)"
+      "retrieved_at_utc": "2026-11-08 (GitHub Actions run)",
+      "legacy_map_inches": 5.1,
+      "source_workbook": "MNLM6_MAP_crest.xls",
+      "source_worksheet": "Sheet1",
+      "source_row": 51,
+      "date_semantics": "legacy date is only a search lead; crest-date meaning unverified"
     }
   ]
 }
