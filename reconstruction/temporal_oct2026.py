@@ -28,6 +28,21 @@ sys.path.insert(0,str(ROOT/"scripts"))
 from update import area_stats, cell_areas, fraction_mask  # noqa: E402
 
 
+def split_hourly_by_peak(hourly, peak_at):
+    """Partition hourly QPE strictly by valid-end UTC intervals, preserving straddle."""
+    before=after=crossing=0.0
+    for row in hourly:
+        t=time_utc(row["valid_end_utc"])
+        rain=row["hourly_upstream_map_inches"]
+        if t<=peak_at:
+            before+=rain
+        elif t-timedelta(hours=1)>=peak_at:
+            after+=rain
+        else:
+            crossing+=rain
+    return before,after,crossing
+
+
 def diagnostic(manifest_path, basins_path, reference_path, stage_request=request_stage):
     previous=json.loads(Path(reference_path).read_text())
     start=time_utc(previous["event_start_utc"])
@@ -78,16 +93,7 @@ def diagnostic(manifest_path, basins_path, reference_path, stage_request=request
         tied=[r for r in observations if r["stage_ft"]==top]
         peak=tied[0]
         peak_at=time_utc(peak["time_utc"])
-        before=after=crossing=0.0
-        for row in hourly[nwsli]:
-            t=time_utc(row["valid_end_utc"])
-            rain=row["hourly_upstream_map_inches"]
-            if t<=peak_at:
-                before+=rain
-            elif t-timedelta(hours=1)>=peak_at:
-                after+=rain
-            else:
-                crossing+=rain
+        before,after,crossing=split_hourly_by_peak(hourly[nwsli],peak_at)
         total=before+after+crossing
         reference=previous["periods"]["event"]["basins"][site]["whole_mean"]
         if abs(total-reference)>0.0001:
