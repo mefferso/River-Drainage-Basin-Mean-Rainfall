@@ -30,6 +30,10 @@ class InventoryTests(unittest.TestCase):
         self.assertEqual(sample["review_status"],"OBSERVED_WINDOW_MAXIMUM_NOT_VERIFIED_EVENT_CREST")
         self.assertIn("EDGE_COVERAGE_INCOMPLETE",sample["qc_flags"])
         self.assertIn("OBSERVATION_QUALIFIERS_REQUIRE_REVIEW",sample["qc_flags"])
+        outlier=summarize_window({"nwsli":"AMIL1","legacy_date_lead":"2019-05-12",
+                                  "legacy_crest_feet":12.0},data,start,end)
+        self.assertIn("WINDOW_MAX_VS_LEGACY_CREST_DIFF_GT_1FT_INVESTIGATE",outlier["qc_flags"])
+        self.assertEqual(outlier["candidate_minus_legacy_crest_ft"],5.0)
 
     def test_mock_inventory_is_never_an_approved_event(self):
         def fake(site,start,end):
