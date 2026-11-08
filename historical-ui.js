@@ -43,10 +43,12 @@
     const rows = $('hist-rows');
     const exportButton = $('hist-export');
     const retryButton = $('hist-retry');
+    retryButton.hidden = true;
 
     function message(text, state = 'info') {
       status.textContent = text;
       status.className = `historical-status ${state}`;
+      retryButton.hidden = state !== 'error';
       choices.replaceChildren();
       chart.replaceChildren();
       head.replaceChildren();

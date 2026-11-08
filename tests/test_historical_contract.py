@@ -72,6 +72,17 @@ class HistoricalDataContractTests(unittest.TestCase):
         self.assertEqual((kentwood_pair["source_point_id_nws"], kentwood_pair["target_point_id_nws"]), ("OSYM6", "KENL1"))
         self.assertEqual([r["record_id"] for r in pair["records"]], [r["record_id"] for r in kentwood_pair["records"]])
 
+    def test_magnolia_denham_phase2_approved_count_and_identity(self):
+        source_pairs = json.loads((SOURCE / "Phase2_Crest_to_Crest_Plot_Ready.json").read_text())
+        approved = [record for record in source_pairs if record["relationship_id"] == "MAGL1__DENL1"]
+        denham = self.payload("DENL1")
+        published = next(rel for rel in denham["crest_relationships"] if rel["relationship_id"] == "MAGL1__DENL1")["records"]
+        self.assertEqual(len(approved), 13)
+        self.assertEqual(len(published), 13)
+        self.assertEqual({r["record_id"] for r in approved}, {r["record_id"] for r in published})
+        self.assertEqual({r["quality_tier"] for r in published}, {"B"})
+        self.assertEqual(len([r for r in published if r["event_date"] == "2003-02-03"]), 0)
+
     def test_verified_crosswalk_and_station_aliases_fail_closed(self):
         crosswalk = json.loads((self.out / "crosswalk.json").read_text())
         by_usgs = {r["usgs_site_id"]: r["nws_point_id"] for r in crosswalk}
