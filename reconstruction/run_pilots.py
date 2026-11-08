@@ -16,7 +16,7 @@ import sys
 
 import numpy as np
 import rasterio
-from shapely.geometry import shape
+from shapely.geometry import shape, box
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -127,6 +127,9 @@ def calculate_map(basin, required, inventory):
                 arr = arr / 25.4
             if transform0 is None:
                 transform0, shape0 = src.transform, arr.shape
+                raster_footprint = box(*src.bounds)
+                if not raster_footprint.buffer(1e-9).covers(basin):
+                    raise ValueError("QPE raster does not cover entire upstream basin")
                 fractions = fraction_mask(basin, shape0, transform0)
                 areas = cell_areas(transform0, *shape0)
                 if float((fractions * areas).sum()) <= 0:
