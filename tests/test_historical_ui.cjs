@@ -29,7 +29,7 @@ class Element {
   focus() { this.focused = true; }
 }
 
-const ids = ['hist-status', 'hist-title', 'hist-meta', 'hist-relationships', 'hist-chart', 'hist-head', 'hist-rows', 'hist-export', 'hist-retry'];
+const ids = ['hist-status', 'hist-title', 'hist-meta', 'hist-relationships', 'hist-source-choices', 'hist-chart', 'hist-head', 'hist-rows', 'hist-export', 'hist-retry'];
 function fixture() {
   const elements = Object.fromEntries(ids.map(id => [id, new Element('div', id)]));
   const document = {
@@ -55,6 +55,14 @@ async function main() {
   const source = fs.readFileSync('historical-ui.js', 'utf8');
   new vm.Script(source, {filename: 'historical-ui.js'});
   const ui = require('../historical-ui.js');
+  assert.deepEqual(ui.niceTicks(0.12, 12.78, 8), {min: 0, max: 14, step: 2, ticks: [0, 2, 4, 6, 8, 10, 12, 14]});
+  const narrowTicks = ui.niceTicks(1.04, 1.06, 7);
+  assert.ok(narrowTicks.min <= 1.04 && narrowTicks.max >= 1.06, 'narrow range is not clipped');
+  assert.ok(narrowTicks.step < 0.1, 'narrow range uses small ticks');
+  const singleTicks = ui.niceTicks(0, 0, 7);
+  assert.ok(singleTicks.min < 0 && singleTicks.max > 0, 'single zero is expanded around the observation');
+  const negativeTicks = ui.niceTicks(-3.2, -3.2, 7);
+  assert.ok(negativeTicks.min <= -3.2 && negativeTicks.max >= -3.2, 'negative value remains in limits');
   const html = fs.readFileSync('index.html', 'utf8');
   assert.match(html, /historical-ui\.js/);
   assert.match(html, /renderHistoricalForUsGsGage/);
@@ -88,19 +96,49 @@ async function main() {
   assert.match(f.elements['hist-title'].textContent, /Tangipahoa River near Amite/);
   assert.match(f.elements['hist-title'].textContent, /USGS 07375430 · NWS AMIL1/);
   assert.equal(f.elements['hist-rows'].children.length, 3);
+  const sourceButtons = f.elements['hist-source-choices'].children.filter(node => node.tagName === 'BUTTON');
+  assert.deepEqual(sourceButtons.map(button => [button.textContent, button.disabled]), [['Legacy', false], ['Reconstructed', true], ['Both', true]]);
+  assert.match(f.elements['hist-source-choices'].textContent, /pending independent scientific verification/);
   assert.equal(calls.filter(url => url.includes('/points/')).length, 1);
   assert.equal(f.elements['hist-relationships'].children.length, 2);
   const overlapping = f.elements['hist-chart'].children[0].children.filter(node => ['R1', 'R3'].includes(node.dataset.recordId));
-  assert.deepEqual(overlapping.map(node => node.getAttribute('r')).sort(), ['10', '6']);
+  assert.deepEqual(overlapping.map(node => node.getAttribute('r')).sort(), ['12', '8']);
+  const svgNodes = f.elements['hist-chart'].children[0].children;
+  assert.equal(svgNodes.filter(node => /chart-grid/.test(node.getAttribute('class') || '')).length > 10, true, 'major X/Y gridlines are drawn');
+  const chartLabels = svgNodes.filter(node => node.tagName === 'TEXT').map(node => node.textContent);
+  assert.ok(chartLabels.includes('Mean Areal Precipitation (inches)'));
+  assert.ok(chartLabels.includes('Observed River Crest (feet)'));
+  const hoverPoint = svgNodes.find(node => node.tagName === 'CIRCLE' && node.dataset.recordId === 'R2');
+  const guideGroup = svgNodes.find(node => (node.getAttribute('class') || '') === 'chart-crosshair-group');
+  const guides = guideGroup.children;
+  assert.equal(guides.length, 2);
+  hoverPoint.listeners.pointerenter?.({});
+  assert.equal(guideGroup.getAttribute('visibility'), 'visible', 'hover displays crosshairs');
+  assert.ok(svgNodes.some(node => (node.getAttribute('class') || '').includes('chart-hover-tooltip') && node.getAttribute('visibility') === 'visible'));
+  hoverPoint.listeners.focus?.({});
+  assert.equal(guideGroup.getAttribute('visibility'), 'visible', 'keyboard focus displays crosshairs');
+  hoverPoint.listeners.keydown?.({key: 'Enter', preventDefault() {}});
+  assert.equal(f.elements['hist-rows'].children.find(row => row.dataset.recordId === 'R2').getAttribute('aria-selected'), 'true', 'keyboard selection syncs the event table');
+  f.elements['hist-chart'].children[0].children.find(node => node.tagName === 'CIRCLE' && node.dataset.recordId === 'R2').listeners.keydown?.({key: ' ', preventDefault() {}});
+  assert.equal(f.elements['hist-rows'].children.find(row => row.dataset.recordId === 'R2').getAttribute('aria-selected'), 'false', 'keyboard can clear selection');
+  hoverPoint.listeners.pointerleave?.({});
+  assert.equal(guideGroup.getAttribute('visibility'), 'hidden', 'hover guides disappear when leaving plot');
+
+  const sourceControls = f.elements['hist-chart'].children;
 
   const mapHeader = f.elements['hist-head'].children[0].children.find(node => node.dataset.sort === 'map_inches');
   mapHeader.children[0].click();
   assert.deepEqual(f.elements['hist-rows'].children.map(row => row.dataset.recordId), ['R1', 'R3', 'R2']);
-  const point = f.elements['hist-chart'].children[0].children.find(node => node.dataset.recordId === 'R2');
+  const point = f.elements['hist-chart'].children[0].children.find(node => node.tagName === 'CIRCLE' && node.dataset.recordId === 'R2');
   point.click();
   assert.equal(f.elements['hist-rows'].children.find(row => row.dataset.recordId === 'R2').className, 'selected');
+  assert.equal(f.elements['hist-rows'].children.find(row => row.dataset.recordId === 'R2').getAttribute('aria-selected'), 'true');
+  const selectedGuideGroup = f.elements['hist-chart'].children[0].children.find(node => (node.getAttribute('class') || '') === 'chart-crosshair-group');
+  assert.equal(selectedGuideGroup.getAttribute('visibility'), 'visible', 'selected point keeps crosshairs');
+  f.elements['hist-chart'].children[0].children.find(node => node.tagName === 'CIRCLE' && node.dataset.recordId === 'R2').click();
+  assert.equal(f.elements['hist-rows'].children.find(row => row.dataset.recordId === 'R2').getAttribute('aria-selected'), 'false', 'clicking selected point clears selection');
   f.elements['hist-rows'].children.find(row => row.dataset.recordId === 'R1').click();
-  assert.match(f.elements['hist-chart'].children[0].children.find(node => node.dataset.recordId === 'R1').getAttribute('class'), /selected/);
+  assert.match(f.elements['hist-chart'].children[0].children.find(node => node.tagName === 'CIRCLE' && node.dataset.recordId === 'R1').getAttribute('class'), /selected/);
   const csv = ui.csvForRecords(rows, 'map');
   assert.match(csv, /record_id,event_date,date_precision,map_inches,crest_feet/);
   assert.match(csv, /R2,2002-02-02,day,3,13/);

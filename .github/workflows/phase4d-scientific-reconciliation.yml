@@ -1,0 +1,58 @@
+name: Phase 4D scientific reconciliation
+on:
+  push:
+    branches: [feature/pilot-rainfall-reconstruction-amil1-mnlm6]
+    paths:
+      - .github/workflows/phase4d-scientific-reconciliation.yml
+      - reconstruction/phase4d_reconcile.py
+      - reconstruction/tests/test_phase4d_reconcile.py
+      - reports/phase4a/**
+      - reconstruction/stageiv_daily_map.py
+      - scripts/audit_rfc_network_geometry.py
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  official-data-reconciliation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install geospatial dependencies
+        run: python -m pip install -r requirements.txt geopandas
+      - name: Run project, chart, and geospatial regression tests
+        run: |
+          python -m unittest discover -s tests -v
+          python -m unittest discover -s reconstruction/tests -v
+          node tests/validate-ui.cjs
+          node tests/test_historical_ui.cjs
+          node tests/test_reconstruction_comparison.cjs
+      - name: Retrieve current official NOAA LMRFC basin archive
+        run: |
+          mkdir -p reports/phase4d reconstruction/staging
+          curl -fL --connect-timeout 20 --max-time 180 --retry 3 --retry-delay 5 \
+            'https://www.nohrsc.noaa.gov/data/vector/master/b_lmrfc.tar.gz' -o b_lmrfc.tar.gz
+          sha256sum b_lmrfc.tar.gz | tee reports/phase4d/lmrfc_archive_sha256.txt
+      - name: Rebuild exact-attribute RFC candidate geometry inventory
+        run: python scripts/audit_rfc_network_geometry.py
+      - name: Compare RFC and NLDI geometries with identical native-grid Stage IV windows and retrieve suspect USGS hydrographs
+        run: |
+          python -m reconstruction.phase4d_reconcile \
+            --dates 2018-12-27 2018-12-28 \
+            --retrieve-stage \
+            --output reports/phase4d/phase4d_data_audit.json
+      - name: Upload provenance and independent source results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase4d-scientific-reconciliation
+          path: |
+            reports/phase4a/
+            reports/phase4d/
+            reconstruction/staging/amil1_hydrograph_discrepancy_windows.json
+          if-no-files-found: warn
+          retention-days: 60

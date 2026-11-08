@@ -10,6 +10,30 @@
     return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
   };
 
+  function niceTicks(minimum, maximum, target = 8) {
+    let min = Number(minimum), max = Number(maximum);
+    if (!Number.isFinite(min) || !Number.isFinite(max)) { min = -1; max = 1; }
+    if (min > max) [min, max] = [max, min];
+    target = Math.max(3, Math.min(12, Math.round(Number(target) || 8)));
+    let span = max - min;
+    if (span === 0) {
+      span = Math.max(0.5, Math.abs(min) * 0.05);
+      min -= span / 2;
+      max += span / 2;
+    }
+    const rawStep = span / (target - 1);
+    const power = 10 ** Math.floor(Math.log10(rawStep));
+    const factor = [1, 2, 2.5, 5, 10].find(value => value * power >= rawStep) || 10;
+    const step = factor * power;
+    const precision = Math.min(12, Math.max(0, Math.ceil(-Math.log10(step)) + (factor === 2.5 ? 1 : 0)));
+    const round = value => Number(value.toFixed(precision));
+    const lower = Math.floor(min / step + 1e-10) * step;
+    const upper = Math.ceil(max / step - 1e-10) * step;
+    const ticks = [];
+    for (let value = lower, index = 0; value <= upper + step * 1e-8 && index < 40; value += step, index++) ticks.push(round(value));
+    return {min: round(lower), max: round(upper), step: round(step), ticks};
+  }
+
   function csvForRecords(records, kind) {
     const fields = kind === 'map'
       ? ['record_id', 'event_date', 'date_precision', 'map_inches', 'crest_feet', 'tc_raw', 'tc_units_labeled', 'tc_hours_confirmed', 'periods_rain_raw', 'quality_tier', 'source_workbook', 'source_worksheet', 'source_row', 'source_file_sha256', 'source_class', 'qpe_product', 'validation_status', 'crest_time_utc', 'rain_start_utc', 'rain_end_utc', 'source_url']
@@ -221,14 +245,14 @@
     function pointDescription(relation, row) {
       const limitations = Array.isArray(row.quality_limitations) ? row.quality_limitations.join(', ') : '';
       if (relation.kind === 'map' && row.source_class === 'independent_reconstruction') {
-        return `${row.event_date}; independent ${row.qpe_product} MAP ${row.map_inches} inches; observed crest ${row.crest_feet} feet at ${row.crest_time_utc}; rainfall window ${row.rain_start_utc} to ${row.rain_end_utc}; ${row.validation_status}; ${unavailable(row.source_url)}`;
+        return `${row.event_date}; independent ${row.qpe_product} MAP ${row.map_inches.toFixed(2)} inches; observed crest ${row.crest_feet.toFixed(2)} feet at ${row.crest_time_utc}; rainfall window ${row.rain_start_utc} to ${row.rain_end_utc}; ${row.validation_status}; ${unavailable(row.source_url)}`;
       }
       if (relation.kind === 'map') {
         const tc = Number.isFinite(row.tc_hours_confirmed)
           ? `verified TC ${row.tc_hours_confirmed} hours${row.tc_raw === null || row.tc_raw === undefined ? '' : `; source TC ${row.tc_raw} ${unavailable(row.tc_units_labeled)}`}`
           : row.tc_raw === null || row.tc_raw === undefined ? 'TC unavailable' : `TC source value ${row.tc_raw} (${unavailable(row.tc_units_labeled)}; clock/units unverified)`;
         const periods = row.periods_rain_raw === null || row.periods_rain_raw === undefined ? 'rainfall periods unavailable' : `rainfall periods source value ${row.periods_rain_raw}`;
-        return `${dateLabel(row)} (${dateSemantics(row)}); legacy study MAP ${row.map_inches} inches; recorded crest ${row.crest_feet} feet; ${tc}; ${periods}; Tier ${row.quality_tier}; ${provenance(row)}${limitations ? `; ${limitations}` : ''}`;
+        return `${dateLabel(row)} (${dateSemantics(row)}); legacy study MAP ${row.map_inches.toFixed(2)} inches; recorded crest ${row.crest_feet.toFixed(2)} feet; ${tc}; ${periods}; Tier ${row.quality_tier}; ${provenance(row)}${limitations ? `; ${limitations}` : ''}`;
       }
       const lag = Number.isFinite(row.lag_hours_confirmed)
         ? `verified crest lag ${row.lag_hours_confirmed} hours${row.lag_raw === null || row.lag_raw === undefined ? '' : `; source lag ${row.lag_raw} ${unavailable(row.lag_units_labeled)}`}`
@@ -238,13 +262,14 @@
 
     function coordinates(relation) {
       return relation.kind === 'map'
-        ? {x: row => number(row.map_inches), y: row => number(row.crest_feet), xLabel: 'Historical study MAP (inches)', yLabel: 'Recorded river crest (feet)'}
+        ? {x: row => number(row.map_inches), y: row => number(row.crest_feet), xLabel: 'Mean Areal Precipitation (inches)', yLabel: 'Observed River Crest (feet)'}
         : {x: row => number(row.source_crest_feet), y: row => number(row.target_crest_feet), xLabel: `Source crest · ${relation.source_point_name} (${relation.source_point_id_nws}) · feet`, yLabel: `Target crest · ${relation.target_point_name} (${relation.target_point_id_nws}) · feet`};
     }
 
-    function formatTick(value) {
+    function formatTick(value, step = 1) {
       if (!Number.isFinite(value)) return '';
-      return Number(value.toFixed(2)).toString();
+      const decimals = step < 1 ? Math.min(6, Math.max(1, Math.ceil(-Math.log10(step)) + 1e-9)) : 0;
+      return Number(value.toFixed(decimals)).toString();
     }
 
     function axisText(svg, x, y, text, options = {}) {
@@ -261,7 +286,7 @@
     function drawChart(relation) {
       chart.replaceChildren();
       const svg = doc.createElementNS(SVG_NS, 'svg');
-      svg.setAttribute('viewBox', '0 0 820 390');
+      svg.setAttribute('viewBox', '0 0 900 490');
       svg.setAttribute('role', 'img');
       svg.setAttribute('aria-label', `${relation.label} historical descriptive scatterplot`);
       svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -269,7 +294,7 @@
       titleNode.textContent = `${relation.label} historical descriptive scatterplot`;
       svg.appendChild(titleNode);
       const desc = doc.createElementNS(SVG_NS, 'desc');
-      desc.textContent = 'Tier B source observations only. No line of fit or forecast is shown.';
+      desc.textContent = 'Source observations only. No line of fit or forecast is shown. Focus or hover a point to show its values and crosshairs; select it to keep the guides and synchronize the event table.';
       svg.appendChild(desc);
 
       const {x: xOf, y: yOf, xLabel, yLabel} = coordinates(relation);
@@ -282,38 +307,101 @@
         stacks.set(key, stack);
       }
       for (const stack of stacks.values()) stack.forEach((item, index) => { item.stackIndex = index; item.stackSize = stack.length; });
-      const left = 88, right = 790, top = 25, bottom = 322;
+      const left = 98, right = 874, top = 30, bottom = 386;
       const xVals = plotted.map(p => p.x), yVals = plotted.map(p => p.y);
-      const expand = values => {
-        let min = Math.min(...values), max = Math.max(...values);
-        if (min === max) { const delta = Math.max(Math.abs(min) * 0.05, 0.5); min -= delta; max += delta; }
-        else { const delta = (max - min) * 0.06; min -= delta; max += delta; }
-        return [min, max];
-      };
-      const [xMin, xMax] = expand(xVals), [yMin, yMax] = expand(yVals);
+      const tickTarget = Math.max(4, Math.min(10, Math.floor((chart.clientWidth || 760) / 85)));
+      const xAxis = niceTicks(Math.min(...xVals), Math.max(...xVals), tickTarget);
+      const yAxis = niceTicks(Math.min(...yVals), Math.max(...yVals), Math.min(10, tickTarget + 1));
+      const {min: xMin, max: xMax} = xAxis, {min: yMin, max: yMax} = yAxis;
       const scaleX = value => left + (value - xMin) / (xMax - xMin) * (right - left);
       const scaleY = value => bottom - (value - yMin) / (yMax - yMin) * (bottom - top);
+
+      for (const value of xAxis.ticks) {
+        const line = doc.createElementNS(SVG_NS, 'line');
+        const x = scaleX(value);
+        line.setAttribute('x1', x); line.setAttribute('x2', x);
+        line.setAttribute('y1', top); line.setAttribute('y2', bottom);
+        line.setAttribute('class', 'chart-grid chart-grid-vertical'); line.dataset.tickValue = String(value);
+        svg.appendChild(line);
+        const tick = doc.createElementNS(SVG_NS, 'line');
+        tick.setAttribute('x1', x); tick.setAttribute('x2', x); tick.setAttribute('y1', bottom); tick.setAttribute('y2', bottom + 6);
+        tick.setAttribute('class', 'chart-tick'); svg.appendChild(tick);
+        axisText(svg, x, bottom + 22, formatTick(value, xAxis.step), {anchor: 'middle'});
+      }
+      for (const value of yAxis.ticks) {
+        const line = doc.createElementNS(SVG_NS, 'line');
+        const y = scaleY(value);
+        line.setAttribute('x1', left); line.setAttribute('x2', right);
+        line.setAttribute('y1', y); line.setAttribute('y2', y);
+        line.setAttribute('class', 'chart-grid chart-grid-horizontal'); line.dataset.tickValue = String(value);
+        svg.appendChild(line);
+        const tick = doc.createElementNS(SVG_NS, 'line');
+        tick.setAttribute('x1', left - 6); tick.setAttribute('x2', left); tick.setAttribute('y1', y); tick.setAttribute('y2', y);
+        tick.setAttribute('class', 'chart-tick'); svg.appendChild(tick);
+        axisText(svg, left - 10, y + 4, formatTick(value, yAxis.step), {anchor: 'end'});
+      }
+
+      const crosshair = doc.createElementNS(SVG_NS, 'g');
+      crosshair.setAttribute('class', 'chart-crosshair-group'); crosshair.setAttribute('visibility', 'hidden');
+      crosshair.setAttribute('pointer-events', 'none');
+      const vertical = doc.createElementNS(SVG_NS, 'line');
+      vertical.setAttribute('class', 'chart-crosshair chart-crosshair-vertical');
+      vertical.setAttribute('x1', left); vertical.setAttribute('x2', left); vertical.setAttribute('y1', top); vertical.setAttribute('y2', bottom);
+      const horizontal = doc.createElementNS(SVG_NS, 'line');
+      horizontal.setAttribute('class', 'chart-crosshair chart-crosshair-horizontal');
+      horizontal.setAttribute('x1', left); horizontal.setAttribute('x2', right); horizontal.setAttribute('y1', top); horizontal.setAttribute('y2', top);
+      crosshair.appendChild(vertical); crosshair.appendChild(horizontal); svg.appendChild(crosshair);
+
+      const tooltip = doc.createElementNS(SVG_NS, 'g');
+      tooltip.setAttribute('class', 'chart-hover-tooltip'); tooltip.setAttribute('role', 'tooltip'); tooltip.setAttribute('visibility', 'hidden'); tooltip.setAttribute('pointer-events', 'none');
+      const tooltipBox = doc.createElementNS(SVG_NS, 'rect'); tooltipBox.setAttribute('width', '306'); tooltipBox.setAttribute('height', '104'); tooltipBox.setAttribute('rx', '7');
+      tooltipBox.setAttribute('class', 'chart-tooltip-box'); tooltip.appendChild(tooltipBox);
+      const tooltipText = doc.createElementNS(SVG_NS, 'text'); tooltipText.setAttribute('x', '10'); tooltipText.setAttribute('y', '19'); tooltip.appendChild(tooltipText);
+
+      function guidesFor(item) {
+        if (!item) { crosshair.setAttribute('visibility', 'hidden'); tooltip.setAttribute('visibility', 'hidden'); return; }
+        const px = scaleX(item.x), py = scaleY(item.y);
+        vertical.setAttribute('x1', px); vertical.setAttribute('x2', px); vertical.setAttribute('y1', py); vertical.setAttribute('y2', bottom);
+        horizontal.setAttribute('x1', left); horizontal.setAttribute('x2', px); horizontal.setAttribute('y1', py); horizontal.setAttribute('y2', py);
+        crosshair.dataset.recordId = item.row.record_id; crosshair.setAttribute('visibility', 'visible');
+        tooltipText.replaceChildren();
+        const lines = tooltipLines(relation, item.row);
+        for (const [index, line] of lines.entries()) {
+          const tspan = doc.createElementNS(SVG_NS, 'tspan'); tspan.setAttribute('x', '10'); tspan.setAttribute('dy', index ? '17' : '0'); tspan.textContent = line; tooltipText.appendChild(tspan);
+        }
+        tooltipBox.setAttribute('height', String(12 + lines.length * 17));
+        const tooltipWidth = 308, tooltipHeight = 12 + lines.length * 17;
+        const tx = px > (left + right) / 2 ? Math.max(left + 2, px - tooltipWidth - 10) : Math.min(right - tooltipWidth + 2, px + 12);
+        const ty = Math.max(top + 2, Math.min(bottom - tooltipHeight, py - tooltipHeight - 8));
+        tooltip.setAttribute('transform', `translate(${tx} ${ty})`); tooltip.setAttribute('visibility', 'visible');
+      }
+
+      function tooltipLines(_relation, row) {
+        if (_relation.kind === 'map') {
+          const source = row.source_class === 'independent_reconstruction' ? `Reconstructed · ${unavailable(row.qpe_product)}` : `Legacy · ${unavailable(row.source_workbook)}`;
+          const window = row.rain_start_utc && row.rain_end_utc ? `${row.rain_start_utc} – ${row.rain_end_utc}` : 'Unavailable';
+          const crestTime = row.crest_time_utc || (row.source_class === 'independent_reconstruction' ? 'Unavailable' : 'Not present in date-only legacy source');
+          return [`Date: ${dateLabel(row)}${row.source_class === 'independent_reconstruction' ? '' : ' (source label)'}`,
+            `MAP: ${Number(row.map_inches).toFixed(2)} in · crest: ${Number(row.crest_feet).toFixed(2)} ft`,
+            `${activeNwsli} · ${source}`, `Quality: ${unavailable(row.validation_status || row.quality_tier)}`,
+            `Rain window: ${window}`, `Crest timestamp: ${crestTime}`,
+            `Provenance: ${unavailable(row.source_url || row.source_workbook)}`];
+        }
+        return [pointDescription(_relation, row).slice(0, 240)];
+      }
 
       const axis = doc.createElementNS(SVG_NS, 'path');
       axis.setAttribute('d', `M${left} ${top}V${bottom}H${right}`);
       axis.setAttribute('class', 'chart-axis');
       svg.appendChild(axis);
-      for (let i = 0; i <= 4; i++) {
-        const tx = left + i * (right - left) / 4;
-        const ty = bottom - i * (bottom - top) / 4;
-        const xValue = xMin + i * (xMax - xMin) / 4;
-        const yValue = yMin + i * (yMax - yMin) / 4;
-        axisText(svg, tx, bottom + 20, formatTick(xValue), {anchor: 'middle'});
-        axisText(svg, left - 9, ty + 4, formatTick(yValue), {anchor: 'end'});
-      }
-      axisText(svg, (left + right) / 2, 374, xLabel, {anchor: 'middle'});
-      axisText(svg, 18, (top + bottom) / 2, yLabel, {anchor: 'middle', transform: `rotate(-90 18 ${(top + bottom) / 2})`});
+      axisText(svg, (left + right) / 2, 468, xLabel, {anchor: 'middle'});
+      axisText(svg, 22, (top + bottom) / 2, yLabel, {anchor: 'middle', transform: `rotate(-90 22 ${(top + bottom) / 2})`});
 
       for (const item of plotted) {
         const circle = doc.createElementNS(SVG_NS, 'circle');
         circle.setAttribute('cx', scaleX(item.x));
         circle.setAttribute('cy', scaleY(item.y));
-        circle.setAttribute('r', item.stackSize > 1 ? String(6 + item.stackIndex * 4) : '6');
+        circle.setAttribute('r', item.stackSize > 1 ? String(8 + item.stackIndex * 4) : '8');
         circle.setAttribute('class', `historical-point${item.row.source_class === 'independent_reconstruction' ? ' reconstructed' : ''}${item.stackSize > 1 ? ' stacked' : ''}${selectedRecordId === item.row.record_id ? ' selected' : ''}`);
         circle.setAttribute('pointer-events', item.stackSize > 1 ? 'stroke' : 'all');
         circle.setAttribute('tabindex', '0');
@@ -324,16 +412,23 @@
         tip.textContent = pointDescription(relation, item.row);
         circle.appendChild(tip);
         const selectPoint = () => {
-          selectedRecordId = item.row.record_id;
+          selectedRecordId = selectedRecordId === item.row.record_id ? '' : item.row.record_id;
           markSelection(selectedRecordId);
           drawChart(relation);
         };
+        circle.addEventListener('pointerenter', () => guidesFor(item));
+        circle.addEventListener('focus', () => guidesFor(item));
+        circle.addEventListener('pointerleave', () => guidesFor(selectedRecordId ? plotted.find(other => other.row.record_id === selectedRecordId) : null));
+        circle.addEventListener('blur', () => guidesFor(selectedRecordId ? plotted.find(other => other.row.record_id === selectedRecordId) : null));
         circle.addEventListener('click', selectPoint);
         circle.addEventListener('keydown', event => {
           if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); selectPoint(); }
         });
         svg.appendChild(circle);
       }
+      svg.appendChild(tooltip);
+      svg.addEventListener('pointerleave', () => guidesFor(selectedRecordId ? plotted.find(item => item.row.record_id === selectedRecordId) : null));
+      if (selectedRecordId) guidesFor(plotted.find(item => item.row.record_id === selectedRecordId));
       chart.appendChild(svg);
     }
 
@@ -400,7 +495,7 @@
         row.tabIndex = 0;
         row.setAttribute('aria-selected', String(record.record_id === selectedRecordId));
         row.className = record.record_id === selectedRecordId ? 'selected' : '';
-        const choose = () => { selectedRecordId = record.record_id; markSelection(selectedRecordId); drawChart(relation); };
+        const choose = () => { selectedRecordId = selectedRecordId === record.record_id ? '' : record.record_id; markSelection(selectedRecordId); drawChart(relation); };
         row.addEventListener('click', choose);
         row.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); choose(); } });
         for (const [field] of columns) appendText(row, 'td', visibleValue(record, field));
@@ -421,7 +516,11 @@
       sortDirection = 1;
       const dates = relation.records.map(row => row.event_date).filter(Boolean).sort();
       const coverage = dates.length ? `${dateLabel({event_date: dates[0], date_precision: relation.records[0].date_precision})} to ${dateLabel({event_date: dates[dates.length - 1], date_precision: relation.records[0].date_precision})}` : 'Date coverage unavailable';
-      const countText = `${relation.records.length} historical descriptive records (Tier B)`;
+      const countText = relation.kind !== 'map' || sourceChoice === 'legacy'
+        ? `${relation.records.length} historical descriptive records (Tier B)`
+        : sourceChoice === 'reconstructed'
+          ? `${records.length} independently reconstructed, science-approved observations`
+          : `${records.length} observations · ${relation.records.length} legacy and ${reconstructed.length} science-approved reconstructed`;
       status.textContent = countText;
       status.className = 'historical-status';
       meta.textContent = `${coverage} · ${relation.kind === 'map' ? 'Historical legacy MAP is not current MRMS rainfall.' : `Directional pair ${relation.relationship_id}; source remains X and target remains Y.`}`;
@@ -492,10 +591,11 @@
 
     exportButton.addEventListener('click', downloadCsv);
     retryButton.addEventListener('click', () => { if (activeGage) { crosswalkPromise = null; cache.delete(activeNwsli); renderForGage(activeGage); } });
+    root.addEventListener?.('resize', () => { if (visibleRelation) drawChart(visibleRelation); });
     return {renderForGage, clear: () => renderForGage(''), refresh: () => renderForGage(activeGage), cache};
   }
 
-  const api = {create, csvForRecords};
+  const api = {create, csvForRecords, niceTicks};
   root.HistoricalUI = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);
