@@ -9,6 +9,8 @@ on:
       - reconstruction/tests/test_phase4d_reconcile.py
       - reconstruction/historical_source_availability.py
       - reconstruction/tests/test_historical_source_availability.py
+      - reconstruction/summarize_historical_source_coverage.py
+      - reconstruction/tests/test_summarize_historical_source_coverage.py
       - reports/phase4a/**
       - reconstruction/stageiv_daily_map.py
       - scripts/audit_rfc_network_geometry.py
@@ -50,6 +52,9 @@ jobs:
             --output reports/phase4d/phase4d_data_audit.json
           python -m reconstruction.historical_source_availability \
             --output reports/phase4d/stage_source_availability.json
+          python -m reconstruction.summarize_historical_source_coverage \
+            reports/phase4d/stage_source_availability.json \
+            --source-run-id "$GITHUB_RUN_ID"
       - name: Upload provenance and independent source results
         if: always()
         uses: actions/upload-artifact@v4
