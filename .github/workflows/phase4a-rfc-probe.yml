@@ -1,0 +1,25 @@
+name: Phase 4A RFC archive accessibility probe
+on:
+  push:
+    branches:
+      - audit/phase4a-full-network-rfc-basins
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch official NOAA LMRFC archive
+        run: |
+          set -eu
+          curl -fL --connect-timeout 20 --max-time 180 --retry 3 --retry-delay 5 'https://www.nohrsc.noaa.gov/data/vector/master/b_lmrfc.tar.gz' -o /tmp/b_lmrfc.tar.gz
+          sha256sum /tmp/b_lmrfc.tar.gz
+          ls -lh /tmp/b_lmrfc.tar.gz
+          tar -tzf /tmp/b_lmrfc.tar.gz | head -20
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: official-lmrfc-archive
+          path: /tmp/b_lmrfc.tar.gz
