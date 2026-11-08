@@ -1,7 +1,7 @@
 import unittest
 
 from reconstruction.historical_source_availability import (
-    _crest_quality_summary, _find_key, _peak_summary, _quality_summary, _timestamps,
+    _crest_quality_summary, _find_key, _lead_window_overlaps, _peak_summary, _quality_summary, _timestamps,
 )
 
 
@@ -34,6 +34,13 @@ class HistoricalSourceAvailabilityTests(unittest.TestCase):
         result = _peak_summary(features)
         self.assertEqual(result["records_by_parameter_code"], {"00060": 1, "00065": 1})
         self.assertEqual(result["record_count"], 2)
+
+    def test_legacy_date_window_overlap_is_explicitly_not_an_event_match(self):
+        rows = [{"occurredTime": "2018-12-29T18:45:00Z", "stage": 19.72}]
+        matches = _lead_window_overlaps(rows, "occurredTime", ["2018-12-28"])
+        self.assertEqual(len(matches), 1)
+        self.assertEqual(matches[0]["status"], "DATE_WINDOW_OVERLAP_NOT_EVENT_MATCH")
+        self.assertEqual(_lead_window_overlaps(rows, "missing", ["2018-12-28"]), [])
 
 
 if __name__ == "__main__":

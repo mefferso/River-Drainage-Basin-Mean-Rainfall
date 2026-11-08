@@ -11,7 +11,8 @@ import requests
 
 ROOT = Path(__file__).resolve().parents[1]
 SITES = {"AMIL1": "07375430", "MNLM6": "02492360"}
-LEADS = ("2016-08-13", "2017-04-04", "2018-12-28")
+LEADS = ("2016-03-12", "2016-08-13", "2017-04-03", "2017-04-04", "2018-12-28",
+         "2019-04-20", "2019-05-12", "2020-06-08", "2026-10-31")
 USGS = "https://api.waterdata.usgs.gov/ogcapi/v0/collections"
 NWPS = "https://api.water.noaa.gov/nwps/v1"
 
@@ -123,6 +124,29 @@ def _crest_quality_summary(records):
     }
 
 
+def _lead_window_overlaps(records, time_field, leads):
+    """List source records inside review windows; never equate them to legacy events."""
+    matches = []
+    for lead in leads:
+        day = datetime.strptime(lead, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+        start, end = day-timedelta(days=3), day+timedelta(days=6)
+        for record in records:
+            raw = record.get(time_field)
+            if not raw:
+                continue
+            try:
+                at = datetime.fromisoformat(str(raw).replace("Z", "+00:00"))
+                if at.tzinfo is None:
+                    continue
+                at = at.astimezone(timezone.utc)
+            except ValueError:
+                continue
+            if start <= at < end:
+                matches.append({"legacy_date_lead_only": lead, "source_record": record,
+                                "status": "DATE_WINDOW_OVERLAP_NOT_EVENT_MATCH"})
+    return matches
+
+
 def retrieve(session=None, now=None):
     sess = session or requests.Session()
     retrieved = (now or datetime.now(timezone.utc)).astimezone(timezone.utc).isoformat()
@@ -208,6 +232,16 @@ def retrieve(session=None, now=None):
                 }
             except Exception as exc:
                 nwps[label] = {"request_url": url, "error": str(exc)}
+        gauge = nwps.get("gauge_metadata", {})
+        station["review_window_source_overlaps"] = {
+            "legacy_date_leads_are_search_windows_only": True,
+            "usgs_annual_peak_record_overlaps": _lead_window_overlaps(
+                station["annual_peak_records"].get("records", []), "time", LEADS),
+            "nwps_historic_crest_overlaps": _lead_window_overlaps(
+                gauge.get("historic_crests", []), "occurredTime", LEADS),
+            "nwps_recent_crest_overlaps": _lead_window_overlaps(
+                gauge.get("recent_crests", []), "occurredTime", LEADS),
+        }
         station["noaa_nwps"] = nwps
         stations[nwsli] = station
     return {
@@ -240,6 +274,9 @@ def main():
             "annual_peak_count": len(station["annual_peak_records"]["features"]),
             "annual_peak_summary": station["annual_peak_records"].get("summary"),
             "annual_peak_error": station["annual_peak_records"].get("error"),
+            "annual_peak_window_overlap_count": len(station["review_window_source_overlaps"]["usgs_annual_peak_record_overlaps"]),
+            "nwps_historic_window_overlap_count": len(station["review_window_source_overlaps"]["nwps_historic_crest_overlaps"]),
+            "nwps_recent_window_overlap_count": len(station["review_window_source_overlaps"]["nwps_recent_crest_overlaps"]),
             "review_window_observation_counts": {date: {
                 kind: len(stage[kind]["features"]) for kind in ("continuous_00065", "daily_00065")
             } for date, stage in station["daily_and_continuous_stage_review_windows"].items()},
