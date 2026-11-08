@@ -14,7 +14,7 @@
     "UNRESOLVED_NO_MATCHING_RFC_FEATURE": 3,
     "WITHHELD_TARGET_OUTLET_UNLINKED": 26
   },
-  "unresolved_issue_count": 584,
+  "unresolved_issue_count": 583,
   "unresolved_outlet_count": 543,
   "warning": "NLDI/NHDPlus topology is a modern routed-network proxy, not proof of legacy MAP geometry.",
   "withheld_or_unresolved_station_count": 29

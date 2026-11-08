@@ -116,7 +116,7 @@ RFC_FEATURE,103,,RFC_OUTLET_UNLINKED,103,NLDI hydrolocation must return exactly 
 RFC_FEATURE,104,,RFC_OUTLET_UNLINKED,104,NLDI hydrolocation must return exactly one feature
 RFC_FEATURE,105,,RFC_OUTLET_UNLINKED,105,NLDI hydrolocation must return exactly one feature
 RFC_FEATURE,106,,RFC_OUTLET_UNLINKED,106,NLDI hydrolocation must return exactly one feature
-RFC_FEATURE,107,,RFC_OUTLET_UNLINKED,107,NLDI hydrolocation request failed
+RFC_FEATURE,107,,RFC_OUTLET_UNLINKED,107,NLDI hydrolocation must return exactly one feature
 RFC_FEATURE,108,,RFC_OUTLET_UNLINKED,108,NLDI hydrolocation must return exactly one feature
 RFC_FEATURE,109,,RFC_OUTLET_UNLINKED,109,NLDI hydrolocation must return exactly one feature
 RFC_FEATURE,110,,RFC_OUTLET_UNLINKED,110,NLDI hydrolocation must return exactly one feature
@@ -585,7 +585,6 @@ NLDI_REQUEST,42,,NLDI_REQUEST_FAILED,,502 Server Error: Bad Gateway for url: htt
 NLDI_REQUEST,70,,NLDI_REQUEST_FAILED,,502 Server Error: Bad Gateway for url: https://api.water.usgs.gov/nldi/linked-data/hydrolocation?f=json&coords=POINT%28-87.1640173332+36.7354806087%29
 NLDI_REQUEST,86,,NLDI_REQUEST_FAILED,,502 Server Error: Bad Gateway for url: https://api.water.usgs.gov/nldi/linked-data/hydrolocation?f=json&coords=POINT%28-83.7440410572+35.1580070548%29
 NLDI_REQUEST,87,,NLDI_REQUEST_FAILED,,502 Server Error: Bad Gateway for url: https://api.water.usgs.gov/nldi/linked-data/hydrolocation?f=json&coords=POINT%28-83.7130666605+35.2576780914%29
-NLDI_REQUEST,107,,NLDI_REQUEST_FAILED,,502 Server Error: Bad Gateway for url: https://api.water.usgs.gov/nldi/linked-data/hydrolocation?f=json&coords=POINT%28-83.7632552670+35.3857404716%29
 NLDI_REQUEST,120,,NLDI_REQUEST_FAILED,,502 Server Error: Bad Gateway for url: https://api.water.usgs.gov/nldi/linked-data/hydrolocation?f=json&coords=POINT%28-84.2427659769+35.7813036990%29
 NLDI_REQUEST,131,,NLDI_REQUEST_FAILED,,502 Server Error: Bad Gateway for url: https://api.water.usgs.gov/nldi/linked-data/hydrolocation?f=json&coords=POINT%28-87.7596670288+35.1197633215%29
 NLDI_REQUEST,143,,NLDI_REQUEST_FAILED,,502 Server Error: Bad Gateway for url: https://api.water.usgs.gov/nldi/linked-data/hydrolocation?f=json&coords=POINT%28-85.4128798986+35.2329882729%29
