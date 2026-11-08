@@ -1,7 +1,8 @@
 import unittest
 
 from reconstruction.historical_source_availability import (
-    _crest_quality_summary, _find_key, _lead_window_overlaps, _peak_summary, _quality_summary, _timestamps,
+    _coverage_summary, _crest_quality_summary, _find_key, _lead_window_overlaps,
+    _peak_summary, _quality_summary, _timestamps,
 )
 
 
@@ -41,6 +42,17 @@ class HistoricalSourceAvailabilityTests(unittest.TestCase):
         self.assertEqual(len(matches), 1)
         self.assertEqual(matches[0]["status"], "DATE_WINDOW_OVERLAP_NOT_EVENT_MATCH")
         self.assertEqual(_lead_window_overlaps(rows, "missing", ["2018-12-28"]), [])
+
+    def test_coverage_summary_is_per_series_and_reports_missing_sample_intervals(self):
+        features = [
+            {"properties": {"time_series_id": "quarter-hour", "time": "2018-12-28T00:00:00Z"}},
+            {"properties": {"time_series_id": "quarter-hour", "time": "2018-12-28T00:15:00Z"}},
+            {"properties": {"time_series_id": "quarter-hour", "time": "2018-12-28T01:00:00Z"}},
+            {"properties": {"time_series_id": "daily-mean", "time": "2018-12-28"}},
+        ]
+        result = _coverage_summary(features)
+        self.assertAlmostEqual(result["quarter-hour"]["largest_sample_gap_hours"], 0.75)
+        self.assertEqual(result["daily-mean"]["observation_count"], 1)
 
 
 if __name__ == "__main__":

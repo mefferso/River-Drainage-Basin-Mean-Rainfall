@@ -91,6 +91,31 @@ def _quality_summary(features):
     return values
 
 
+def _coverage_summary(features):
+    groups = {}
+    for feature in features:
+        props = feature.get("properties", {})
+        series = str(props.get("time_series_id") or props.get("statistic_id") or "unspecified")
+        raw = props.get("time")
+        if not raw:
+            continue
+        try:
+            at = datetime.fromisoformat(str(raw).replace("Z", "+00:00"))
+        except ValueError:
+            continue
+        groups.setdefault(series, []).append(at)
+    output = {}
+    for series, times in groups.items():
+        times = sorted(set(times))
+        gaps = [(b-a).total_seconds()/3600 for a,b in zip(times,times[1:])]
+        output[series] = {
+            "observation_count": len(times), "first_time": times[0].isoformat() if times else None,
+            "last_time": times[-1].isoformat() if times else None,
+            "largest_sample_gap_hours": max(gaps) if gaps else None,
+        }
+    return output
+
+
 def _peak_summary(features):
     properties = [feature.get("properties", {}) for feature in features]
     codes = {}
@@ -191,8 +216,10 @@ def retrieve(session=None, now=None):
                          "page_count": 0, "features": [], "pages": [], "error": str(exc)}
             stage_samples[lead] = {
                 "review_window_utc": [start.isoformat(), end.isoformat()],
-                "continuous_00065": {**continuous, "values": _quality_summary(continuous["features"])},
-                "daily_00065": {**daily, "values": _quality_summary(daily["features"])},
+                "continuous_00065": {**continuous, "coverage": _coverage_summary(continuous["features"]),
+                                      "values": _quality_summary(continuous["features"])},
+                "daily_00065": {**daily, "coverage": _coverage_summary(daily["features"]),
+                                 "values": _quality_summary(daily["features"])},
             }
 
         try:
@@ -279,6 +306,9 @@ def main():
             "nwps_recent_window_overlap_count": len(station["review_window_source_overlaps"]["nwps_recent_crest_overlaps"]),
             "review_window_observation_counts": {date: {
                 kind: len(stage[kind]["features"]) for kind in ("continuous_00065", "daily_00065")
+            } for date, stage in station["daily_and_continuous_stage_review_windows"].items()},
+            "review_window_coverage": {date: {
+                kind: stage[kind].get("coverage") for kind in ("continuous_00065", "daily_00065")
             } for date, stage in station["daily_and_continuous_stage_review_windows"].items()},
             "review_window_errors": {date: {
                 kind: stage[kind].get("error") for kind in ("continuous_00065", "daily_00065")
