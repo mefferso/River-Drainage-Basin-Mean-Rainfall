@@ -91,17 +91,56 @@ with tempfile.TemporaryDirectory() as tmp:
         sid=str(x['id'])
         if sid in used:continue
         a=up[sid];b=inc[sid]
+        spatial=[]
+        for index, row in frame.iterrows():
+            geom=row.geometry
+            if geom is None or geom.is_empty or not geom.intersects(a):continue
+            props={name:str(row[name]) for name in attrs}
+            intersection=area(geom.intersection(a)); total=area(geom.union(a))
+            int_inc=area(geom.intersection(b)); total_inc=area(geom.union(b))
+            contains=geom.covers(Point(float(x['lon']),float(x['lat'])))
+            spatial.append({'nwsli':'UNMAPPED_USGS:'+sid,'rfc_feature':str(index),
+                'exact_nwsli_attribute':False,'outlet_inside':contains,'overlap_upstream':True,
+                'rfc_area_sqmi':round(area(geom),3),'upstream_intersection_sqmi':round(intersection,3),
+                'full_iou_pct':round(100*intersection/total,3) if total else '',
+                'incremental_iou_pct':round(100*int_inc/total_inc,3) if total_inc else '',
+                'rfc_minus_full_sqmi':round(area(geom.difference(a)),3),
+                'full_minus_rfc_sqmi':round(area(a.difference(geom)),3),
+                'attributes_json':json.dumps(props,sort_keys=True),
+                'scientific_status':'SPATIAL_ONLY_NO_VERIFIED_HISTORICAL_JOIN'})
+        spatial.sort(key=lambda item:(not item['outlet_inside'],-(item['full_iou_pct'] or 0)))
+        candidates.extend(spatial)
+        top=spatial[0] if spatial else None
         rows.append({'historical_id':'','canonical_nwsli':'','station':x['name'],
             'dashboard_usgs':sid,'verified_dashboard_join':False,'lat':x['lat'],'lon':x['lon'],
             'upstream_sqmi':round(area(a),3),'incremental_sqmi':round(area(b),3),
             'incremental_fraction_pct':round(100*area(b)/area(a),2) if area(a) else '',
-            'rfc_candidates':'','rfc_exact_attribute_matches':'','rfc_outlet_containing':'',
-            'leading_rfc_feature':'','leading_rfc_sqmi':'','leading_full_iou_pct':'','leading_incremental_iou_pct':'',
-            'legacy_map_geometry_approved':False,'review_status':'DASHBOARD_GAGE_WITHOUT_HISTORICAL_JOIN'})
+            'rfc_candidates':len(spatial),'rfc_exact_attribute_matches':0,
+            'rfc_outlet_containing':sum(v['outlet_inside'] for v in spatial),
+            'leading_rfc_feature':top['rfc_feature'] if top else '',
+            'leading_rfc_sqmi':top['rfc_area_sqmi'] if top else '',
+            'leading_full_iou_pct':top['full_iou_pct'] if top else '',
+            'leading_incremental_iou_pct':top['incremental_iou_pct'] if top else '',
+            'legacy_map_geometry_approved':False,'review_status':'DASHBOARD_GAGE_WITHOUT_HISTORICAL_JOIN_SPATIAL_ONLY'})
+    exact_features=[]
+    for index, feature in frame.iterrows():
+        values={k:str(feature[k]).strip().upper() for k in attrs}
+        matching=[x for x in cross if x['canonical_nws_id']==values.get('NWSID')]
+        if not matching:continue
+        from shapely.geometry import mapping
+        exact_features.append({'type':'Feature','properties':{
+            'nwsli':values['NWSID'],'rfc_index':str(index),
+            'rfc_name':str(feature.get('DESCRIPT','')),
+            'rfc_fcstgroup':str(feature.get('FCSTGROUP','')),
+            'area_sqmi':round(area(feature.geometry),3),
+            'scientific_status':'UNVERIFIED_LEGACY_MAP_GEOMETRY'},
+            'geometry':mapping(feature.geometry)})
+    (OUT/'rfc_exact_nwsli_polygons.geojson').write_text(json.dumps({
+        'type':'FeatureCollection','features':exact_features},separators=(',',':')))
     writetable(OUT/'network_inventory.csv',rows)
     writetable(OUT/'rfc_candidates.csv',candidates)
     summary={'archive_sha256':hashlib.sha256(archive.read_bytes()).hexdigest(),
-        'rfc_features':len(frame),'rfc_fields':attrs,'historical_points':len(cross),
+        'rfc_features':len(frame),'rfc_fields':attrs,'exact_nwsli_polygon_features':len(exact_features),'historical_points':len(cross),
         'dashboard_gages':len(gages),'matched_historical_gages':len(used),
         'dashboard_only_gages':len(gages)-len(used),'inventory_rows':len(rows),
         'candidate_rows':len(candidates),'with_candidates':sum(bool(x['rfc_candidates']) for x in rows[:29]),
