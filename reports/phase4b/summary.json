@@ -1,0 +1,23 @@
+{
+  "candidate_count": 5,
+  "connectivity_classification": "NHDPLUS_LINKED_PROXY",
+  "historical_point_count": 29,
+  "invalid_source_geometry_count": 9,
+  "legacy_map_equivalence_verified_count": 0,
+  "legacy_map_geometry_verified": false,
+  "linked_outlet_count": 110,
+  "nldi_reference_source": "Existing Phase 2 verified USGS joins only; current NLDI geometry",
+  "relationship_count": 120,
+  "rfc_feature_count": 543,
+  "source_archive_sha256": "ffd630cb973edfc70a5dabdeff383593bdcef8d17f697f2e824d6e3c636269bb",
+  "station_status_counts": {
+    "CANDIDATE_COMPLETE_ROUTED_COVERAGE": 5,
+    "UNRESOLVED_NO_MATCHING_RFC_FEATURE": 3,
+    "WITHHELD_INCOMPLETE_ROUTED_COVERAGE": 6,
+    "WITHHELD_TARGET_OUTLET_UNLINKED": 15
+  },
+  "unresolved_issue_count": 475,
+  "unresolved_outlet_count": 433,
+  "warning": "NLDI/NHDPlus topology is a modern routed-network proxy, not proof of legacy MAP geometry.",
+  "withheld_or_unresolved_station_count": 24
+}

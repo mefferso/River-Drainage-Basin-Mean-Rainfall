@@ -8,6 +8,8 @@ on:
       - 'historical/**'
       - 'reports/phase4a/**'
       - 'docs/PHASE4A_NETWORK_BASIN_GEOMETRY_HANDOFF.md'
+      - 'reports/phase4b/**'
+      - 'docs/PHASE4B_HISTORICAL_MAP_RECONSTRUCTION.md'
       - 'README.md'
       - '.github/workflows/deploy.yml'
   workflow_run:

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Phase 4B: Historical MAP basin reconstruction review</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+:root{color-scheme:dark;font:14px system-ui,sans-serif;background:#101b2d;color:#e6edf7}*{box-sizing:border-box}body{margin:0}
+header{padding:14px 20px;background:#172740;border-bottom:1px solid #456}h1{margin:0;font-size:1.35rem}p{line-height:1.55}
+main{display:grid;grid-template-columns:340px minmax(0,1fr);min-height:calc(100dvh - 85px)}aside{padding:16px;background:#16243a;overflow:auto}
+#map{height:calc(100dvh - 85px);min-height:500px}select{width:100%;padding:10px;background:#223a56;color:#fff;border:1px solid #6b8096;border-radius:6px}
+fieldset{margin-top:15px;border:1px solid #4c627c;border-radius:8px}label{display:block;margin:9px 0}
+.key{display:inline-block;width:16px;height:12px;margin-right:6px;border:2px solid currentColor}.small{color:#bac9dd;font-size:12px}
+.warning{padding:11px;border-left:3px solid #f59e0b;background:#50391c}#info{white-space:pre-wrap;line-height:1.5;margin-top:15px}
+a{color:#94d8ff}@media(max-width:750px){main{display:flex;flex-direction:column}#map{height:55dvh;min-height:360px}aside{order:2}}
+</style></head><body>
+<header><h1>Historical MAP basin reconstruction — Phase 4B</h1><span class="small">29 historical forecast points · NOAA 2018 LMRFC segments · current NLDI references</span></header>
+<main><aside>
+<p class="warning"><strong>Review only.</strong> NLDI/NHDPlus routing is a modern network proxy. A candidate geometry is not evidence that the original RFC MAP calculation used that polygon. Modern MRMS MAP is not interchangeable with legacy RFC MAP.</p>
+<label for="station">Historical forecast point</label><select id="station"><option>Loading station inventory…</option></select>
+<fieldset><legend>Geometry layers</legend>
+<label><input type="checkbox" id="source" checked/> <span class="key" style="color:#f59e0b"></span>2018 RFC source segment</label>
+<label><input type="checkbox" id="allSource"/> All 543 RFC source segments</label>
+<label><input type="checkbox" id="candidate" checked/> <span class="key" style="color:#e879f9"></span>Routed RFC aggregate candidate</label>
+<label><input type="checkbox" id="full" checked/> <span class="key" style="color:#38bdf8"></span>Verified NLDI full upstream</label>
+<label><input type="checkbox" id="incremental" checked/> <span class="key" style="color:#22c55e"></span>Verified NLDI incremental</label>
+</fieldset>
+<div id="info" role="status">Loading versioned review evidence…</div>
+<p class="small">The map keeps source segments, constructed candidates, and NLDI reference geometries separate. Missing topology or incomplete coverage is shown as unresolved. Spatial overlap does not establish historical MAP equivalence.</p>
+<p class="small"><a href="./station_reconciliation.csv">29-station reconciliation</a> · <a href="./rfc_feature_inventory.csv">Full RFC attribute inventory</a> · <a href="./rfc_relationships.csv">Directed relationships</a> · <a href="./topology_snapshot.json">Topology snapshot</a> · <a href="./candidate_aggregates.geojson">Candidate GeoJSON</a> · <a href="../../docs/PHASE4B_HISTORICAL_MAP_RECONSTRUCTION.md">Scientific handoff</a></p>
+</aside><div id="map" aria-label="Historical basin geometry review map"></div></main>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const map=L.map('map',{preferCanvas:true}).setView([30.75,-90],8);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors',maxZoom:17}).addTo(map);
+const group=L.layerGroup().addTo(map),station=document.getElementById('station'),info=document.getElementById('info');
+let all;
+async function read(path){const response=await fetch(path);if(!response.ok)throw new Error(path+' returned HTTP '+response.status);return response.json()}
+function draw(){
+ if(!all)return;group.clearLayers();const id=station.value;
+ const point=all.points.find(row=>row.canonical_nws_id===id),row=all.reconciliation.find(item=>item.canonical_nws_id===id);
+ const source=all.source.features.filter(feature=>String(feature.properties.NWSID||'').trim()===id);
+ const candidate=all.candidates.features.find(feature=>feature.properties.canonical_nws_id===id);
+ const refs=all.references.features.filter(feature=>feature.properties.canonical_nws_id===id);let layers=[];
+ function add(feature,color,dash,label){if(!feature)return;const layer=L.geoJSON(feature,{style:{color,weight:3,fillColor:color,fillOpacity:.10,dashArray:dash||undefined}}).bindPopup(label).addTo(group);layers.push(layer)}
+ if(document.getElementById('source').checked){
+  const sourceToDraw=document.getElementById('allSource').checked?all.source.features:source;
+  sourceToDraw.forEach(feature=>add(feature,feature.properties.source_geometry_valid===false?'#ef4444':'#f59e0b','4 4',
+   feature.properties.source_geometry_valid===false?'2018 NOAA RFC source segment — invalid geometry, preserved without repair':'2018 NOAA RFC source segment'));
+ }
+ if(document.getElementById('candidate').checked)add(candidate,'#e879f9',null,'NHDPlus/NLDI routed RFC candidate — MAP equivalence not established');
+ if(document.getElementById('full').checked)refs.filter(feature=>feature.properties.layer==='full_upstream').forEach(feature=>add(feature,'#38bdf8',null,'Current verified NLDI full upstream'));
+ if(document.getElementById('incremental').checked)refs.filter(feature=>feature.properties.layer==='incremental').forEach(feature=>add(feature,'#22c55e','7 5','Current verified NLDI incremental reach'));
+ if(layers.length){let bounds=layers[0].getBounds();for(const layer of layers.slice(1))bounds.extend(layer.getBounds());map.fitBounds(bounds.pad(.12),{maxZoom:11})}
+ else if(point?.latitude&&point?.longitude)map.setView([point.latitude,point.longitude],10);
+ info.textContent=(point?.official_nws_name||id)+'\nNWSLI: '+id+'\nRFC match: '+(row?.exact_rfc_feature_id||'No exact 2018 NWSID match')+
+  '\nCandidate status: '+(row?.candidate_status||'UNRESOLVED')+'\nConnectivity: '+(row?.connectivity_classification||'UNRESOLVED')+
+  '\nCandidate components: '+(row?.candidate_feature_ids||'none')+'\nNLDI reference: '+(row?.nldi_reference_status||'unavailable')+
+  '\nMAP equivalence: NOT ESTABLISHED'+(row?.uncertainty?'\nEvidence/uncertainty: '+row.uncertainty:'');
+}
+Promise.all([
+ read('../../historical/relationships/v1/source/Phase2_Forecast_Point_Crosswalk.json'),
+ read('station_reconciliation.json'),read('rfc_single_segments.geojson'),
+ read('candidate_aggregates.geojson'),read('nldi_reference_geometries.geojson')
+]).then(([points,reconciliation,source,candidates,references])=>{
+ all={points,reconciliation,source,candidates,references};station.replaceChildren();
+ for(const point of points){const option=document.createElement('option');option.value=point.canonical_nws_id;option.textContent=point.canonical_nws_id+' — '+point.official_nws_name;station.appendChild(option)}
+ station.value='AMIL1';draw();
+}).catch(error=>{info.textContent='Unable to load Phase 4B assets: '+error.message});
+station.addEventListener('change',draw);for(const id of ['source','allSource','candidate','full','incremental'])document.getElementById(id).addEventListener('change',draw);
+</script></body></html>

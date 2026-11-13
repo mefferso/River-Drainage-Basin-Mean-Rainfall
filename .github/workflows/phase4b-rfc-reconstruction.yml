@@ -1,0 +1,85 @@
+name: Refresh Phase 4B RFC basin reconciliation
+on:
+  push:
+    branches: [phase4b/map-basin-reconstruction]
+    paths-ignore:
+      - 'reports/phase4b/**'
+  workflow_dispatch:
+    inputs:
+      refresh_nldi:
+        description: Fetch a fresh NLDI snapshot instead of reusing the branch cache
+        required: false
+        default: true
+        type: boolean
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: phase4b-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  rebuild:
+    if: github.ref == 'refs/heads/phase4b/map-basin-reconstruction'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase4b/map-basin-reconstruction
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install geospatial validation dependencies
+        run: pip install -r requirements.txt geopandas pyproj
+      - name: Fetch and verify official NOAA RFC source
+        run: |
+          curl --fail --location --retry 3 --retry-delay 5 --connect-timeout 20 --max-time 240 \
+            'https://www.nohrsc.noaa.gov/data/vector/master/b_lmrfc.tar.gz' -o b_lmrfc.tar.gz
+          echo 'ffd630cb973edfc70a5dabdeff383593bdcef8d17f697f2e824d6e3c636269bb  b_lmrfc.tar.gz' | sha256sum --check
+      - name: Run offline tests and source checks
+        run: |
+          python -m compileall -q scripts
+          python -m unittest discover -s tests -v
+          node tests/validate-ui.cjs
+          node tests/test_historical_ui.cjs
+          node tests/test_phase4a_map.cjs
+          node tests/test_phase4b_map.cjs
+      - name: Refresh cache and build versioned topology outputs
+        env:
+          FORCE_NLDI_REFRESH: ${{ github.event.inputs.refresh_nldi || 'true' }}
+        run: |
+          if [ "$FORCE_NLDI_REFRESH" = "true" ] || [ ! -f .cache/phase4b/nldi_network_cache.json ]; then
+            REFRESH_FLAG=--refresh-nldi
+          else
+            REFRESH_FLAG=
+          fi
+          python scripts/build_phase4b_rfc_aggregates.py --archive b_lmrfc.tar.gz $REFRESH_FLAG
+          python scripts/validate_phase4b_outputs.py reports/phase4b
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          root = Path('reports/phase4b')
+          entries = []
+          for path in sorted(root.iterdir()):
+              if path.is_file() and path.name != 'SHA256SUMS':
+                  entries.append(f"{hashlib.sha256(path.read_bytes()).hexdigest()}  {path.name}")
+          (root / 'SHA256SUMS').write_text('\\n'.join(entries) + '\\n')
+          PY
+      - name: Upload the complete review package
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase4b-rfc-reconstruction
+          path: reports/phase4b/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Commit generated reports to the feature branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/phase4b/
+          if ! git diff --cached --quiet; then
+            git commit -m 'data: refresh Phase 4B RFC basin reconciliation'
+            git push origin HEAD:phase4b/map-basin-reconstruction
+          fi
