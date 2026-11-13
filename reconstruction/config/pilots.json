@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "pilots": [
+    {
+      "nwsli": "AMIL1",
+      "usgs": "07375430",
+      "name": "Tangipahoa River near Amite, LA"
+    },
+    {
+      "nwsli": "MNLM6",
+      "usgs": "02492360",
+      "name": "West Hobolochitto Creek near McNeill, MS"
+    }
+  ],
+  "method": {
+    "basin": "full upstream NLDI basin; not incremental reach",
+    "qpe": "hourly raster input; product and units explicit",
+    "window": "explicit UTC start inclusive, end exclusive",
+    "missing": "reject any missing expected timestep or invalid basin coverage",
+    "legacy": "comparison only, never merged with reconstruction"
+  }
+}

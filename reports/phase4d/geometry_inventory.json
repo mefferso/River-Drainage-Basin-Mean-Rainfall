@@ -1,0 +1,108 @@
+{
+  "source": {
+    "archive_url": "https://www.nohrsc.noaa.gov/data/vector/master/b_lmrfc.tar.gz",
+    "archive_sha256": "ffd630cb973edfc70a5dabdeff383593bdcef8d17f697f2e824d6e3c636269bb",
+    "feature_count": 543,
+    "fields": [
+      "OBJ_STATUS_",
+      "OBJ_IDENTIF",
+      "NAME",
+      "MIN_X_AXIS_",
+      "MAX_X_AXIS_",
+      "MIN_Y_AXIS_",
+      "MAX_Y_AXIS_",
+      "FCSTGROUP",
+      "NWSID",
+      "AREA",
+      "DESCRIPT",
+      "TVA_NUM"
+    ],
+    "derived_asset": "reports/phase4a/rfc_exact_nwsli_polygons.geojson",
+    "coordinate_reference_system": "EPSG:4326 (RFC polygons were reprojected to WGS84 for GeoJSON export)"
+  },
+  "geometry_method": "WGS84 ellipsoidal geodesic area for RFC, full NLDI and incremental NLDI; EPSG:5070 for boundary and centroid offsets",
+  "stations": {
+    "AMIL1": {
+      "usgs_site_id": "07375430",
+      "nwsli_attribute": "AMIL1",
+      "rfc_feature_index": "359",
+      "rfc_feature_name": "TANGIPAHOA/AMITE",
+      "rfc_forecast_group": "FGAMCOLA",
+      "rfc_attributes_area_sqmi": 202.289,
+      "candidate_status": "EXACT_NWSLI_ATTRIBUTE_UNVERIFIED_HISTORICAL_MAP_BOUNDARY",
+      "geometry_comparison": {
+        "outlet_inside_rfc_candidate": false,
+        "outlet_to_rfc_boundary_km": 0.089,
+        "upstream": {
+          "rfc_candidate_area_sqmi": 202.28859,
+          "nldi_area_sqmi": 476.084057,
+          "intersection_sqmi": 197.660659,
+          "union_sqmi": 480.711988,
+          "symmetric_difference_sqmi": 283.051329,
+          "rfc_only_sqmi": 4.627931,
+          "nldi_only_sqmi": 278.423398,
+          "iou_percent": 41.1183,
+          "rfc_fraction_in_nldi_percent": 97.7122,
+          "nldi_fraction_in_rfc_percent": 41.518,
+          "centroid_offset_km_epsg5070": 13.5973,
+          "boundary_hausdorff_km_epsg5070": 28.2113
+        },
+        "incremental": {
+          "rfc_candidate_area_sqmi": 202.28859,
+          "nldi_area_sqmi": 233.136099,
+          "intersection_sqmi": 194.583192,
+          "union_sqmi": 240.841496,
+          "symmetric_difference_sqmi": 46.258304,
+          "rfc_only_sqmi": 7.705398,
+          "nldi_only_sqmi": 38.552906,
+          "iou_percent": 80.7931,
+          "rfc_fraction_in_nldi_percent": 96.1909,
+          "nldi_fraction_in_rfc_percent": 83.4633,
+          "centroid_offset_km_epsg5070": 1.5602,
+          "boundary_hausdorff_km_epsg5070": 8.6172
+        }
+      }
+    },
+    "MNLM6": {
+      "usgs_site_id": "02492360",
+      "nwsli_attribute": "MNLM6",
+      "rfc_feature_index": "370",
+      "rfc_feature_name": "W.HOBOLO- @ MCNEIL",
+      "rfc_forecast_group": "FGLPERLA",
+      "rfc_attributes_area_sqmi": 177.243,
+      "candidate_status": "EXACT_NWSLI_ATTRIBUTE_UNVERIFIED_HISTORICAL_MAP_BOUNDARY",
+      "geometry_comparison": {
+        "outlet_inside_rfc_candidate": true,
+        "outlet_to_rfc_boundary_km": 0.4785,
+        "upstream": {
+          "rfc_candidate_area_sqmi": 177.242818,
+          "nldi_area_sqmi": 174.929187,
+          "intersection_sqmi": 170.465658,
+          "union_sqmi": 181.706347,
+          "symmetric_difference_sqmi": 11.240689,
+          "rfc_only_sqmi": 6.77716,
+          "nldi_only_sqmi": 4.463529,
+          "iou_percent": 93.8138,
+          "rfc_fraction_in_nldi_percent": 96.1763,
+          "nldi_fraction_in_rfc_percent": 97.4484,
+          "centroid_offset_km_epsg5070": 0.396,
+          "boundary_hausdorff_km_epsg5070": 1.4953
+        },
+        "incremental": {
+          "rfc_candidate_area_sqmi": 177.242818,
+          "nldi_area_sqmi": 174.929187,
+          "intersection_sqmi": 170.465658,
+          "union_sqmi": 181.706347,
+          "symmetric_difference_sqmi": 11.240689,
+          "rfc_only_sqmi": 6.77716,
+          "nldi_only_sqmi": 4.463529,
+          "iou_percent": 93.8138,
+          "rfc_fraction_in_nldi_percent": 96.1763,
+          "nldi_fraction_in_rfc_percent": 97.4484,
+          "centroid_offset_km_epsg5070": 0.396,
+          "boundary_hausdorff_km_epsg5070": 1.4953
+        }
+      }
+    }
+  }
+}

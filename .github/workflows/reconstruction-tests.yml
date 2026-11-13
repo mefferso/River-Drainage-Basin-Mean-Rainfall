@@ -1,0 +1,23 @@
+name: Validate independent rainfall reconstruction pilots
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'reconstruction/**'
+      - '.github/workflows/reconstruction-tests.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pilot-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python -m compileall -q reconstruction
+      - run: python -m unittest discover -s reconstruction/tests -v
+      - run: node tests/test_reconstruction_comparison.cjs

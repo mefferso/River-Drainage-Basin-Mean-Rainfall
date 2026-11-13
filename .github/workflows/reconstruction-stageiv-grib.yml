@@ -1,0 +1,33 @@
+name: Phase 4B Stage IV GRIB product science metadata
+on:
+  push:
+    branches: [feature/pilot-rainfall-reconstruction-amil1-mnlm6]
+    paths:
+      - reconstruction/inspect_stageiv_grib.py
+      - .github/workflows/reconstruction-stageiv-grib.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  stageiv-metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: python -m pip install -r requirements.txt
+      - name: Independently inspect 2018-12-28 NOAA Stage IV GRIB
+        run: |
+          python reconstruction/inspect_stageiv_grib.py \
+            --date 2018-12-28 \
+            --output reconstruction/staging/stageiv_grib_metadata.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: phase4b-stageiv-grib-science-metadata
+          path: reconstruction/staging/stageiv_grib_metadata.json
+          if-no-files-found: warn
+          retention-days: 30

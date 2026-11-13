@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Full-network IHABBS-vs-NLDI inventory. Spatial associations are NOT legacy MAP approval."""
 import csv,hashlib,json,tarfile,tempfile
+from datetime import datetime,timezone
 from pathlib import Path
 import geopandas as gpd
 from shapely.geometry import shape,Point
@@ -35,7 +36,9 @@ with tempfile.TemporaryDirectory() as tmp:
         tar.extractall(target,filter='data')
     shp=list(target.rglob('*.shp'))
     if len(shp)!=1:raise ValueError(f'Expected one shapefile, got {shp}')
-    frame=gpd.read_file(shp[0]).to_crs('EPSG:4326')
+    source_frame=gpd.read_file(shp[0])
+    source_crs=source_frame.crs.to_string() if source_frame.crs else None
+    frame=source_frame.to_crs('EPSG:4326')
     attrs=[str(c) for c in frame.columns if c!='geometry']
     rows=[]; candidates=[]; used=set()
     for item in cross:
@@ -153,7 +156,10 @@ with tempfile.TemporaryDirectory() as tmp:
         'type':'FeatureCollection','features':spatial_features},separators=(',',':')))
     writetable(OUT/'network_inventory.csv',rows)
     writetable(OUT/'rfc_candidates.csv',candidates)
-    summary={'archive_sha256':hashlib.sha256(archive.read_bytes()).hexdigest(),
+    summary={'archive_url':'https://www.nohrsc.noaa.gov/data/vector/master/b_lmrfc.tar.gz',
+        'archive_sha256':hashlib.sha256(archive.read_bytes()).hexdigest(),
+        'retrieved_at_utc':datetime.now(timezone.utc).isoformat(),
+        'source_crs':source_crs,'export_crs':'EPSG:4326',
         'rfc_features':len(frame),'rfc_fields':attrs,'exact_nwsli_polygon_features':len(exact_features),'dashboard_only_candidate_polygons':len(spatial_features),'historical_points':len(cross),
         'dashboard_gages':len(gages),'matched_historical_gages':len(used),
         'dashboard_only_gages':len(gages)-len(used),'inventory_rows':len(rows),

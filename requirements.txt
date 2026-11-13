@@ -4,3 +4,4 @@ requests>=2.31,<3
 Pillow>=10,<13
 shapely>=2,<3
 boto3>=1.35,<2
+pyproj>=3.6,<4
